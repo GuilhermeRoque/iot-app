@@ -33,16 +33,16 @@ export default function SignIn() {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
     // eslint-disable-next-line no-console
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
     const user = {
       email: data.get("email"),
       password: data.get("password")
     }
-    api.post('/users/login',user)
-    .then(response => console.log(response))
+    console.log(user)
+    api.post('/users/login', user)
+    .then(response => {
+      console.log("AUTH",response.get("Authorization"))
+      // localStorage.setItem("token",response.headers)
+    })
     .catch(error => console.log(error))
   };
 

@@ -62,7 +62,7 @@ export default function SignIn() {
             <LogoSVG />
           {/* </Avatar> */}
           <Typography component="h1" variant="h5">
-            IoT Manager
+          LoRaWAN Device Manager
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField

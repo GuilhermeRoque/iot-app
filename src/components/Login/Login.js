@@ -12,6 +12,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
 import api from "../../services/api";
+import { Alert } from '@mui/material';
 
 function Copyright(props) {
   return (
@@ -43,7 +44,10 @@ export default function SignIn() {
       console.log("AUTH",response.get("Authorization"))
       // localStorage.setItem("token",response.headers)
     })
-    .catch(error => console.log(error))
+    .catch(error => {
+      // <Alert onClose={() => {}}>This is a success alert — check it out!</Alert> 
+      console.log("Error", error)
+    })
   };
 
   return (
@@ -98,20 +102,20 @@ export default function SignIn() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
+              {/* <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
                 </Link>
-              </Grid>
+              </Grid> */}
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="singup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
+        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
     </ThemeProvider>
   );

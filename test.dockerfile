@@ -9,7 +9,9 @@ FROM node:14
 # Set working directory
 WORKDIR /app
 # Copy all files from current directory to working dir in image
-COPY . .
+COPY ./src ./src
+COPY ./public ./public
+COPY package*.json ./
 # install node modules and build assets
 RUN npm ci
 EXPOSE 3000

@@ -13,23 +13,29 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
 import api from "../../services/api";
 import { Alert } from '@mui/material';
+import Snackbar from '@mui/material/Snackbar';
 
-function Copyright(props) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
-const theme = createTheme();
+const theme = createTheme({
+  palette: {
+    mode: 'light', 
+    // dark
+  },
+});
 
 export default function SignIn() {
+  const [open_login_succeed, setOpen] = React.useState(false);
+  const [open_login_failed, setOpenFailed] = React.useState(false);
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false)
+    setOpenFailed(false)
+  };
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -43,9 +49,10 @@ export default function SignIn() {
     .then(response => {
       console.log("AUTH",response.get("Authorization"))
       // localStorage.setItem("token",response.headers)
+      setOpen(true);
     })
     .catch(error => {
-      // <Alert onClose={() => {}}>This is a success alert — check it out!</Alert> 
+      setOpenFailed(true);
       console.log("Error", error)
     })
   };
@@ -102,11 +109,6 @@ export default function SignIn() {
               Sign In
             </Button>
             <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
               <Grid item>
                 <Link href="singup" variant="body2">
                   {"Don't have an account? Sign Up"}
@@ -115,8 +117,13 @@ export default function SignIn() {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 8, mb: 4 }} /> */}
       </Container>
+      <Snackbar open={open_login_succeed} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'right'}}>
+          <Alert onClose={handleClose} variant="filled">Autenticado com sucesso</Alert> 
+      </Snackbar>
+      <Snackbar open={open_login_failed} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'right'}}>
+          <Alert onClose={handleClose} severity="error" variant="filled">Falha na autenticação</Alert> 
+      </Snackbar>
     </ThemeProvider>
   );
 }

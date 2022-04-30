@@ -15,7 +15,6 @@ import api from "../../services/api";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
 
-
 const theme = createTheme({
   palette: {
     mode: 'light', 
@@ -29,20 +28,17 @@ export default function SignIn() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    // eslint-disable-next-line no-console
     const user = {
       email: data.get("email"),
       password: data.get("password")
     }
-    console.log(user)
+    
     api.post('/users/login', user)
-    .then(response => {
+    .then((response) => {
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
-      console.log("AUTH",response.get("Authorization"))
-      // localStorage.setItem("token",response.headers)
+      localStorage.setItem("authorization",response.headers.authorization)
     })
     .catch(error => {
-      console.log(error)
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha na autenticação"}));
     })
   };

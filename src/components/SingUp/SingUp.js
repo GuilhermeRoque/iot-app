@@ -12,30 +12,43 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
-
-// function Copyright(props) {
-//   return (
-//     <Typography variant="body2" color="text.secondary" align="center" {...props}>
-//       {'Copyright © '}
-//       <Link color="inherit" href="https://mui.com/">
-//         Your Website
-//       </Link>{' '}
-//       {new Date().getFullYear()}
-//       {'.'}
-//     </Typography>
-//   );
-// }
+import api from "../../services/api";
+import Snackbar from '@mui/material/Snackbar';
+import {useNavigate} from 'react-router-dom'
 
 const theme = createTheme();
 
 export default function SignUp() {
+  const [open_signup_succeed, setOpen] = React.useState(false);
+  const [open_signup_failed, setOpenFailed] = React.useState(false);
+  let navigate = useNavigate();
+
+  const handleClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false)
+    setOpenFailed(false)
+  };
+
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+    const user = {
+      name: data.get("firstName") + " " + data.get("lastName"),
+      email: data.get("email"),
+      password: data.get("password")
+    }
+    api.post('/users/', user)
+    .then(response => {
+      setOpen(true)
+      // navigate('/login', {state:{open_signup_succeed:true}})
+    })
+    .catch(error => {
+      setOpenFailed(true);
+      console.log("Error", error)
+    })
   };
 
   return (
@@ -124,8 +137,14 @@ export default function SignUp() {
             </Grid>
           </Box>
         </Box>
-        {/* <Copyright sx={{ mt: 5 }} /> */}
       </Container>
+      {/* action={navigate('/login')} */}
+      <Snackbar open={open_signup_succeed} autoHideDuration={6000} onClose={handleClose}  anchorOrigin={{ vertical:'top', horizontal:'right'}} >
+          <Alert onClose={handleClose} variant="filled">Usuário cadastrado com sucesso</Alert> 
+      </Snackbar>
+      <Snackbar open={open_signup_failed} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'right'}}>
+          <Alert onClose={handleClose} severity="error" variant="filled">Falha no cadastro</Alert> 
+      </Snackbar>
     </ThemeProvider>
   );
 }

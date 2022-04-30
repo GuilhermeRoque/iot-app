@@ -12,8 +12,8 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
 import api from "../../services/api";
-import { Alert } from '@mui/material';
-import Snackbar from '@mui/material/Snackbar';
+import { useDispatch } from "react-redux";
+import { setSnackbar } from "../../redux/snackbarSlice";
 
 
 const theme = createTheme({
@@ -24,17 +24,7 @@ const theme = createTheme({
 });
 
 export default function SignIn() {
-  const [open_login_succeed, setOpen] = React.useState(false);
-  const [open_login_failed, setOpenFailed] = React.useState(false);
-
-  const handleClose = (event, reason) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-    setOpen(false)
-    setOpenFailed(false)
-  };
-
+  const dispatch = useDispatch()
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -47,13 +37,13 @@ export default function SignIn() {
     console.log(user)
     api.post('/users/login', user)
     .then(response => {
+      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
       console.log("AUTH",response.get("Authorization"))
       // localStorage.setItem("token",response.headers)
-      setOpen(true);
     })
     .catch(error => {
-      setOpenFailed(true);
-      console.log("Error", error)
+      console.log(error)
+      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha na autenticação"}));
     })
   };
 
@@ -69,9 +59,7 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}> */}
-            <LogoSVG />
-          {/* </Avatar> */}
+          <LogoSVG />
           <Typography component="h1" variant="h5">
           LoRaWAN Device Manager
           </Typography>
@@ -81,7 +69,7 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Email"
               name="email"
               autoComplete="email"
               autoFocus
@@ -90,7 +78,7 @@ export default function SignIn() {
               margin="normal"
               required
               name="password"
-              label="Password"
+              label="Senha"
               fullWidth
               type="password"
               id="password"
@@ -98,7 +86,7 @@ export default function SignIn() {
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Lembre-me"
             />
             <Button
               type="submit"
@@ -106,24 +94,18 @@ export default function SignIn() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Entrar
             </Button>
             <Grid container>
               <Grid item>
                 <Link href="singup" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                  {"Não possui uma conta? Registre-se"}
                 </Link>
               </Grid>
             </Grid>
           </Box>
         </Box>
       </Container>
-      <Snackbar open={open_login_succeed} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'right'}}>
-          <Alert onClose={handleClose} variant="filled">Autenticado com sucesso</Alert> 
-      </Snackbar>
-      <Snackbar open={open_login_failed} autoHideDuration={6000} onClose={handleClose} anchorOrigin={{ vertical:'top', horizontal:'right'}}>
-          <Alert onClose={handleClose} severity="error" variant="filled">Falha na autenticação</Alert> 
-      </Snackbar>
     </ThemeProvider>
   );
 }

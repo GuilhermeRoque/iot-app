@@ -8,16 +8,16 @@ import List from '@mui/material/List';
 import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
+import HubIcon from '@mui/icons-material/Hub';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import EdgesensorLowIcon from '@mui/icons-material/EdgesensorLow';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
+import AppsIcon from '@mui/icons-material/Apps';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
-import { Link } from 'react-router-dom';
+import ApiIcon from '@mui/icons-material/Api';
+import GroupsIcon from '@mui/icons-material/Groups';
+import DrawerItem from './DrawerItem';
 
 const drawerWidth = 240;
 
@@ -128,52 +128,14 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItemButton
-              key={text}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          ))}
+          <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon}/>
+          <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon}/>
+          <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon}/>
         </List>
         <Divider />
         <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItemButton
-              key={text}
-              sx={{
-                minHeight: 48,
-                justifyContent: open ? 'initial' : 'center',
-                px: 2.5,
-              }}
-              component={Link} to="/login"
-            >
-              <ListItemIcon
-                sx={{
-                  minWidth: 0,
-                  mr: open ? 3 : 'auto',
-                  justifyContent: 'center',
-                }}
-              >
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
-            </ListItemButton>
-          ))}
+          <DrawerItem open={open} text={"Redes"} Icon={HubIcon}/>
+          <DrawerItem open={open} text={"APIs de dispositivos"} Icon={ApiIcon}/>
         </List>
       </Drawer>
     </Box>

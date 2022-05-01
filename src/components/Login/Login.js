@@ -13,7 +13,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import api from "../../services/api";
 
 const theme = createTheme({
@@ -26,19 +26,23 @@ const theme = createTheme({
 export default function SignIn() {
   const dispatch = useDispatch()
   let navigate = useNavigate();
+  let location = useLocation();
+  let from = location.state?.from?.pathname || "/";
+
+  
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const user = {
+    const userData = {
       email: data.get("email"),
       password: data.get("password")
     }
     
-    api.post('/users/login', user)
+    api.post('/users/login', userData)
     .then((response) => {
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
       localStorage.setItem("authorization",response.headers.authorization)
-      navigate('/dashboard')
+      navigate(from, {replace: true})
     })
     .catch(error => {
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha na autenticação"}));

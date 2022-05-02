@@ -43,10 +43,7 @@ export default function SignIn() {
     api.post('/users/login', userData)
     .then((response) => {
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
-      localStorage.setItem("user",{
-        email: userData.email,
-        token: response.headers.authorization
-      })
+      localStorage.setItem("token", response.headers.authorization)
       navigate(from, {replace: true})
     })
     .catch(error => {

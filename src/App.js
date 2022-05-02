@@ -13,10 +13,8 @@ export default function App(){
   const dispatch = useDispatch()
 
   const ProtectedRoute = ({ redirectPath='/login', children }) => {
-    // const auth = useAuth();
-    // console.log(auth)
     const location = useLocation();
-    if (!localStorage.getItem("user")) {
+    if (!localStorage.getItem("token")) {
       if(location.pathname !== "/"){
         dispatch(setSnackbar({snackbarOpen: true, snackbarType: "info", snackbarMessage: "Autenticação necessária"}));
       }

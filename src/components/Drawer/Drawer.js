@@ -15,7 +15,7 @@ import ApiIcon from '@mui/icons-material/Api';
 import GroupsIcon from '@mui/icons-material/Groups';
 import DrawerItem from './DrawerItem';
 import { DrawerHeader } from './DrawerHeader';
-import AppBar from '../AppBar/AppBar';
+import { DrawerAppBar } from '../AppBar/AppBar';
 
 
 const drawerWidth = 240;
@@ -41,6 +41,7 @@ const closedMixin = (theme) => ({
   },
 });
 
+
 const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
   ({ theme, open }) => ({
     width: drawerWidth,
@@ -61,7 +62,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-
+  
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -73,8 +74,8 @@ export default function MiniDrawer() {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      <AppBar open={open} handleDrawerOpen={handleDrawerOpen} drawerWidth={drawerWidth}/>
-      <Drawer variant="permanent" open={open}>
+        <DrawerAppBar open={open} drawerwidth={drawerWidth} toggleDrawer={handleDrawerOpen} ></DrawerAppBar>
+        <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}

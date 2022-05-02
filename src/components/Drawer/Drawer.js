@@ -62,7 +62,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
-  
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -89,7 +89,7 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List>
-          <DrawerItem open={open} text={"Redes"} Icon={HubIcon}/>
+          <DrawerItem open={open} text={"Integrações"} Icon={HubIcon}/>
           <DrawerItem open={open} text={"APIs de dispositivos"} Icon={ApiIcon}/>
         </List>
       </Drawer>

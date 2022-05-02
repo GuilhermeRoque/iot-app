@@ -10,6 +10,8 @@ import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
 import { Badge } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import { useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 export const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
@@ -34,14 +36,20 @@ export const AppBar = styled(MuiAppBar, {
 
 export function DrawerAppBar({open,drawerwidth,toggleDrawer}){
     const [anchorEl, setAnchorEl] = React.useState(null);
-  
+    const navigate = useNavigate()
     const handleMenu = (event) => {
       setAnchorEl(event.currentTarget);
     };
   
     const handleClose = () => {
-      setAnchorEl(null);
+        setAnchorEl(null);
     };
+
+    const logout = () => {
+        localStorage.setItem("token","")
+        setAnchorEl(null);
+        navigate("/login")
+    }
 
     return(
         <AppBar position="absolute" open={open} drawerwidth={drawerwidth}>
@@ -91,8 +99,8 @@ export function DrawerAppBar({open,drawerwidth,toggleDrawer}){
                     id="menu-appbar"
                     anchorEl={anchorEl}
                     anchorOrigin={{
-                    vertical: 'top',
-                    horizontal: 'right',
+                    vertical: 'bottom',
+                    horizontal: 'center',
                     }}
                     keepMounted
                     transformOrigin={{
@@ -102,8 +110,8 @@ export function DrawerAppBar({open,drawerwidth,toggleDrawer}){
                     open={Boolean(anchorEl)}
                     onClose={handleClose}
                 >
-                    <MenuItem onClick={handleClose}>Perfil</MenuItem>
-                    <MenuItem onClick={handleClose}>Sair</MenuItem>
+                    {/* <MenuItem onClick={handleClose}>Perfil</MenuItem> */}
+                    <MenuItem onClick={logout}><LogoutIcon />Sair</MenuItem>
                 </Menu>
             </div>
         </Toolbar>

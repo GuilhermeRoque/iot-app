@@ -83,14 +83,14 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon}/>
-          <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon}/>
-          <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon}/>
+          <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon} link={'organizations'}/>
+          <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon} link={'text'}/>
+          <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon} link={'text'}/>
         </List>
         <Divider />
         <List>
-          <DrawerItem open={open} text={"Integrações"} Icon={HubIcon}/>
-          <DrawerItem open={open} text={"APIs de dispositivos"} Icon={ApiIcon}/>
+          <DrawerItem open={open} text={"Integrações"} Icon={HubIcon} link={'text2'}/>
+          <DrawerItem open={open} text={"APIs de dispositivos"} Icon={ApiIcon} link={'text2'}/>
         </List>
       </Drawer>
     </Box>

@@ -6,6 +6,9 @@ import { CustomSnackbar } from './components/CustomSnackbar/CustomSnackbar';
 import Dashboard from './components/Dashboard/Dashboard';
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "./redux/snackbarSlice";
+import TextBox from './components/TextBox/TextBox'
+import Table from './components/Table/Table'
+
 // import { AuthProvider, useAuth } from './auth-context';
 
 
@@ -31,8 +34,11 @@ export default function App(){
           <Route path="/login" element={<Login/>}></Route>
           <Route path="/singup" element={<SignUp/>}></Route>
           <Route element={<ProtectedRoute/>}>
-            <Route path="/" element={<Dashboard/>}></Route>
-            <Route path="/dashboard" element={<Dashboard/>}></Route>
+              <Route path="/" element={<Dashboard/>}>
+                <Route path="organizations" element={<Table/>}></Route>
+                <Route path="text" element={<TextBox/>}></Route>
+                <Route path="text2" element={<TextBox/>}></Route>
+              </Route>
           </Route>
           <Route path="*" element={<h1>Página não encontrada</h1>} />
         </Routes>

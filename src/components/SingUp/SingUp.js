@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
-import api from "../../services/api";
+import useAPI from "../../services/useAPI";
 import {useNavigate} from 'react-router-dom'
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
@@ -19,6 +19,7 @@ const theme = createTheme();
 export default function SignUp() {
   let navigate = useNavigate();
   const dispatch = useDispatch()
+  const api = useAPI()
 
 
   const handleSubmit = (event) => {

@@ -14,8 +14,8 @@ import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
 import { useNavigate, useLocation } from 'react-router-dom'
-// import { useAuth } from '../../auth-context';
-import api from "../../services/api";
+import { useAuth } from '../../auth-context';
+import useAPI from '../../services/useAPI';
 
 const theme = createTheme({
   palette: {
@@ -29,8 +29,8 @@ export default function SignIn() {
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
-  // let auth = useAuth();
-
+  let auth = useAuth();
+  const api = useAPI()
   
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -43,7 +43,7 @@ export default function SignIn() {
     api.post('/users/login', userData)
     .then((response) => {
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
-      localStorage.setItem("token", response.headers.Authorization)
+      auth.signin(response.data.token)
       navigate(from, {replace: true})
     })
     .catch(error => {

@@ -9,7 +9,7 @@ const useAPI = () => {
         const requestIntercept = api.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${auth?.token}`;
+                    config.headers['Authorization'] = `Bearer ${auth?.user?.token}`;
                 }
                 return config;
             }, (error) => Promise.reject(error)

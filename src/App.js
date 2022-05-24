@@ -8,6 +8,8 @@ import TextBox from './components/TextBox/TextBox'
 import Table from './components/Table/Table'
 import { AuthProvider } from './auth-context';
 import ProtectedRoute from './components/ProtectedRoute';
+import Integrations from './components/Integrations/Integrations';
+import DeviceAPIs from './components/DeviceAPIs/DeviceAPIS';
 
 export default function App(){
   return (
@@ -19,8 +21,9 @@ export default function App(){
           <Route element={<ProtectedRoute/>}>
               <Route path="/" element={<Dashboard/>}>
                 <Route path="organizations" element={<Table/>}></Route>
-                <Route path="text" element={<TextBox/>}></Route>
-                <Route path="text2" element={<TextBox/>}></Route>
+                <Route path="integrations" element={<Integrations/>}></Route>
+                <Route path="device-apis" element={<DeviceAPIs/>}></Route>
+                <Route path="text" element={<TextBox/>}></Route>      
               </Route>
           </Route>
           <Route path="*" element={<h1>Página não encontrada</h1>} />

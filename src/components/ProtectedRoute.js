@@ -9,12 +9,13 @@ const ProtectedRoute = ({ redirectPath='/login', children }) => {
     const auth = useAuth()
     const dispatch = useDispatch()
 
-    if (!auth.token) {
+    if (!auth?.user?.token) {
       if(location.pathname !== "/"){
         dispatch(setSnackbar({snackbarOpen: true, snackbarType: "info", snackbarMessage: "Autenticação necessária"}));
       }
       return <Navigate to={redirectPath} replace />;
     }
+    console.log("token found")
     return children?children:<Outlet/>;
   };
 

@@ -3,7 +3,7 @@ import { useNavigate} from 'react-router-dom'
 
 
 const AuthContext = React.createContext({
-    token:null,
+    user:null,
     signin:null,
     signout:null
 });
@@ -13,16 +13,16 @@ const useAuth = () => {
   };  
 
 const AuthProvider = ({children}) => {
-    const [token, setToken] = React.useState(null);
+    const [user, setUser] = React.useState(null);
     const navigate = useNavigate()
-    const signin = (token) => {
-        setToken(token)
+    const signin = (user) => {
+        setUser(user)
         navigate("/dashboard")  
     }
     const signout = () => {
-        setToken(null)
+        setUser(null)
     }
-    const value = { token, signin, signout}
+    const value = { user, signin, signout}
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 } 
 export {AuthContext, useAuth, AuthProvider}

@@ -72,7 +72,9 @@ export default function MiniDrawer() {
   };
 
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{
+      display: 'flex',
+      }}>
       <CssBaseline />
         <DrawerAppBar open={open} drawerwidth={drawerWidth} toggleDrawer={handleDrawerOpen} ></DrawerAppBar>
         <Drawer variant="permanent" open={open}>
@@ -89,8 +91,8 @@ export default function MiniDrawer() {
         </List>
         <Divider />
         <List>
-          <DrawerItem open={open} text={"Integrações"} Icon={HubIcon} link={'text2'}/>
-          <DrawerItem open={open} text={"APIs de dispositivos"} Icon={ApiIcon} link={'text2'}/>
+          <DrawerItem open={open} text={"Integrações"} Icon={HubIcon} link={'integrations'}/>
+          <DrawerItem open={open} text={"APIs de dispositivos"} Icon={ApiIcon} link={'device-apis'}/>
         </List>
       </Drawer>
     </Box>

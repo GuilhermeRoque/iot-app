@@ -55,10 +55,7 @@ export default function Table() {
       email: data.get("email-invite"),
       role: data.get("role-invite")
     }
-    console.log("\n\npost_data", post_data)
-    console.log(organization)
     const path = "/organizations/"+organization[0]._id+"/users"
-    console.log("sending...", post_data, path)
     api.post(path, post_data)
     .then((response) => {
       console.log("Usuario convidado", response)
@@ -146,11 +143,18 @@ export default function Table() {
   const handleSubmit = (event) =>{
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const payload = {name: data.get("organizationName")}
+    const payload = {
+      organizationId: data.get("organizationId"),
+      name: data.get("organizationName"),
+      apiKey: data.get("organizationApiKey")
+    }
     api.post("/organizations", payload)
       .then((response) => {
         dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Organização cadastrada"}))
+        const organizations = [response.data._id]
         setOrganization([response.data])
+        auth.updateOrganizations(organizations)
+
       })
       .catch((err)=>{
         console.log(err)
@@ -259,7 +263,16 @@ export default function Table() {
       // dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Nenhuma organização encontrada"}));
       return(
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <Typography>Cadastre uma organização</Typography>
+          <Typography component="h1" variant="h5">Cadastre uma organização</Typography>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="organizationId"
+            label="Identificador"
+            name="organizationId"
+            autoFocus
+            />
           <TextField
             margin="normal"
             required
@@ -267,6 +280,15 @@ export default function Table() {
             id="organizationName"
             label="Nome"
             name="organizationName"
+            autoFocus
+            />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="organizationApiKey"
+            label="Chave de API"
+            name="organizationApiKey"
             autoFocus
             />
           <Button

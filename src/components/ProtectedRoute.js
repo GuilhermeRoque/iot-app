@@ -15,7 +15,6 @@ const ProtectedRoute = ({ redirectPath='/login', children }) => {
       }
       return <Navigate to={redirectPath} replace />;
     }
-    console.log("token found")
     return children?children:<Outlet/>;
   };
 

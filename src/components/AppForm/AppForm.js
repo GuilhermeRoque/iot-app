@@ -12,6 +12,7 @@ import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import MUIDataTable from "mui-datatables";
 
 const theme = createTheme({
   palette: {
@@ -74,7 +75,83 @@ export default function AppForm() {
   if(organization == null){
     return <></>
   }else if (organization.applications.length){
-    return(<>"APLICAÇÔES"</>)
+    const options = {
+      search: true,
+      download: true,
+      print: true,
+      viewColumns: true,
+      filter: true,
+      selectableRows: "none",
+      selectableRowsHeader: false,
+      filterType: "dropdown",
+      responsive: "vertical",
+      tableBodyHeight: "400px",
+      tableBodyMaxHeight: "",
+      textLabels: {
+        body: {
+          noMatch: "Nenhum registro encontrado",
+          toolTip: "Ordenar",
+          columnHeaderTooltip: column => `Ordenar por ${column.label}`
+        },
+        pagination: {
+          next: "Próxima página",
+          previous: "Página anterior",
+          rowsPerPage: "Linhas por página:",
+          displayRows: "of",
+        },
+        toolbar: {
+          search: "Buscar",
+          downloadCsv: "Baixar CSV",
+          print: "Imprimir",
+          viewColumns: "Exibir colunas",
+          filterTable: "Filtrar Tabela",
+        },
+        filter: {
+          all: "Todos",
+          title: "FILTROS",
+          reset: "LIMPAR",
+        },
+        viewColumns: {
+          title: "Exibir Colunas",
+          titleAria: "Exibir/Esconder Colunas",
+        },
+        selectedRows: {
+          text: "linhas(s) selecionadas",
+          delete: "Remover",
+          deleteAria: "Remover linhas selecionadas",
+        },
+      }, 
+      onTableChange: (action, state) => {
+        // console.log(action);
+        // console.dir(state);
+      }
+    };  
+    
+    const columns = [
+      {name: "name", label:"Nome"},
+      {name: "appId", label:"Identificador"},
+      {name: "integration", label: "Integração"},
+      {name: "deviceApi", label: "API dos dispositivos"},
+    ];
+  
+    const data = []
+    for (const application of organization.applications){
+      data.push({
+        name: application.name,
+        appId: application.appId,
+        integration: "TTN",
+        deviceApi: "LoRaWAN-Jean"
+      })
+    }
+
+    return(              
+    <MUIDataTable
+      title={organization.name}
+      data={data}
+      columns={columns}
+      options={options}
+    />
+)
   }else{
     return (
             <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>

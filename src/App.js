@@ -11,6 +11,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import Integrations from './components/Integrations/Integrations';
 import DeviceAPIs from './components/DeviceAPIs/DeviceAPIS';
 import AppForm from './components/AppForm/AppForm';
+import RegisterForm from './components/Device/RegisterForm';
 
 export default function App(){
   return (
@@ -23,6 +24,7 @@ export default function App(){
               <Route path="/" element={<Dashboard/>}>
                 <Route path="organizations" element={<Table/>}></Route>
                 <Route path="applications" element={<AppForm/>}></Route>
+                <Route path="devices" element={<RegisterForm/>}></Route>
                 <Route path="integrations" element={<Integrations/>}></Route>
                 <Route path="device-apis" element={<DeviceAPIs/>}></Route>
                 <Route path="text" element={<TextBox/>}></Route>      

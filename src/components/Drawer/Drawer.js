@@ -87,7 +87,7 @@ export default function MiniDrawer() {
         <List>
           <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon} link={'organizations'}/>
           <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon} link={'applications'}/>
-          <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon} link={'text'}/>
+          <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon} link={'devices'}/>
         </List>
         <Divider />
         <List>

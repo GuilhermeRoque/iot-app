@@ -8,7 +8,7 @@ import useAPI from '../../services/useAPI';
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice"; 
 
-export default function BasicCard({name, role, oragnizationId, updateOrganizations}) {
+export default function InviteCard({name, role, oragnizationId, updateOrganizations}) {
     const api = useAPI()
     const dispatch = useDispatch()
     const handleAccept = () => {

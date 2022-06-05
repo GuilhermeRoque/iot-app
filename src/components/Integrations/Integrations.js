@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import FeaturedPost from '../CustomCard/CustomCard'
+import PostCard from "../CustomCard/PostCard";
 
 const featuredPosts = [
     {
@@ -17,7 +17,7 @@ export default function Integrations () {
     return (
             <Grid container spacing={4}>
             {featuredPosts.map((post) => (
-                <FeaturedPost key={post.title} post={post} />
+                <PostCard key={post.title} post={post} />
             ))}
             </Grid>
       );   

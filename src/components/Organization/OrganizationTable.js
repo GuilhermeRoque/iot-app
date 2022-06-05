@@ -1,33 +1,25 @@
-import MUIDataTable from "mui-datatables";
 import React, { useState, useEffect } from "react";
-import { ThemeProvider } from "@mui/material/styles";
-import { createTheme } from "@mui/material/styles";
 import { CacheProvider } from "@emotion/react";
+import MUIDataTable from "mui-datatables";
+import { ThemeProvider, createTheme } from "@mui/material/styles";
 import createCache from "@emotion/cache";
-import useAPI from "../../services/useAPI";
 import { Box } from "@mui/system";
-import { TextField, Typography } from "@mui/material";
 import { Button } from "@mui/material";
+import { useAuth } from "../../auth-context";
+import { TextField, Typography, CircularProgress } from "@mui/material";
+import InviteCard from "./InviteCard";
+import { options } from "../Table/defaultOptions";
+import InviteDialog from "./InviteDialog";
+import useAPI from "../../services/useAPI";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import { MenuItem } from "@mui/material";
-import { Select } from "@mui/material";
-import { InputLabel } from "@mui/material";
-import { useAuth } from "../../auth-context";
-import CircularProgress from '@mui/material/CircularProgress';
-import BasicCard from "../Card/Card";
 
 const muiCache = createCache({
   key: "mui-datatables",
   prepend: true
 });
 
-export default function Table() {
+export default function OrganizationTable() {
   const [organization, setOrganization] = useState(null)
   const api = useAPI()
   const dispatch = useDispatch()
@@ -35,19 +27,19 @@ export default function Table() {
   const [role, setRole] = React.useState('');
   const auth = useAuth();
 
-  const handleChange = (event) => {
-    setRole(event.target.value);
-  };
 
   const handleClickOpen = () => {
     setOpen(true);
+  };
+
+  const handleChange = (event) => {
+    setRole(event.target.value);
   };
 
   const handleClose = (e) => {
     setOpen(false);
   };
 
-  
   const inviteUser = (event) => {
     event.preventDefault()
     const data = new FormData(event.currentTarget);
@@ -88,57 +80,6 @@ export default function Table() {
     {name: "role", label: "Função"},
     {name: "status", label: "Estado"},
   ];
-  const options = {
-    search: true,
-    download: true,
-    print: true,
-    viewColumns: true,
-    filter: true,
-    selectableRows: "none",
-    selectableRowsHeader: false,
-    filterType: "dropdown",
-    responsive: "vertical",
-    tableBodyHeight: "400px",
-    tableBodyMaxHeight: "",
-    textLabels: {
-      body: {
-        noMatch: "Nenhum registro encontrado",
-        toolTip: "Ordenar",
-        columnHeaderTooltip: column => `Ordenar por ${column.label}`
-      },
-      pagination: {
-        next: "Próxima página",
-        previous: "Página anterior",
-        rowsPerPage: "Linhas por página:",
-        displayRows: "of",
-      },
-      toolbar: {
-        search: "Buscar",
-        downloadCsv: "Baixar CSV",
-        print: "Imprimir",
-        viewColumns: "Exibir colunas",
-        filterTable: "Filtrar Tabela",
-      },
-      filter: {
-        all: "Todos",
-        title: "FILTROS",
-        reset: "LIMPAR",
-      },
-      viewColumns: {
-        title: "Exibir Colunas",
-        titleAria: "Exibir/Esconder Colunas",
-      },
-      selectedRows: {
-        text: "linhas(s) selecionadas",
-        delete: "Remover",
-        deleteAria: "Remover linhas selecionadas",
-      },
-    }, 
-    onTableChange: (action, state) => {
-      // console.log(action);
-      // console.dir(state);
-    }
-  };
 
   const handleSubmit = (event) =>{
     event.preventDefault();
@@ -161,16 +102,6 @@ export default function Table() {
         dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha ao registrar"}))
       })
   }
-
-  const actions = [
-    <Button 
-      type="submit"
-    >
-      Enviar
-    </Button>,
-   <Button onClick={handleClose}>Cancelar</Button>
-];
-
   if (organization == null){
     return(
       <Box sx={{ display: 'flex' }}>
@@ -180,8 +111,6 @@ export default function Table() {
   }else{
     const first_organization = organization.length?organization[0]:{name: '', members: []}
     if(organization.length){
-      console.log('first_organization', first_organization)
-      console.log('user', auth.user)
       const index = first_organization.members.findIndex(member => {
         return member.email == auth.user.email;
       });
@@ -189,17 +118,15 @@ export default function Table() {
         return <></>
       }
       const member = first_organization.members[index]
-      console.log(index)
       if (member.status == 'invited'){
         return (
-          <BasicCard 
+          <InviteCard 
             name={first_organization.name} 
             role={member.role} 
             oragnizationId={first_organization._id}
             updateOrganizations={getOrganizations}
-            >
-            
-          </BasicCard>
+            >            
+          </InviteCard>
         )
       }else{
         return (
@@ -218,43 +145,15 @@ export default function Table() {
                     onClick={handleClickOpen}>
                     Convidar
                   </Button>
-                  <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>Convite para participação</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                        Insira o email do usuário a convidar e o papel do mesmo da organização.
-                      </DialogContentText>
-                      <Box component="form" onSubmit={inviteUser} noValidate sx={{ mt: 1 }}>
-                        <TextField
-                          autoFocus
-                          margin="dense"
-                          id="email-invite"
-                          name="email-invite"
-                          label="Email"
-                          type="email"
-                          fullWidth
-                          variant="standard"
-                        />
-                        <InputLabel id="role-invite">Função</InputLabel>
-                        <Select
-                          id="role-invite"
-                          name="role-invite"
-                          value={role}
-                          label="Função"
-                          fullWidth
-                          onChange={handleChange}
-                        >
-                          <MenuItem value={"owner"}>Dono</MenuItem>
-                          <MenuItem value={"admin"}>Administrador</MenuItem>
-                          <MenuItem value={"user"}>Visualizador</MenuItem>
-                        </Select>
-                        {actions}                    
-                      </Box>
-                      </DialogContent>
-                      {/* <DialogActions>
-                      </DialogActions> */}
-                    </Dialog>
-                  </div>
+                  <InviteDialog 
+                    open={open} 
+                    handleClose={handleClose} 
+                    handleChange={handleChange} 
+                    inviteUser={inviteUser}
+                    role={role}
+                    >
+                  </InviteDialog>                  
+              </div>
                 </ThemeProvider>
           </CacheProvider>
         );  

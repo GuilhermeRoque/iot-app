@@ -5,13 +5,13 @@ import SignUp from './components/SingUp/SingUp';
 import { CustomSnackbar } from './components/CustomSnackbar/CustomSnackbar';
 import Dashboard from './components/Dashboard/Dashboard';
 import TextBox from './components/TextBox/TextBox'
-import Table from './components/Table/Table'
 import { AuthProvider } from './auth-context';
 import ProtectedRoute from './components/ProtectedRoute';
 import Integrations from './components/Integrations/Integrations';
 import DeviceAPIs from './components/DeviceAPIs/DeviceAPIS';
 import AppForm from './components/AppForm/AppForm';
 import RegisterForm from './components/Device/RegisterForm';
+import OrganizationTable from './components/Organization/OrganizationTable';
 
 export default function App(){
   return (
@@ -22,7 +22,7 @@ export default function App(){
           <Route path="/singup" element={<SignUp/>}></Route>
           <Route element={<ProtectedRoute/>}>
               <Route path="/" element={<Dashboard/>}>
-                <Route path="organizations" element={<Table/>}></Route>
+                <Route path="organizations" element={<OrganizationTable/>}></Route>
                 <Route path="applications" element={<AppForm/>}></Route>
                 <Route path="devices" element={<RegisterForm/>}></Route>
                 <Route path="integrations" element={<Integrations/>}></Route>

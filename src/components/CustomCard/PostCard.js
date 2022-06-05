@@ -7,7 +7,7 @@ import CardActionArea from '@mui/material/CardActionArea';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 
-function FeaturedPost(props) {
+function PostCard(props) {
   const { post } = props;
 
   return (
@@ -46,7 +46,7 @@ function FeaturedPost(props) {
   );
 }
 
-FeaturedPost.propTypes = {
+PostCard.propTypes = {
   post: PropTypes.shape({
     date: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
@@ -56,4 +56,4 @@ FeaturedPost.propTypes = {
   }).isRequired,
 };
 
-export default FeaturedPost;
+export default PostCard;

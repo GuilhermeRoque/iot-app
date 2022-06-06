@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
-import { useAuth } from "../../auth-context";
+import { useAuth } from "../../context/auth-context";
 import { CircularProgress } from "@mui/material";
 import InviteCard from "./InviteCard";
 import InviteDialog from "./InviteDialog";

@@ -15,8 +15,7 @@ import ApiIcon from '@mui/icons-material/Api';
 import GroupsIcon from '@mui/icons-material/Groups';
 import DrawerItem from './DrawerItem';
 import { DrawerHeader } from './DrawerHeader';
-import { DrawerAppBar } from '../AppBar/AppBar';
-
+import { DrawerAppBar } from '../AppBar';
 
 const drawerWidth = 240;
 

@@ -1,6 +1,6 @@
-import { setSnackbar } from "../redux/snackbarSlice";
+import { setSnackbar } from "../../redux/snackbarSlice";
 import { useLocation } from "react-router-dom";
-import { useAuth } from "../auth-context";
+import { useAuth } from "../../context/auth-context";
 import { Navigate, Outlet } from "react-router-dom";
 import { useDispatch } from "react-redux";
 

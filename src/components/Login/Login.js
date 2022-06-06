@@ -14,7 +14,7 @@ import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useAuth } from '../../auth-context';
+import { useAuth } from '../../context/auth-context';
 import useAPI from '../../services/useAPI';
 
 const theme = createTheme({

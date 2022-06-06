@@ -8,7 +8,7 @@ import {
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
 import useAPI from "../../services/useAPI";
-import { useAuth } from "../../auth-context";
+import { useAuth } from "../../context/auth-context";
 
 export default function OrganizationForm({setOrganization}){
     const api = useAPI()

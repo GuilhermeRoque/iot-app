@@ -11,7 +11,7 @@ import React from "react"
 import useAPI from "../../services/useAPI"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
-import { useAuth } from "../../auth-context"
+import { useAuth } from "../../context/auth-context"
 
 export default function RegisterForm(){
     const [dataType, setDataType] = React.useState('0')

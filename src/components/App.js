@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { BrowserRouter as Router, Route, Routes} from "react-router-dom";
-import Login from "./components/Login/Login"
-import SignUp from './components/SingUp/SingUp';
-import { CustomSnackbar } from './components/CustomSnackbar/CustomSnackbar';
-import Dashboard from './components/Dashboard/Dashboard';
-import LoremIpsum from './components/LoremIpsum/LoremIpsum'
-import { AuthProvider } from './auth-context';
-import ProtectedRoute from './components/ProtectedRoute';
-import Integrations from './components/Integrations/Integrations';
-import DeviceAPIs from './components/DeviceAPIs/DeviceAPIS';
-import AppForm from './components/AppForm/AppForm';
-import RegisterForm from './components/Device/RegisterForm';
-import Organization from './components/Organization/Organization';
+import Login from "./Login/Login"
+import SignUp from './SingUp/SingUp';
+import { CustomSnackbar } from './resources/CustomSnackbar/CustomSnackbar';
+import Dashboard from './Dashboard/Dashboard';
+import LoremIpsum from './resources/LoremIpsum/LoremIpsum'
+import { AuthProvider } from '../context/auth-context';
+import ProtectedRoute from './resources/ProtectedRoute';
+import Integrations from './Integrations/Integrations';
+import DeviceAPIs from './DeviceAPIs/DeviceAPIS';
+import AppForm from './AppForm/AppForm';
+import RegisterForm from './Device/RegisterForm';
+import Organization from './Organization/Organization';
 
 export default function App(){
   return (

@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { setSnackbar } from '../../redux/snackbarSlice'
+import { setSnackbar } from '../../../redux/snackbarSlice';
 import { Alert } from '@mui/material';
 import Snackbar from '@mui/material/Snackbar';
 

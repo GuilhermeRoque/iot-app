@@ -1,7 +1,7 @@
 import { CacheProvider } from "@emotion/react";
 import MUIDataTable from "mui-datatables";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-import { options } from "../Table/defaultOptions";
+import { options } from "../resources/Table/defaultOptions";
 import createCache from "@emotion/cache";
 
 const muiCache = createCache({

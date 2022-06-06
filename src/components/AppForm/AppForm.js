@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { createTheme } from '@mui/material/styles';
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
-import { useAuth } from '../../auth-context';
+import { useAuth } from '../../context/auth-context';
 import useAPI from '../../services/useAPI';
 import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';

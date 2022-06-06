@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import PostCard from '../CustomCard/PostCard'
+import PostCard from '../resources/CustomCard/PostCard'
 
 const featuredPosts = [
     {

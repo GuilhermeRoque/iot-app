@@ -50,6 +50,7 @@ export default function Device(){
         const applicationCopy = {...application}
         applicationCopy.devices.push(device)
         setApplication(applicationCopy)
+        handleClose()
     }
 
     // Not loaded yet

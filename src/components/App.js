@@ -10,8 +10,8 @@ import ProtectedRoute from './resources/ProtectedRoute';
 import Integrations from './Integrations/Integrations';
 import DeviceAPIs from './DeviceAPIs/DeviceAPIS';
 import AppForm from './AppForm/AppForm';
-import RegisterForm from './Device/RegisterForm';
 import Organization from './Organization/Organization';
+import Device from './Device/Device';
 
 export default function App(){
   return (
@@ -24,7 +24,7 @@ export default function App(){
               <Route path="/" element={<Dashboard/>}>
                 <Route path="organizations" element={<Organization/>}></Route>
                 <Route path="applications" element={<AppForm/>}></Route>
-                <Route path="devices" element={<RegisterForm/>}></Route>
+                <Route path="devices" element={<Device/>}></Route>
                 <Route path="integrations" element={<Integrations/>}></Route>
                 <Route path="device-apis" element={<DeviceAPIs/>}></Route>
                 <Route path="text" element={<LoremIpsum/>}></Route>      

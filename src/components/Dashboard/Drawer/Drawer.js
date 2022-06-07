@@ -16,6 +16,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import DrawerItem from './DrawerItem';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerAppBar } from '../AppBar';
+import CellTowerIcon from '@mui/icons-material/CellTower';
 
 const drawerWidth = 240;
 
@@ -87,6 +88,7 @@ export default function MiniDrawer() {
           <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon} link={'organizations'}/>
           <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon} link={'applications'}/>
           <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon} link={'devices'}/>
+          <DrawerItem open={open} text={"Perfis de Rede"} Icon={CellTowerIcon} link={'network-profiles'}/>
         </List>
         <Divider />
         <List>

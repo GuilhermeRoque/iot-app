@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { createTheme } from '@mui/material/styles';
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
 import { useAuth } from '../../context/auth-context';
@@ -14,12 +13,6 @@ import { InputLabel } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import MUIDataTable from "mui-datatables";
 
-const theme = createTheme({
-  palette: {
-    mode: 'light', 
-    // dark
-  },
-});
 
 export default function AppForm() {
   const dispatch = useDispatch()
@@ -161,6 +154,15 @@ export default function AppForm() {
             <TextField
                 margin="normal"
                 required
+                fullWidth
+                id="appId"
+                label="Identificador"
+                name="appId"
+                autoFocus
+              />
+            <TextField
+                margin="normal"
+                required
                 name="name"
                 label="Nome"
                 fullWidth
@@ -176,15 +178,6 @@ export default function AppForm() {
                 name="apiKey"
                 autoFocus
               /> */}
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="appId"
-                label="ID da aplicação"
-                name="appId"
-                autoFocus
-              />
               <InputLabel id="integration-select-label">Integração</InputLabel>
               <Select
                   required

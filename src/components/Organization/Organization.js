@@ -58,7 +58,7 @@ export default function Organization() {
         return <></>
       }
       const member = first_organization.members[index]
-      if (member.status == 'invited'){
+      if (member.status == 'Convidado'){
         console.log("The user still is just invited, rendering invite card..")
         return (
           <InviteCard 

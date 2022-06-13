@@ -7,7 +7,7 @@ import {
 import DeviceForm from "./DeviceForm";
 
 
-export default function DeviceDialog({open, handleClose, organizationId, applicationId, handleNewDevice}){
+export default function DeviceDialog({open, handleClose, organizationId, applicationId, handleNewDevice, loraProfiles}){
     return(
         <Dialog open={open} onClose={handleClose}>
             <DialogTitle>Cadastro de dispositivo</DialogTitle>
@@ -15,7 +15,13 @@ export default function DeviceDialog({open, handleClose, organizationId, applica
                 <DialogContentText>
                     Especifique os perfis de configuração e identificadores do dispositivo
                 </DialogContentText>
-                <DeviceForm organizationId={organizationId} applicationId={applicationId} handleNewDevice={handleNewDevice}> </DeviceForm>
+                <DeviceForm 
+                    organizationId={organizationId} 
+                    applicationId={applicationId} 
+                    handleNewDevice={handleNewDevice}
+                    loraProfiles={loraProfiles}
+                > 
+                </DeviceForm>
             </DialogContent> 
         </Dialog>
     )

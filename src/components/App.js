@@ -12,6 +12,7 @@ import DeviceAPIs from './DeviceAPIs/DeviceAPIS';
 import AppForm from './AppForm/AppForm';
 import Organization from './Organization/Organization';
 import Device from './Device/Device';
+import LoraProfile from './LoraProfile/LoraProfile';
 
 export default function App(){
   return (
@@ -27,6 +28,8 @@ export default function App(){
                 <Route path="devices" element={<Device/>}></Route>
                 <Route path="integrations" element={<Integrations/>}></Route>
                 <Route path="device-apis" element={<DeviceAPIs/>}></Route>
+                <Route path="lorawan-profiles" element={<LoraProfile/>}></Route>
+                <Route path="service-profiles" element={<DeviceAPIs/>}></Route>
                 <Route path="text" element={<LoremIpsum/>}></Route>      
               </Route>
           </Route>

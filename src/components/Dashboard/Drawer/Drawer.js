@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import EdgesensorLowIcon from '@mui/icons-material/EdgesensorLow';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import AppsIcon from '@mui/icons-material/Apps';
+import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ApiIcon from '@mui/icons-material/Api';
 import GroupsIcon from '@mui/icons-material/Groups';
@@ -87,8 +88,9 @@ export default function MiniDrawer() {
         <List>
           <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon} link={'organizations'}/>
           <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon} link={'applications'}/>
+          <DrawerItem open={open} text={"Perfis LoRaWAN"} Icon={CellTowerIcon} link={'lorawan-profiles'}/>
+          <DrawerItem open={open} text={"Perfis de Serviço"} Icon={SettingsApplicationsIcon} link={'service-profiles'}/>
           <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon} link={'devices'}/>
-          <DrawerItem open={open} text={"Perfis de Rede"} Icon={CellTowerIcon} link={'network-profiles'}/>
         </List>
         <Divider />
         <List>

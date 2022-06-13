@@ -115,14 +115,14 @@ export default function AppForm() {
         },
       }, 
       onTableChange: (action, state) => {
-        // console.log(action);
-        // console.dir(state);
+        console.log(action);
+        console.dir(state);
       }
     };  
     
     const columns = [
-      {name: "name", label:"Nome"},
       {name: "appId", label:"Identificador"},
+      {name: "name", label:"Nome"},
       {name: "integration", label: "Integração"},
       {name: "deviceApi", label: "API dos dispositivos"},
     ];

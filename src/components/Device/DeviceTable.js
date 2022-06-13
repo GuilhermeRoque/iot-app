@@ -4,10 +4,10 @@ import { options } from "../resources/Table/defaultOptions";
 
 export default function DeviceTable({application}){
     const columns = [
-        {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "devId", label: "Identificador"},
-        {name: "configProfId", label: "Configuração de aplicação"},
-        {name: "networkProfId", label: "Configurações de rede"},
+        {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
+        {name: "configProfId", label: "Perfil de Serviço"},
+        {name: "loraProfile", label: "Perfil LoRaWAN"},
       ];
     
     const devices = []
@@ -16,7 +16,7 @@ export default function DeviceTable({application}){
         name: device.name,
         devId: device.devId,
         configProfId: 'Perfil 1',
-        networkProfId: 'Perfil 1'
+        loraProfile: device.loraProfile.loraProfileId
       })
     }
 

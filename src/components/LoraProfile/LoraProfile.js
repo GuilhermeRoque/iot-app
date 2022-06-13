@@ -1,15 +1,15 @@
 import React, { useState } from "react"
 import useAPI from "../../services/useAPI"
 import { useAuth } from "../../context/auth-context"
-import DeviceForm from "./DeviceForm"
+import LoraProfileForm from "./LoraProfileForm"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
 import { useNavigate } from "react-router-dom"
-import DeviceTable from "./DeviceTable"
-import DeviceDialog from "./DeviceDialog"
+import LoraProfileTable from "./LoraProfileTable"
+import LoraProfileDialog from "./LoraProfileDialog"
 import { Button, Typography } from "@mui/material"
 
-export default function Device(){
+export default function LoraProfile(){
     const api = useAPI()
     const [organization, setOrganization] = React.useState(null)
     const auth = useAuth()
@@ -24,17 +24,7 @@ export default function Device(){
         api.get('/organizations/'+ auth.user.organizations[0])
         .then((response)=>{
             const _organization = response.data
-            if(_organization.applications.length & _organization.loraProfiles.length){
-                setOrganization(_organization)
-            } 
-            else if(! _organization.applications.length){
-                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre uma aplicação primeiro"}));
-                navigate('/applications', {replace: true})    
-            }
-            else if(! _organization.loraProfiles.length){
-                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre um perfil LoRaWAN primeiro"}));
-                navigate('/lorawan-profiles', {replace: true})
-            }
+            setOrganization(_organization)
         })
         .catch((err)=>{console.log(err)})
     }
@@ -49,9 +39,9 @@ export default function Device(){
     }, [])
 
  
-    const handleNewDevice = (device) => {
+    const handleNewLoraProfile = (loraProfile) => {
         const _organization = {...organization}
-        _organization.applications[0].devices.push(device)
+        _organization.loraProfiles.push(loraProfile)
         setOrganization(_organization)
         handleClose()
     }
@@ -59,25 +49,23 @@ export default function Device(){
     // Not loaded yet
     if(organization == null){
         return (<></>)
-    }else if(organization.applications[0].devices.length){
+    }else if(organization.loraProfiles.length){
             return (
                 <div>
-                    <DeviceTable application={organization.applications[0]}/>
+                    <LoraProfileTable organizationName={organization.name} loraProfiles={organization.loraProfiles}/>
                     <Button 
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}                
                         onClick={handleClickOpen}>
-                        Novo dispositivo
+                        Novo Perfil LoRaWAN
                     </Button>
-                    <DeviceDialog 
+                    <LoraProfileDialog 
                         organizationId={auth.user.organizations[0]} 
-                        applicationId={organization.applications[0]._id} 
-                        handleNewDevice={handleNewDevice}
+                        handleNewLoraProfile={handleNewLoraProfile}
                         open={open}
                         handleClose={handleClose}
-                        loraProfiles={organization.loraProfiles}
                         >
-                    </DeviceDialog>
+                    </LoraProfileDialog>
                 </div>
   
             )
@@ -85,14 +73,9 @@ export default function Device(){
         return(
             <div>
                 <Typography component="h1" variant="h5">
-                Cadastre um dispositivo
+                Cadastre um perfil LoRaWAN
                 </Typography>    
-                <DeviceForm 
-                    organizationId={auth.user.organizations[0]} 
-                    applicationId={organization.applications[0]._id} 
-                    handleNewDevice={handleNewDevice}
-                    loraProfiles={organization.loraProfiles}
-                    />
+                <LoraProfileForm organizationId={auth.user.organizations[0]} handleNewLoraProfile={handleNewLoraProfile}/>
             </div>
         )
     }

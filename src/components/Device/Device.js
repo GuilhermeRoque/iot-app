@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom"
 import DeviceTable from "./DeviceTable"
 import DeviceDialog from "./DeviceDialog"
 import { Button, Typography } from "@mui/material"
+import FormPaper from "../resources/FormPaper"
 
 export default function Device(){
     const api = useAPI()
@@ -25,6 +26,7 @@ export default function Device(){
         .then((response)=>{
             const _organization = response.data
             if(_organization.applications.length & _organization.loraProfiles.length){
+                console.log("TUDO_OK", _organization)
                 setOrganization(_organization)
             } 
             else if(! _organization.applications.length){
@@ -36,7 +38,9 @@ export default function Device(){
                 navigate('/lorawan-profiles', {replace: true})
             }
         })
-        .catch((err)=>{console.log(err)})
+        .catch((err)=>{
+            console.log("ERROR", err)
+        })
     }
 
     React.useEffect( () => {
@@ -44,6 +48,7 @@ export default function Device(){
             dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre uma organização primeiro"}));
             navigate('/organizations', {replace: true})
         }else{
+            console.log("GETTING ORGs...")
             getOrganizations()
         }  
     }, [])
@@ -62,7 +67,7 @@ export default function Device(){
     }else if(organization.applications[0].devices.length){
             return (
                 <div>
-                    <DeviceTable application={organization.applications[0]}/>
+                    <DeviceTable devices={organization.applications[0].devices}/>
                     <Button 
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}                
@@ -83,17 +88,14 @@ export default function Device(){
             )
     }else{
         return(
-            <div>
-                <Typography component="h1" variant="h5">
-                Cadastre um dispositivo
-                </Typography>    
+            <FormPaper tile={"Cadastre um dispositivo"}>
                 <DeviceForm 
                     organizationId={auth.user.organizations[0]} 
                     applicationId={organization.applications[0]._id} 
                     handleNewDevice={handleNewDevice}
                     loraProfiles={organization.loraProfiles}
-                    />
-            </div>
+                />
+            </FormPaper>
         )
     }
 }

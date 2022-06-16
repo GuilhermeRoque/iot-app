@@ -73,7 +73,7 @@ export default function Organization() {
         console.log("The user is active in organization, rendering table with members..")
         return(
           <div>
-            <OrganizationTable organization={first_organization}/>
+            <OrganizationTable members={first_organization.members}/>
             <Button 
               variant="contained"
               sx={{ mt: 3, mb: 2 }}                
@@ -94,7 +94,7 @@ export default function Organization() {
       console.log("There is no organizations, rendering register form..")
       // dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Nenhuma organização encontrada"}));
       return(
-      <OrganizationForm setOrganization={setOrganization}/>
+        <OrganizationForm setOrganization={setOrganization}/>
       )
     }
   }

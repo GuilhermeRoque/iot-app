@@ -13,8 +13,6 @@ import { setSnackbar } from "../../redux/snackbarSlice"
 
 export default function DeviceForm({organizationId, applicationId, loraProfiles, handleNewDevice}){
 
-
-    console.log("loraProfiles[0].loraProfileId", loraProfiles[0].loraProfileId)
     const api = useAPI()
     const dispatch = useDispatch()
     const [loraProfile, setLoraProfile] = useState(loraProfiles[0].loraProfileId)
@@ -44,6 +42,7 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
           devId: data.get("devId"),
           devEUI: data.get("devEUI"),
           joinEUI: data.get('joinEUI'),
+          appKey: data.get('appKey'),
           loraProfile: loraProfile,
           config: {}
         }
@@ -82,6 +81,14 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
                 label="Join EUI"
                 fullWidth
                 id="joinEUI"
+                hidden
+            />
+            <TextField
+                margin="normal"
+                name="appKey"
+                label="Chave de aplicação"
+                fullWidth
+                id="appKey"
                 hidden
             />
 

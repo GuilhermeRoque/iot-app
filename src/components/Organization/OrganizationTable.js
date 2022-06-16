@@ -10,7 +10,7 @@ const muiCache = createCache({
 });
 
 
-export default function OrganizationTable({organization}){
+export default function OrganizationTable({members}){
     const columns = [
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "email", label: "Email"},
@@ -22,8 +22,8 @@ export default function OrganizationTable({organization}){
         <CacheProvider value={muiCache}>
           <ThemeProvider theme={createTheme()}>
             <MUIDataTable
-              title={organization.name}
-              data={organization.members}
+              title={"Participantes"}
+              data={members}
               columns={columns}
               options={options}
             />

@@ -139,7 +139,7 @@ export default function AppForm() {
 
     return(              
     <MUIDataTable
-      title={organization.name}
+      title="Aplicações"
       data={data}
       columns={columns}
       options={options}

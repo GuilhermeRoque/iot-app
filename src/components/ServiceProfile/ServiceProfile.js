@@ -1,16 +1,16 @@
 import React, { useState } from "react"
 import useAPI from "../../services/useAPI"
 import { useAuth } from "../../context/auth-context"
-import LoraProfileForm from "./LoraProfileForm"
+import ServiceProfileForm from "./ServiceProfileForm"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
 import { useNavigate } from "react-router-dom"
-import LoraProfileTable from "./LoraProfileTable"
-import LoraProfileDialog from "./LoraProfileDialog"
-import { Button, Typography } from "@mui/material"
+import ServiceProfileTable from "./ServiceProfileTable"
+import ServiceProfileDialog from "./ServiceProfileDialog"
+import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
 
-export default function LoraProfile(){
+export default function ServiceProfile(){
     const api = useAPI()
     const [organization, setOrganization] = React.useState(null)
     const auth = useAuth()
@@ -40,9 +40,9 @@ export default function LoraProfile(){
     }, [])
 
  
-    const handleNewLoraProfile = (loraProfile) => {
+    const handleNewServiceProfile = (serviceProfile) => {
         const _organization = {...organization}
-        _organization.loraProfiles.push(loraProfile)
+        _organization.serviceProfiles.push(serviceProfile)
         setOrganization(_organization)
         handleClose()
     }
@@ -50,30 +50,32 @@ export default function LoraProfile(){
     // Not loaded yet
     if(organization == null){
         return (<></>)
-    }else if(organization.loraProfiles.length){
+    }
+    else if(organization.serviceProfiles.length){
             return (
                 <div>
-                    <LoraProfileTable organizationName={organization.name} loraProfiles={organization.loraProfiles}/>
+                    <ServiceProfileTable organizationName={organization.name} serviceProfiles={organization.serviceProfiles}/>
                     <Button 
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}                
                         onClick={handleClickOpen}>
-                        Novo Perfil LoRaWAN
+                        Novo Perfil de Serviço
                     </Button>
-                    <LoraProfileDialog 
+                    <ServiceProfileDialog 
                         organizationId={auth.user.organizations[0]} 
-                        handleNewLoraProfile={handleNewLoraProfile}
+                        handleNewServiceProfile={handleNewServiceProfile}
                         open={open}
                         handleClose={handleClose}
                         >
-                    </LoraProfileDialog>
+                    </ServiceProfileDialog>
                 </div>
   
             )
-    }else{
+    }
+    else{
         return(
-            <FormPaper title={"Cadastre um perfil LoRaWAN"}>
-                <LoraProfileForm organizationId={auth.user.organizations[0]} handleNewLoraProfile={handleNewLoraProfile}/>
+            <FormPaper title={"Cadastre um perfil de serviço"}>
+                    <ServiceProfileForm organizationId={auth.user.organizations[0]} handleNewServiceProfile={handleNewServiceProfile}/>
             </FormPaper>
         )
     }

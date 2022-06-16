@@ -12,7 +12,7 @@ import React from "react"
 import useAPI from "../../services/useAPI"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
-import { ttn_frequency_plans, loraWanVersions } from "./loraModelOptions"
+import { ttn_frequency_plans, loraWanVersions, loraPhyVersions } from "./loraModelOptions"
 
 export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
     const api = useAPI()
@@ -27,10 +27,13 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
 
     const [loraWanVersion, setLoraWanVersion] = React.useState(1)
     const [loraFreqPlan, setLoraFreqPlan] = React.useState("EU_863_870")
+    const [loraPhyVersion, setLoraPhyVersion] = React.useState(0)
     const handleChangeLoraWanVersion = (event) =>{setLoraWanVersion(event.target.value)}
     const handleChangeLoraFreqPlan = (event) =>{setLoraFreqPlan(event.target.value)}
-    const loraWanVersionsMenuItems = loraWanVersions.map((loraWanVersion) => <MenuItem value={loraWanVersion.value}>{loraWanVersion.name}</MenuItem>)
+    const handleChangeLoraPhyVersion = (event) =>{setLoraPhyVersion(event.target.value)}
+    const loraWanVersionsMenuItems = loraWanVersions.map((loraWanVersion) => <MenuItem value={loraWanVersion.name}>{loraWanVersion.name}</MenuItem>)
     const frequencyPlansMenuItems = ttn_frequency_plans.map((freqPlan) => <MenuItem value={freqPlan['id']}>{freqPlan['name']}</MenuItem>)
+    const loraPhyVersionsMenuItems = loraPhyVersions.map((loraPhyVersion) => <MenuItem value={loraPhyVersion.name}>{loraPhyVersion.name}</MenuItem>)
 
 
     const registerLoraProfile = (loraProfile) => {
@@ -52,10 +55,11 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
             loraProfileId: data.get("loraProfileId"),
             name: data.get("name"),
             macVersionId: data.get("loraWanVersion"),
+            phyVersionId: data.get("loraPhyVersion"),
             freqPlanId: data.get("loraFreqPlan"),
             isClassB: data.get("isClassB") !== null,
             isClassC: data.get("isClassC") !== null,
-            isOTAA: data.get("isOTAA") !== null,
+            isOTAA: true,
 
         }
         console.log('payload', payload)
@@ -86,10 +90,10 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
                 <FormControlLabel control={<Checkbox name="isClassB"/>} label="Classe B" />
                 <FormControlLabel control={<Checkbox name="isClassC"/>} label="Classe C" />            
             </Box>
-            <FormControlLabel disabled control={<Checkbox name="isOTAA"/>} label="OTAA" />
+            <FormControlLabel disabled checked control={<Checkbox name="isOTAA"/>} label="OTAA" />
             <Box sx={{display: 'flex'}}>
                 <Box sx={{marginRight: 5}}>
-                    <InputLabel id="loraWanVersion-select-label">Versão MAC LoRaWAN</InputLabel>
+                    <InputLabel id="loraWanVersion-select-label">MAC LoRaWAN</InputLabel>
                     <Select
                         required
                         fullWidth
@@ -103,22 +107,32 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
                     </Select>
                 </Box>
                 <Box sx={{marginRight: 5}}>
-                    <InputLabel id="loraFreqPlan-select-label">Plano de frequência</InputLabel>
+                    <InputLabel id="loraPhyVersion-select-label">PHY LoRa</InputLabel>
                     <Select
                         required
                         fullWidth
-                        id="loraFreqPlan"
-                        name="loraFreqPlan"
-                        value={loraFreqPlan}
-                        labelId='loraFreqPlan-select-label'
-                        onChange={handleChangeLoraFreqPlan}
+                        id="loraPhyVersion"
+                        name="loraPhyVersion"
+                        value={loraPhyVersion}
+                        labelId='loraPhyVersion-select-label'
+                        onChange={handleChangeLoraPhyVersion}
                     >
-                        {frequencyPlansMenuItems}
+                        {loraPhyVersionsMenuItems}
                     </Select>
                 </Box>
             </Box>
-
-
+            <InputLabel id="loraFreqPlan-select-label">Plano de frequência</InputLabel>
+            <Select
+                required
+                fullWidth
+                id="loraFreqPlan"
+                name="loraFreqPlan"
+                value={loraFreqPlan}
+                labelId='loraFreqPlan-select-label'
+                onChange={handleChangeLoraFreqPlan}
+            >
+                {frequencyPlansMenuItems}
+            </Select>
             {/* <Box sx={{display: 'flex'}}>
                 <Box sx={{marginRight: 5}}>
                     <InputLabel id="dataType-select-label">Tipo de dado</InputLabel>

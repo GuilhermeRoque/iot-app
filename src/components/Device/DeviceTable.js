@@ -9,8 +9,8 @@ export default function DeviceTable({devices}){
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "devEUI", label:"Device EUI"},
         {name: "joinEUI", label:"Join EUI"},
-        {name: "appKey", label:"Chave de aplicação"},
-        {name: "configProfId", label: "Perfil de Serviço"},
+        // {name: "appKey", label:"Chave de aplicação"},
+        {name: "serviceProfile", label: "Perfil de Serviço"},
         {name: "loraProfile", label: "Perfil LoRaWAN"},
       ];
     
@@ -22,9 +22,9 @@ export default function DeviceTable({devices}){
         devId: device.devId,
         devEUI: device.devEUI,
         joinEUI: device.joinEUI,
-        appKey: device.appKey,
-        configProfId: 'Perfil 1',
-        loraProfile: device.loraProfile.loraProfileId
+        // appKey: device.appKey,
+        serviceProfile: device.serviceProfile,
+        loraProfile: device.loraProfile
       })
     }
 

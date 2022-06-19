@@ -1,28 +1,22 @@
-import {
-    Dialog,
-    DialogContent, 
-    DialogContentText, 
-    DialogTitle, 
-} from "@mui/material";
 import DeviceForm from "./DeviceForm";
+import DialogForm from "../resources/DialogForm";
 
-
-export default function DeviceDialog({open, handleClose, organizationId, applicationId, handleNewDevice, loraProfiles}){
+export default function DeviceDialog({open, handleClose, organizationId, applicationId, handleNewDevice, loraProfiles, serviceProfiles}){
     return(
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Cadastro de dispositivo</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    Especifique os perfis de configuração e identificadores do dispositivo
-                </DialogContentText>
-                <DeviceForm 
-                    organizationId={organizationId} 
-                    applicationId={applicationId} 
-                    handleNewDevice={handleNewDevice}
-                    loraProfiles={loraProfiles}
-                > 
-                </DeviceForm>
-            </DialogContent> 
-        </Dialog>
+        <DialogForm
+            title={"Cadastro de dispositivo"}
+            helpText={"Especifique os perfis de configuração e identificadores do dispositivo"}
+            open={open}
+            handleClose={handleClose}
+        >
+            <DeviceForm 
+                organizationId={organizationId} 
+                applicationId={applicationId} 
+                handleNewDevice={handleNewDevice}
+                loraProfiles={loraProfiles}
+                serviceProfiles={serviceProfiles}
+            > 
+            </DeviceForm>
+        </DialogForm>
     )
 }

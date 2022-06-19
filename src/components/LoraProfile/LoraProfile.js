@@ -7,7 +7,7 @@ import { setSnackbar } from "../../redux/snackbarSlice"
 import { useNavigate } from "react-router-dom"
 import LoraProfileTable from "./LoraProfileTable"
 import LoraProfileDialog from "./LoraProfileDialog"
-import { Button, Typography } from "@mui/material"
+import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
 
 export default function LoraProfile(){

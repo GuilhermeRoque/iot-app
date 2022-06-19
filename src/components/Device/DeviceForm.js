@@ -11,13 +11,18 @@ import useAPI from "../../services/useAPI"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
 
-export default function DeviceForm({organizationId, applicationId, loraProfiles, handleNewDevice}){
+export default function DeviceForm({organizationId, applicationId, loraProfiles, serviceProfiles, handleNewDevice}){
 
     const api = useAPI()
     const dispatch = useDispatch()
+
     const [loraProfile, setLoraProfile] = useState(loraProfiles[0].loraProfileId)
     const handleChangeLoraProfile = (event) =>{setLoraProfile(event.target.value)}
     const loraProfilesItems = loraProfiles.map((loraProfile) => <MenuItem value={loraProfile.loraProfileId}>{loraProfile.loraProfileId}</MenuItem>)
+
+    const [serviceProfile, setServiceProfile] = useState(serviceProfiles[0].serviceProfileId)
+    const handleChangeServiceProfile = (event) =>{setServiceProfile(event.target.value)}
+    const serviceProfilesItems = serviceProfiles.map((serviceProfile) => <MenuItem value={serviceProfile.serviceProfileId}>{serviceProfile.serviceProfileId}</MenuItem>)
 
     const registerDevice = (device) => {
         api.post("/organizations/"+organizationId+"/applications/"+applicationId+'/devices', device)
@@ -34,8 +39,12 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
     const handleSubmit = (event) =>{
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+
         const loraProfileId = data.get("loraProfile")
         const loraProfile = loraProfiles.find(loraProfile => loraProfile.loraProfileId === loraProfileId)
+
+        const serviceProfileId = data.get("serviceProfile")
+        const serviceProfile = serviceProfiles.find(serviceProfile => serviceProfile.serviceProfileId === serviceProfileId)
 
         const payload = {
           name: data.get("devName"),
@@ -44,7 +53,7 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
           joinEUI: data.get('joinEUI'),
           appKey: data.get('appKey'),
           loraProfile: loraProfile,
-          config: {}
+          serviceProfile: serviceProfile
         }
         registerDevice(payload)    
     }
@@ -91,20 +100,36 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
                 id="appKey"
                 hidden
             />
-
-            <InputLabel id="loraProfile-select-label">Perfil LoRaWAN</InputLabel>
-            <Select
-                required
-                fullWidth
-                id="loraProfile"
-                name="loraProfile"
-                value={loraProfile}
-                labelId='loraProfile-select-label'
-                onChange={handleChangeLoraProfile}
-            >
-                {loraProfilesItems}
-            </Select>
-
+            <Box sx={{display: 'flex'}}>
+                <Box sx={{marginRight: 5}}>
+                    <InputLabel id="loraProfile-select-label">Perfil LoRaWAN</InputLabel>
+                    <Select
+                        required
+                        fullWidth
+                        id="loraProfile"
+                        name="loraProfile"
+                        value={loraProfile}
+                        labelId='loraProfile-select-label'
+                        onChange={handleChangeLoraProfile}
+                    >
+                        {loraProfilesItems}
+                    </Select>
+                </Box>
+                <Box sx={{marginRight: 5}}>
+                    <InputLabel id="serviceProfile-select-label">Perfil de serviço</InputLabel>
+                    <Select
+                        required
+                        fullWidth
+                        id="serviceProfile"
+                        name="serviceProfile"
+                        value={serviceProfile}
+                        labelId='serviceProfile-select-label'
+                        onChange={handleChangeServiceProfile}
+                    >
+                        {serviceProfilesItems}
+                    </Select>
+                </Box>                
+            </Box>
             <Button
                 type="submit"
                 fullWidth

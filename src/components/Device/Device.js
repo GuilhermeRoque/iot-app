@@ -9,6 +9,7 @@ import DeviceTable from "./DeviceTable"
 import DeviceDialog from "./DeviceDialog"
 import { Button, Typography } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
+import DialogForm from "../resources/DialogForm"
 
 export default function Device(){
     const api = useAPI()
@@ -61,6 +62,14 @@ export default function Device(){
         handleClose()
     }
 
+    const deviceForm =  <DeviceForm 
+        organizationId={auth.user.organizations[0]} 
+        applicationId={organization?.applications[0]._id} 
+        handleNewDevice={handleNewDevice}
+        loraProfiles={organization?.loraProfiles}
+        serviceProfiles={organization?.serviceProfiles}
+    />
+
     // Not loaded yet
     if(organization == null){
         return (<></>)
@@ -74,27 +83,21 @@ export default function Device(){
                         onClick={handleClickOpen}>
                         Novo dispositivo
                     </Button>
-                    <DeviceDialog 
-                        organizationId={auth.user.organizations[0]} 
-                        applicationId={organization.applications[0]._id} 
-                        handleNewDevice={handleNewDevice}
+                    <DialogForm
+                        title={"Cadastro de dispositivo"}
+                        helpText={"Especifique os perfis de configuração e identificadores do dispositivo"}
                         open={open}
                         handleClose={handleClose}
-                        loraProfiles={organization.loraProfiles}
-                        >
-                    </DeviceDialog>
+                    >   
+                        {deviceForm}
+                    </DialogForm>
                 </div>
   
             )
     }else{
         return(
-            <FormPaper tile={"Cadastre um dispositivo"}>
-                <DeviceForm 
-                    organizationId={auth.user.organizations[0]} 
-                    applicationId={organization.applications[0]._id} 
-                    handleNewDevice={handleNewDevice}
-                    loraProfiles={organization.loraProfiles}
-                />
+            <FormPaper title={"Cadastro de dispositivo"}>
+                {deviceForm}
             </FormPaper>
         )
     }

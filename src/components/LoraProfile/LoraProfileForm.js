@@ -18,13 +18,6 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
     const api = useAPI()
     const dispatch = useDispatch()
 
-    // const [dataType, setDataType] = React.useState('0')
-    // const [dataChannel, setDataChannel] = React.useState('0')
-    // const handleChangeDataType = (event) =>{setDataType(event.target.value)}
-    // const handleChangeDataChannel = (event) =>{setDataChannel(event.target.value)}
-    // const dataTypesMenuItems = dataTypes.map((dataType) => <MenuItem value={dataType.value}>{dataType.name}</MenuItem>)
-    // const channelTypesMenuItems = channelTypes.map((channelType) => <MenuItem value={channelType.value}>{channelType.name}</MenuItem>)
-
     const [loraWanVersion, setLoraWanVersion] = React.useState(1)
     const [loraFreqPlan, setLoraFreqPlan] = React.useState("EU_863_870")
     const [loraPhyVersion, setLoraPhyVersion] = React.useState(0)
@@ -133,37 +126,6 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
             >
                 {frequencyPlansMenuItems}
             </Select>
-            {/* <Box sx={{display: 'flex'}}>
-                <Box sx={{marginRight: 5}}>
-                    <InputLabel id="dataType-select-label">Tipo de dado</InputLabel>
-                    <Select
-                        required
-                        fullWidth
-                        id="dataType"
-                        name="dataType"
-                        value={dataType}
-                        labelId='dataType-select-label'
-                        onChange={handleChangeDataType}
-                    >
-                        {dataTypesMenuItems}
-                    </Select>
-                </Box>
-                <Box sx={{marginRight: 5}}>
-                    <InputLabel id="dataChannel-select-label">Canal de leitura/escrita</InputLabel>
-                    <Select
-                        required
-                        fullWidth
-                        id="dataChannel"
-                        name="dataChannel"
-                        value={dataChannel}
-                        labelId='dataChannel-select-label'
-                        onChange={handleChangeDataChannel}
-                    >
-                        {channelTypesMenuItems}
-                    </Select>
-                </Box>
-            </Box> */}
-
             <Button
                 type="submit"
                 fullWidth

@@ -1,6 +1,6 @@
 import MUIDataTable from "mui-datatables";
 import { options } from "../resources/Table/defaultOptions";
-
+import servieProfileData from "./serviceProfileData"
 
 export default function ServiceProfileTable({serviceProfiles}){
     const columns = [
@@ -12,10 +12,21 @@ export default function ServiceProfileTable({serviceProfiles}){
         {name: "acquisition", label: "Tipo de aquisição"},
       ];
 
+ 
+    const _serviceProfiles = serviceProfiles.map((serviceProfile) =>{
+      return{
+        serviceProfileId: serviceProfile.serviceProfileId,
+        name: serviceProfile.name,
+        dataType: servieProfileData.acquisitionMethodsValueMap.get(serviceProfile.dataType),
+        channelType: servieProfileData.channelTypesValueMap.get(serviceProfile.channelType),
+        channelParam: servieProfileData.paramsValueMap.get(serviceProfile.channelParam)
+      }
+    })
+
     return (
             <MUIDataTable
               title={"Perfis de serviço"}
-              data={serviceProfiles}
+              data={_serviceProfiles}
               columns={columns}
               options={options}
             />

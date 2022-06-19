@@ -5,14 +5,12 @@ import {
     InputLabel, 
     Button,
     MenuItem,
-    FormControlLabel,
-    Checkbox
 } from "@mui/material"
 import React from "react"
 import useAPI from "../../services/useAPI"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
-import { acquisitionMethods, channelTypes, dataTypes } from "./loraConfigOptions"
+import { acquisitionMethods, channelTypes, dataTypes } from "./serviceProfileData"
 
 export default function ServiceProfileForm({organizationId, handleNewServiceProfile}){
     const api = useAPI()
@@ -57,10 +55,11 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
         const payload = {
             serviceProfileId: data.get("serviceProfileId"),
             name: data.get("name"),
-            dataType: dataType?.name,
-            channelType: dataChannel?.name,
-            channelParam: channelParam?.name,
-            acquisition: acquisitionMethod?.name
+            dataType: dataType?.value,
+            channelType: dataChannel?.value,
+            channelParam: channelParam?.value,
+            acquisition: acquisitionMethod?.value,
+            period: data.get('period')
         }
         console.log('payload', payload)
         registerServiceProfile(payload)    
@@ -86,7 +85,16 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                 fullWidth
                 id="name"
             />
-                        <Box sx={{display: 'flex'}}>
+            <TextField
+                margin="normal"
+                required
+                name="period"
+                type="number"
+                label="Período (s)"
+                fullWidth
+                id="period"
+            />
+            <Box sx={{display: 'flex'}}>
                 <Box sx={{marginRight: 5}}>
                     <InputLabel id="dataType-select-label">Tipo de dado</InputLabel>
                     <Select

@@ -1,22 +1,15 @@
-import {
-    Dialog,
-    DialogContent, 
-    DialogContentText, 
-    DialogTitle, 
-} from "@mui/material";
 import ServiceProfileForm from "./ServiceProfileForm";
-
+import DialogForm from "../resources/DialogForm";
 
 export default function ServiceProfileDialog({open, handleClose, organizationId, handleNewServiceProfile}){
     return(
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Cadastro de perfil de serviço</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    Especifique as características de serviço do dispositivo
-                </DialogContentText>
-                <ServiceProfileForm organizationId={organizationId} handleNewServiceProfile={handleNewServiceProfile}> </ServiceProfileForm>
-            </DialogContent> 
-        </Dialog>
+        <DialogForm 
+            title={"Cadastro de perfil de serviço"} 
+            helpText={"Especifique as características de serviço do dispositivo"}
+            open={open}
+            handleClose={handleClose}
+        >
+            <ServiceProfileForm organizationId={organizationId} handleNewServiceProfile={handleNewServiceProfile}> </ServiceProfileForm>
+        </DialogForm>
     )
 }

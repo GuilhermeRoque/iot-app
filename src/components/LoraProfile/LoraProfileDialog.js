@@ -1,22 +1,15 @@
-import {
-    Dialog,
-    DialogContent, 
-    DialogContentText, 
-    DialogTitle, 
-} from "@mui/material";
 import LoraProfileForm from "./LoraProfileForm";
-
+import DialogForm from "../resources/DialogForm";
 
 export default function LoraProfileDialog({open, handleClose, organizationId, handleNewLoraProfile}){
     return(
-        <Dialog open={open} onClose={handleClose}>
-            <DialogTitle>Cadastro de perfil LoRaWAN</DialogTitle>
-            <DialogContent>
-                <DialogContentText>
-                    Especifique as características LoRaWAN do dispositivo
-                </DialogContentText>
-                <LoraProfileForm organizationId={organizationId} handleNewLoraProfile={handleNewLoraProfile}> </LoraProfileForm>
-            </DialogContent> 
-        </Dialog>
+        <DialogForm 
+            open={open} 
+            handleClose={handleClose} 
+            title={'Cadastre um perfil LoRaWAN'} 
+            helpText={"Especifique as características LoRaWAN do dispositivo"}
+        >
+            <LoraProfileForm organizationId={organizationId} handleNewLoraProfile={handleNewLoraProfile}></LoraProfileForm>
+        </DialogForm>
     )
 }

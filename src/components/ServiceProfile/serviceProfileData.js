@@ -1,8 +1,8 @@
 const dataTypes = [
-    {name: 'Inteiro', value:"0"},
-    {name: 'Texto', value:"1"},
-    {name: 'Lógico', value:"2"},
-    {name: 'Decimal', value:"3"},
+    {name: 'Inteiro', value:0},
+    {name: 'Texto', value:1},
+    {name: 'Lógico', value:2},
+    {name: 'Decimal', value:3},
 ] 
 
 const UARTParams = [
@@ -58,31 +58,31 @@ const channelTypes = [
     {name: 'Interrupção', value:"2", params: [], paramsType: null},
     {
         name: 'UART', 
-        value:"3",
+        value:3,
         params: UARTParams, 
         paramsType: configParamType
     },
     {
         name: 'SPI', 
-        value:"4",
+        value:4,
         params: SPIParams, 
         paramsType: deviceParamType
     },
     {
         name: 'I2C', 
-        value:"5",
+        value:5,
         params: I2CParams, 
         paramsType: deviceParamType
     },
     {
         name: 'GDI', 
-        value:"6",
+        value:6,
         params: GDIParams, 
         paramsType: deviceParamType
     },
 ]
 
-const channelTypesValueMap = Map()
+const channelTypesValueMap = new Map()
 for(const channelType of channelTypes) {channelTypesValueMap.set(channelType.value, channelType.name)}
 
 const acquisitionMethods = [
@@ -91,8 +91,12 @@ const acquisitionMethods = [
     {name: "RMS", value:2},
 
 ]
-const acquisitionMethodsValueMap = Map()
+const acquisitionMethodsValueMap = new Map()
 for(const acquisitionMethod of acquisitionMethods) {acquisitionMethodsValueMap.set(acquisitionMethod.value, acquisitionMethod.name)}
+
+const dataTypesValueMap = new Map()
+for(const dataType of dataTypes) {dataTypesValueMap.set(dataType.value, dataType.name)}
+
 
 module.exports = {
     dataTypes,
@@ -100,5 +104,6 @@ module.exports = {
     acquisitionMethods,
     acquisitionMethodsValueMap,
     channelTypesValueMap,
-    paramsValueMap
+    paramsValueMap,
+    dataTypesValueMap
 }

@@ -21,7 +21,7 @@ export default function OrganizationForm({setOrganization}){
         const payload = {
           organizationId: data.get("organizationId"),
           name: data.get("organizationName"),
-          apiKey: data.get("organizationApiKey")
+          // apiKey: data.get("organizationApiKey")
         }
         api.post("/organizations", payload)
           .then((response) => {
@@ -57,15 +57,14 @@ export default function OrganizationForm({setOrganization}){
             name="organizationName"
             autoFocus
             />
-          <TextField
+          {/* <TextField
             margin="normal"
-            required
             fullWidth
             id="organizationApiKey"
             label="Chave de API"
             name="organizationApiKey"
             autoFocus
-            />
+            /> */}
           <Button
               type="submit"
               fullWidth

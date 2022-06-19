@@ -12,21 +12,22 @@ import React from "react"
 import useAPI from "../../services/useAPI"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
-import { ttn_frequency_plans, loraWanVersions, loraPhyVersions } from "./loraModelOptions"
+import { loraWanVersions, loraPhyVersions } from "./loraModelOptions"
+import ttn_freq_plans from "./ttn_freq_plans"
 
 export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
     const api = useAPI()
     const dispatch = useDispatch()
 
-    const [loraWanVersion, setLoraWanVersion] = React.useState(1)
+    const [loraWanVersion, setLoraWanVersion] = React.useState(loraWanVersions[0].value)
     const [loraFreqPlan, setLoraFreqPlan] = React.useState("EU_863_870")
-    const [loraPhyVersion, setLoraPhyVersion] = React.useState(0)
+    const [loraPhyVersion, setLoraPhyVersion] = React.useState(loraPhyVersions[0].value)
     const handleChangeLoraWanVersion = (event) =>{setLoraWanVersion(event.target.value)}
     const handleChangeLoraFreqPlan = (event) =>{setLoraFreqPlan(event.target.value)}
     const handleChangeLoraPhyVersion = (event) =>{setLoraPhyVersion(event.target.value)}
-    const loraWanVersionsMenuItems = loraWanVersions.map((loraWanVersion) => <MenuItem value={loraWanVersion.name}>{loraWanVersion.name}</MenuItem>)
-    const frequencyPlansMenuItems = ttn_frequency_plans.map((freqPlan) => <MenuItem value={freqPlan['id']}>{freqPlan['name']}</MenuItem>)
-    const loraPhyVersionsMenuItems = loraPhyVersions.map((loraPhyVersion) => <MenuItem value={loraPhyVersion.name}>{loraPhyVersion.name}</MenuItem>)
+    const loraWanVersionsMenuItems = loraWanVersions.map((loraWanVersion) => <MenuItem value={loraWanVersion.value}>{loraWanVersion.name}</MenuItem>)
+    const frequencyPlansMenuItems = ttn_freq_plans.map((freqPlan) => <MenuItem value={freqPlan['id']}>{freqPlan['name']}</MenuItem>)
+    const loraPhyVersionsMenuItems = loraPhyVersions.map((loraPhyVersion) => <MenuItem value={loraPhyVersion.value}>{loraPhyVersion.name}</MenuItem>)
 
 
     const registerLoraProfile = (loraProfile) => {
@@ -47,8 +48,8 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
         const payload = {
             loraProfileId: data.get("loraProfileId"),
             name: data.get("name"),
-            macVersionId: data.get("loraWanVersion"),
-            phyVersionId: data.get("loraPhyVersion"),
+            macVersion: data.get("loraWanVersion"),
+            phyVersion: data.get("loraPhyVersion"),
             freqPlanId: data.get("loraFreqPlan"),
             isClassB: data.get("isClassB") !== null,
             isClassC: data.get("isClassC") !== null,

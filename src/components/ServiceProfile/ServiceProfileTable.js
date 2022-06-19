@@ -12,14 +12,21 @@ export default function ServiceProfileTable({serviceProfiles}){
         {name: "acquisition", label: "Tipo de aquisição"},
       ];
 
- 
-    const _serviceProfiles = serviceProfiles.map((serviceProfile) =>{
+    
+    console.log([...servieProfileData.acquisitionMethodsValueMap.entries()])
+    console.log([...servieProfileData.channelTypesValueMap.entries()])
+    console.log([...servieProfileData.paramsValueMap.entries()])
+    console.log([...servieProfileData.dataTypesValueMap.entries()])
+    console.log(serviceProfiles)
+
+    const _serviceProfiles = serviceProfiles.map((serviceProfile) => {
       return{
         serviceProfileId: serviceProfile.serviceProfileId,
         name: serviceProfile.name,
-        dataType: servieProfileData.acquisitionMethodsValueMap.get(serviceProfile.dataType),
+        acquisition: servieProfileData.acquisitionMethodsValueMap.get(serviceProfile.acquisition),
+        dataType: servieProfileData.dataTypesValueMap.get(serviceProfile.dataType),
         channelType: servieProfileData.channelTypesValueMap.get(serviceProfile.channelType),
-        channelParam: servieProfileData.paramsValueMap.get(serviceProfile.channelParam)
+        channelParam: servieProfileData.paramsValueMap.get(serviceProfile.channelParam),        
       }
     })
 

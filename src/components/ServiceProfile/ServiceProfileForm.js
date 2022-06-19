@@ -29,8 +29,9 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
     const handleChangeDataType = (event) =>{setDataType(event.target.value)}
     const handleChangeDataChannel = (event) =>{
         const channel = event.target.value
+        // console.log("channel, ", channel)
         setDataChannel(channel)
-        setChannelParam(channel.params.length?channel.params[0]:null)
+        setChannelParam(channel.params.length?channel.params[0].value:null)
     }
     const handleChangeAcquisitionMethod = (event) =>{setAcquisitionMethod(event.target.value)}
     const dataTypesMenuItems = dataTypes.map((dataType) => <MenuItem value={dataType}>{dataType.name}</MenuItem>)
@@ -52,12 +53,13 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
     const handleSubmit = (event) =>{
         event.preventDefault();
         const data = new FormData(event.currentTarget);
+
         const payload = {
             serviceProfileId: data.get("serviceProfileId"),
             name: data.get("name"),
             dataType: dataType?.value,
             channelType: dataChannel?.value,
-            channelParam: channelParam?.value,
+            channelParam: channelParam,
             acquisition: acquisitionMethod?.value,
             period: data.get('period')
         }
@@ -142,7 +144,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                 </Box>
 
                 {dataChannel.params.length?<Box sx={{marginRight: 5}}>
-                    <InputLabel id="channelParam-select-label">{dataChannel.paramsType}</InputLabel>
+                    <InputLabel id="channelParam-select-label">{dataChannel.paramsType.name}</InputLabel>
                     <Select
                         required
                         fullWidth
@@ -152,7 +154,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                         labelId='channelParam-select-label'
                         onChange={handleChangeChannelParam}
                     >
-                        {dataChannel.params.map((channelParam) => {return (<MenuItem value={channelParam}>{channelParam.name}</MenuItem>)})}
+                        {dataChannel.params.map((channelParam) => {return (<MenuItem value={channelParam.value}>{channelParam.name}</MenuItem>)})}
                     </Select>
                 </Box>:null}
             </Box>

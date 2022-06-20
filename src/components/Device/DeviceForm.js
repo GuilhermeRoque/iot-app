@@ -11,21 +11,29 @@ import useAPI from "../../services/useAPI"
 import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
 
-export default function DeviceForm({organizationId, applicationId, loraProfiles, serviceProfiles, handleNewDevice}){
+export default function DeviceForm({
+    organizationId, 
+    applicationId, 
+    loraProfiles, 
+    serviceProfiles, 
+    handleNewDevice, 
+    device
+}){
 
     const api = useAPI()
     const dispatch = useDispatch()
 
-    const [loraProfile, setLoraProfile] = useState(loraProfiles[0].loraProfileId)
+    const [loraProfile, setLoraProfile] = useState(device?device.loraProfileId:loraProfiles[0].loraProfileId)
     const handleChangeLoraProfile = (event) =>{setLoraProfile(event.target.value)}
     const loraProfilesItems = loraProfiles.map((loraProfile) => <MenuItem value={loraProfile.loraProfileId}>{loraProfile.loraProfileId}</MenuItem>)
 
-    const [serviceProfile, setServiceProfile] = useState(serviceProfiles[0].serviceProfileId)
+    const [serviceProfile, setServiceProfile] = useState(device?device.serviceProfileId:serviceProfiles[0].serviceProfileId)
     const handleChangeServiceProfile = (event) =>{setServiceProfile(event.target.value)}
     const serviceProfilesItems = serviceProfiles.map((serviceProfile) => <MenuItem value={serviceProfile.serviceProfileId}>{serviceProfile.serviceProfileId}</MenuItem>)
 
-    const registerDevice = (device) => {
-        api.post("/organizations/"+organizationId+"/applications/"+applicationId+'/devices', device)
+    const registerDevice = (deviceData) => {
+        const request = device?api.post:api.put
+        request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices', deviceData)
         .then((response)=>{
             dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Dispositivo cadastrado"}))
             handleNewDevice(response.data)
@@ -67,6 +75,7 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
                 id="devId"
                 label="Identificador do dispositivo"
                 name="devId"
+                value={device?device.devId:null}
                 autoFocus
             />
             <TextField
@@ -75,6 +84,7 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
                 name="devName"
                 label="Nome"
                 fullWidth
+                value={device?device.name:null}
                 id="devName"
             />
             <TextField
@@ -82,6 +92,7 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
                 name="devEUI"
                 label="Device EUI"
                 fullWidth
+                value={device?device.devEUI:null}
                 id="devEUI"
             />
             <TextField
@@ -89,6 +100,7 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
                 name="joinEUI"
                 label="Join EUI"
                 fullWidth
+                value={device?device.joinEUI:null}
                 id="joinEUI"
                 hidden
             />
@@ -98,6 +110,7 @@ export default function DeviceForm({organizationId, applicationId, loraProfiles,
                 label="Chave de aplicação"
                 fullWidth
                 id="appKey"
+                value={device?device.appKey:null}
                 hidden
             />
             <Box sx={{display: 'flex'}}>

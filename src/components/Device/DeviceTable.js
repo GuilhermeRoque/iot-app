@@ -1,9 +1,25 @@
 import MUIDataTable from "mui-datatables";
+import actionsColumns from "../resources/Table/defaultColumns";
 import { options } from "../resources/Table/defaultOptions";
+export default function DeviceTable({devices, handlerEdit}){
+  const _devices = []
+  for (const device of devices){
+      _devices.push({
+        name: device.name,
+        devId: device.devId,
+        devEUI: device.devEUI,
+        joinEUI: device.joinEUI,
+        serviceProfile: device.serviceProfile,
+        loraProfile: device.loraProfile
+      })
+    }
+
+    function handler(dataIndex){
+      handlerEdit(_devices[dataIndex])
+    } 
 
 
-export default function DeviceTable({devices}){
-    console.log("DEVICES", devices)
+    
     const columns = [
         {name: "devId", label: "Identificador"},
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
@@ -12,22 +28,10 @@ export default function DeviceTable({devices}){
         // {name: "appKey", label:"Chave de aplicação"},
         {name: "serviceProfile", label: "Perfil de Serviço"},
         {name: "loraProfile", label: "Perfil LoRaWAN"},
-      ];
+        // ...defaultActions
+        ...actionsColumns(handler, handler)
+    ];
     
-    const _devices = []
-    console.log("devices", devices)
-    for (const device of devices){
-      _devices.push({
-        name: device.name,
-        devId: device.devId,
-        devEUI: device.devEUI,
-        joinEUI: device.joinEUI,
-        // appKey: device.appKey,
-        serviceProfile: device.serviceProfile,
-        loraProfile: device.loraProfile
-      })
-    }
-
     return (
             <MUIDataTable
               title={"Dispositivos"}

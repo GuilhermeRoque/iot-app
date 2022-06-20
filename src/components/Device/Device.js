@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import useAPI from "../../services/useAPI"
 import { useAuth } from "../../context/auth-context"
 import DeviceForm from "./DeviceForm"
@@ -13,21 +13,26 @@ import DialogForm from "../resources/DialogForm"
 
 export default function Device(){
     const api = useAPI()
-    const [organization, setOrganization] = React.useState(null)
+    const [organization, setOrganization] = useState(null)
     const auth = useAuth()
     const dispatch = useDispatch()
     const navigate = useNavigate()
+    const [device, setDevice] = useState(null)
 
     const [open, setOpen] = useState(false)
     const handleClose = () => {setOpen(false)}
     const handleClickOpen = () => {setOpen(true)}
 
+    const handlerEdit = (device) => {
+        setOpen(true)
+        setDevice(device)
+    }
     const getOrganizations = () => {
         api.get('/organizations/'+ auth.user.organizations[0])
         .then((response)=>{
             const _organization = response.data
             if(_organization.applications.length & _organization.loraProfiles.length){
-                console.log("TUDO_OK", _organization)
+                // console.log("TUDO_OK", _organization)
                 setOrganization(_organization)
             } 
             else if(! _organization.applications.length){
@@ -44,7 +49,7 @@ export default function Device(){
         })
     }
 
-    React.useEffect( () => {
+    useEffect( () => {
         if(!auth.user.organizations.length){
             dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre uma organização primeiro"}));
             navigate('/organizations', {replace: true})
@@ -54,6 +59,10 @@ export default function Device(){
         }  
     }, [])
 
+    useEffect(()=>{
+        console.log("device", device)
+    })
+
  
     const handleNewDevice = (device) => {
         const _organization = {...organization}
@@ -62,13 +71,13 @@ export default function Device(){
         handleClose()
     }
 
-    const deviceForm =  <DeviceForm 
-        organizationId={auth.user.organizations[0]} 
-        applicationId={organization?.applications[0]._id} 
-        handleNewDevice={handleNewDevice}
-        loraProfiles={organization?.loraProfiles}
-        serviceProfiles={organization?.serviceProfiles}
-    />
+    const deviceFormProps = {
+        organizationId : auth.user.organizations[0], 
+        applicationId : organization?.applications[0]._id,
+        handleNewDevice : handleNewDevice,
+        loraProfiles : organization?.loraProfiles,
+        serviceProfiles :organization?.serviceProfiles,
+    }
 
     // Not loaded yet
     if(organization == null){
@@ -76,7 +85,7 @@ export default function Device(){
     }else if(organization.applications[0].devices.length){
             return (
                 <div>
-                    <DeviceTable devices={organization.applications[0].devices}/>
+                    <DeviceTable devices={organization.applications[0].devices} handlerEdit={handlerEdit}/>
                     <Button 
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}                
@@ -89,7 +98,7 @@ export default function Device(){
                         open={open}
                         handleClose={handleClose}
                     >   
-                        {deviceForm}
+                        <DeviceForm {...deviceFormProps} device={device} ></DeviceForm>
                     </DialogForm>
                 </div>
   
@@ -97,7 +106,7 @@ export default function Device(){
     }else{
         return(
             <FormPaper title={"Cadastro de dispositivo"}>
-                {deviceForm}
+                <DeviceForm {...deviceFormProps}></DeviceForm>
             </FormPaper>
         )
     }

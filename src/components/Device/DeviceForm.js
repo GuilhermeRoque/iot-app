@@ -36,7 +36,11 @@ export default function DeviceForm({
         const request = device?api.put:api.post
         request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices', deviceData)
         .then((response)=>{
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Dispositivo cadastrado"}))
+            if(response.status === 201){
+                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Dispositivo cadastrado"}))
+            }else if(response.status === 202){
+                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Falha durante configuração LoRaWAN"}))
+            }
             handleNewDevice(response.data)
         })
         .catch((error)=>{

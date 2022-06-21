@@ -9,8 +9,9 @@ export default function DeviceTable({devices, handlerEdit}){
         devId: device.devId,
         devEUI: device.devEUI,
         joinEUI: device.joinEUI,
-        serviceProfile: device.serviceProfile,
-        loraProfile: device.loraProfile
+        serviceProfileId: device.serviceProfile,
+        loraProfileId: device.loraProfile,
+        appKey: device.appKey
       })
     }
 
@@ -25,9 +26,9 @@ export default function DeviceTable({devices, handlerEdit}){
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "devEUI", label:"Device EUI"},
         {name: "joinEUI", label:"Join EUI"},
-        // {name: "appKey", label:"Chave de aplicação"},
-        {name: "serviceProfile", label: "Perfil de Serviço"},
-        {name: "loraProfile", label: "Perfil LoRaWAN"},
+        {name: "appKey", label:"Chave de aplicação", options: {display: false}},
+        {name: "serviceProfileId", label: "Perfil de Serviço"},
+        {name: "loraProfileId", label: "Perfil LoRaWAN"},
         // ...defaultActions
         ...actionsColumns(handler, handler)
     ];

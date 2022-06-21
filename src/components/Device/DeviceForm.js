@@ -32,7 +32,8 @@ export default function DeviceForm({
     const serviceProfilesItems = serviceProfiles.map((serviceProfile) => <MenuItem value={serviceProfile.serviceProfileId}>{serviceProfile.serviceProfileId}</MenuItem>)
 
     const registerDevice = (deviceData) => {
-        const request = device?api.post:api.put
+        console.log("device",device, device?'1':'2')
+        const request = device?api.put:api.post
         request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices', deviceData)
         .then((response)=>{
             dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Dispositivo cadastrado"}))

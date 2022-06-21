@@ -31,8 +31,8 @@ export default function Device(){
         api.get('/organizations/'+ auth.user.organizations[0])
         .then((response)=>{
             const _organization = response.data
-            if(_organization.applications.length & _organization.loraProfiles.length){
-                // console.log("TUDO_OK", _organization)
+            if(_organization.applications.length > 0 & _organization.loraProfiles.length > 0){
+                console.log("TUDO_OK", _organization)
                 setOrganization(_organization)
             } 
             else if(! _organization.applications.length){
@@ -43,6 +43,7 @@ export default function Device(){
                 dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre um perfil LoRaWAN primeiro"}));
                 navigate('/lorawan-profiles', {replace: true})
             }
+            console.log("RESP", _organization)
         })
         .catch((err)=>{
             console.log("ERROR", err)
@@ -83,6 +84,7 @@ export default function Device(){
     if(organization == null){
         return (<></>)
     }else if(organization.applications[0].devices.length){
+            console.log('devices', organization.applications[0].devices)
             return (
                 <div>
                     <DeviceTable devices={organization.applications[0].devices} handlerEdit={handlerEdit}/>
@@ -104,6 +106,7 @@ export default function Device(){
   
             )
     }else{
+        console.log("AAQUIII")
         return(
             <FormPaper title={"Cadastro de dispositivo"}>
                 <DeviceForm {...deviceFormProps}></DeviceForm>

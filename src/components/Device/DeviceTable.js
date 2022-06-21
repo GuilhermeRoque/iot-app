@@ -3,6 +3,7 @@ import actionsColumns from "../resources/Table/defaultColumns";
 import { options } from "../resources/Table/defaultOptions";
 export default function DeviceTable({devices, handlerEdit}){
   const _devices = []
+  console.log('devicesTable', devices)
   for (const device of devices){
       _devices.push({
         name: device.name,
@@ -11,7 +12,8 @@ export default function DeviceTable({devices, handlerEdit}){
         joinEUI: device.joinEUI,
         serviceProfileId: device.serviceProfile,
         loraProfileId: device.loraProfile,
-        appKey: device.appKey
+        appKey: device.appKey,
+        _id: device._id
       })
     }
 
@@ -26,6 +28,7 @@ export default function DeviceTable({devices, handlerEdit}){
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "devEUI", label:"Device EUI"},
         {name: "joinEUI", label:"Join EUI"},
+        {name: "_id", label:"ID", options: {display: false}},
         {name: "appKey", label:"Chave de aplicação", options: {display: false}},
         {name: "serviceProfileId", label: "Perfil de Serviço"},
         {name: "loraProfileId", label: "Perfil LoRaWAN"},

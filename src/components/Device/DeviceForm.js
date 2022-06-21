@@ -34,7 +34,9 @@ export default function DeviceForm({
     const registerDevice = (deviceData) => {
         console.log("device",device, device?'1':'2')
         const request = device?api.put:api.post
-        request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices', deviceData)
+        const deviceId = device?("/"+device._id):""
+
+        request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices'+deviceId, deviceData)
         .then((response)=>{
             if(response.status === 201){
                 dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Dispositivo cadastrado"}))

@@ -6,8 +6,7 @@ import { useDispatch } from "react-redux"
 import { setSnackbar } from "../../redux/snackbarSlice"
 import { useNavigate } from "react-router-dom"
 import DeviceTable from "./DeviceTable"
-import DeviceDialog from "./DeviceDialog"
-import { Button, Typography } from "@mui/material"
+import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
 import DialogForm from "../resources/DialogForm"
 
@@ -66,8 +65,13 @@ export default function Device(){
 
  
     const handleNewDevice = (device) => {
-        const _organization = {...organization}
-        _organization.applications[0].devices.push(device)
+        let _organization = {...organization}
+        let applicationDevices = _organization.applications[0].devices
+        let deviceIndex = applicationDevices.findIndex((dev) => {return dev._id===device._id})  
+        if (deviceIndex > -1){
+            applicationDevices.splice(deviceIndex, 1)
+        }
+        applicationDevices.push(device)
         setOrganization(_organization)
         handleClose()
     }
@@ -106,7 +110,6 @@ export default function Device(){
   
             )
     }else{
-        console.log("AAQUIII")
         return(
             <FormPaper title={"Cadastro de dispositivo"}>
                 <DeviceForm {...deviceFormProps}></DeviceForm>

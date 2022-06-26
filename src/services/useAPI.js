@@ -6,10 +6,11 @@ const useAPI = () => {
     const auth = useAuth();
 
     useEffect(() => {
+        const token = auth?.user?.token
         const requestIntercept = api.interceptors.request.use(
             config => {
                 if (!config.headers['Authorization']) {
-                    config.headers['Authorization'] = `Bearer ${auth?.user?.token}`;
+                    config.headers['Authorization'] = `Bearer ${token}`;
                 }
                 return config;
             }, (error) => Promise.reject(error)

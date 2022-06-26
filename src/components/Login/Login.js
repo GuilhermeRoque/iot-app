@@ -63,7 +63,7 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <LogoSVG />
+          <LogoSVG width={100} height={100}/>
           <Typography component="h1" variant="h5">
           LoRaWAN Device Manager
           </Typography>

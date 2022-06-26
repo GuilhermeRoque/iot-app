@@ -1,3 +1,4 @@
+import React from "react";
 import { setSnackbar } from "../../redux/snackbarSlice";
 import { useLocation } from "react-router-dom";
 import { useAuth } from "../../context/auth-context";

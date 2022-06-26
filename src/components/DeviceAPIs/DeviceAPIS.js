@@ -1,3 +1,4 @@
+import React from "react";
 import { Grid } from "@mui/material";
 import PostCard from '../resources/CustomCard/PostCard'
 

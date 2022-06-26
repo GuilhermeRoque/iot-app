@@ -1,3 +1,4 @@
+import React from "react"
 import { Paper, Box, Typography } from "@mui/material"
 
 export default function FormPaper ({title, children}) {

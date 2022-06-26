@@ -1,3 +1,4 @@
+import React from "react";
 import LoraProfileForm from "./LoraProfileForm";
 import DialogForm from "../resources/DialogForm";
 

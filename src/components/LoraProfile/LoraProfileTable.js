@@ -1,3 +1,4 @@
+import React from "react";
 import MUIDataTable from "mui-datatables";
 import { options } from "../resources/Table/defaultOptions";
 import { loraWanVersionsValueMap, loraPhyVersionsValueMap } from "./loraModelOptions"

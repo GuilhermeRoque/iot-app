@@ -8,7 +8,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
+import LorawanMgntLogo from '../resources/LorawanMgntLogo';
 import useAPI from "../../services/useAPI";
 import {useNavigate} from 'react-router-dom'
 import { useDispatch } from "react-redux";
@@ -53,7 +53,7 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <LogoSVG />
+          <LorawanMgntLogo />
           <Typography component="h1" variant="h5">
           LoRaWAN Device Manager
           </Typography>

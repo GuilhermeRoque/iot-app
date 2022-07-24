@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNavigate} from 'react-router-dom'
+// import { useNavigate} from 'react-router-dom'
 
 
 const AuthContext = React.createContext({
@@ -14,10 +14,10 @@ const useAuth = () => {
 
 const AuthProvider = ({children}) => {
     const [user, setUser] = React.useState(null);
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const signin = (user) => {
         setUser(user)
-        navigate("/dashboard")  
+        // navigate("/dashboard")  
     }
     const signout = () => {
         setUser(null)

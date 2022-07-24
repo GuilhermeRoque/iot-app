@@ -22,8 +22,10 @@ export default function LoraProfile(){
     const handleClickOpen = () => {setOpen(true)}
 
     const getOrganizations = () => {
+        console.log("GETTING ORG...")
         api.get('/organizations/'+ auth.user.organizations[0])
         .then((response)=>{
+            console.log("ORG GOT...")
             const _organization = response.data
             setOrganization(_organization)
         })

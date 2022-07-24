@@ -10,7 +10,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {ReactComponent as LogoSVG} from "../../assets/iotManager.svg";
+import LorawanMgntLogo from '../resources/LorawanMgntLogo';
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
 import { useNavigate, useLocation } from 'react-router-dom'
@@ -40,7 +40,7 @@ export default function SignIn() {
       password: data.get("password")
     }
     
-    api.post('/users/login', userData)
+    api.post('/auth/login', userData)
     .then((response) => {
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
       auth.signin(response.data)
@@ -63,7 +63,7 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <LogoSVG width={100} height={100}/>
+          <LorawanMgntLogo/>
           <Typography component="h1" variant="h5">
           LoRaWAN Device Manager
           </Typography>

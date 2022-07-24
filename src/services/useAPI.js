@@ -1,10 +1,12 @@
 import api from "./api";
 import { useEffect } from "react";
 import { useAuth } from "../context/auth-context";
+import useRefreshToken from "./useRefreshToken";
 
 const useAPI = () => {
     const auth = useAuth();
-
+    const refresh = useRefreshToken();
+    
     useEffect(() => {
         const token = auth?.user?.token
         const requestIntercept = api.interceptors.request.use(
@@ -16,23 +18,24 @@ const useAPI = () => {
             }, (error) => Promise.reject(error)
         );
 
-        // const responseIntercept = axiosPrivate.interceptors.response.use(
-        //     response => response,
-        //     async (error) => {
-        //         const prevRequest = error?.config;
-        //         if (error?.response?.status === 403 && !prevRequest?.sent) {
-        //             prevRequest.sent = true;
-        //             const newAccessToken = await refresh();
-        //             prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
-        //             return axiosPrivate(prevRequest);
-        //         }
-        //         return Promise.reject(error);
-        //     }
-        // );
+        const responseIntercept = api.interceptors.response.use(
+            response => response,
+            async (error) => {
+                const prevRequest = error?.config;
+                if (error?.response?.status === 403 && !prevRequest?.sent) {
+                    prevRequest.sent = true;
+                    const newAccessToken = await refresh();
+                    prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;
+                    console.log("Repeating request ...")
+                    return api(prevRequest);
+                }
+                return Promise.reject(error);
+            }
+        );
 
         return () => {
             api.interceptors.request.eject(requestIntercept);
-            // axiosPrivate.interceptors.response.eject(responseIntercept);
+            api.interceptors.response.eject(responseIntercept);
         }
     }, [auth])
 

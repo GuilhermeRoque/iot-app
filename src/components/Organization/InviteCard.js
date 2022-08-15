@@ -7,22 +7,26 @@ import Typography from '@mui/material/Typography';
 import useAPI from '../../services/useAPI';
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice"; 
+import { MapperMemberRole } from "../resources/enums"
 
-export default function InviteCard({name, role, oragnizationId, updateOrganizations}) {
+export default function InviteCard({organizationName, member, oragnizationId, updateMemberStatus}) {
     const api = useAPI()
     const dispatch = useDispatch()
+    const memberUpdated = {...member}
+    // active
+    memberUpdated.status = 0
     const handleAccept = () => {
-        api.post("/organizations/"+oragnizationId+"/join")
+        api.put("/organizations/"+oragnizationId+"/members/"+member._id, {status: 0})
         .then((response) => {
           dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Convite aceito"}))
-          updateOrganizations()
+          updateMemberStatus(oragnizationId, member._id)
         })
         .catch((err)=>{
           console.log(err)
           dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Erro inesperado"}))
-          updateOrganizations()
         })  
     }
+
     return (
     <Card sx={{ minWidth: 275 }}>
       <CardContent>
@@ -30,13 +34,13 @@ export default function InviteCard({name, role, oragnizationId, updateOrganizati
           Convite de participação
         </Typography>
         <Typography variant="h5" component="div">
-          {name}
+          {organizationName}
         </Typography>
         {/* <Typography sx={{ mb: 1.5 }} color="text.secondary">
           adjective
         </Typography> */}
         <Typography variant="body2">
-          Você foi convidado a participar da organização <b>{name}</b> com a função de {role}
+          Você foi convidado a participar da organização <b>{organizationName}</b> com a função de <b>{MapperMemberRole[member.role]}</b>
         </Typography>
       </CardContent>
       <CardActions>

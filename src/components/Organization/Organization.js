@@ -28,11 +28,29 @@ export default function Organization() {
     api.get('/organizations')
       .then((response)=>{
         console.log('Organizations got')
-        setOrganization(response.data)  
+        const organizations = response.data
+        console.log(organizations)
+        setOrganization(organizations)  
         })
       .catch((err)=>{
           console.log('Error getting organizations', err)
         })
+  } 
+
+  const updateMemberStatus = (organizationId, memberId) => {
+    const newOrganizations = [...organization]
+    const orgIndex = newOrganizations.findIndex(org => {return org._id === organizationId;});
+    const newOrg = newOrganizations[orgIndex]
+    const memberIndex = newOrg.members.findIndex(memb => {return memb._id === memberId})
+    newOrg.members[memberIndex].status = 0
+    setOrganization(newOrganizations)
+  }
+  const addMember = (organizationId, member) => {
+    const newOrganizations = [...organization]
+    const orgIndex = newOrganizations.findIndex(org => {return org._id === organizationId;});
+    const newOrg = newOrganizations[orgIndex]
+    newOrg.members.push(member)
+    setOrganization(newOrganizations)
   }
 
   useEffect(() => {
@@ -50,22 +68,22 @@ export default function Organization() {
     const first_organization = organization.length?organization[0]:{name: '', members: []}
     if(organization.length){
       console.log("There is organizations, rendering first one..")
-      console.log("First organization", first_organization)
       const index = first_organization.members.findIndex(member => {
-        return member.email == auth.user.email;
+        return member.userId === auth.user._id;
       });
-      if (index == -1){
+      if (index === -1){
+        console.log("User is not in organization!")
         return <></>
       }
       const member = first_organization.members[index]
-      if (member.status == 'Convidado'){
+      if (member.status === 1){
         console.log("The user still is just invited, rendering invite card..")
         return (
           <InviteCard 
-            name={first_organization.name} 
-            role={member.role} 
+            organizationName={first_organization.name} 
+            member={member} 
             oragnizationId={first_organization._id}
-            updateOrganizations={getOrganizations}
+            updateMemberStatus={updateMemberStatus}
             >            
           </InviteCard>
         )
@@ -83,7 +101,7 @@ export default function Organization() {
             <InviteDialog 
               open={open} 
               handleClose={handleClose} 
-              setOrganization={setOrganization}
+              addMember={addMember}
               organizationId={organization[0]._id}
               >
             </InviteDialog>                  

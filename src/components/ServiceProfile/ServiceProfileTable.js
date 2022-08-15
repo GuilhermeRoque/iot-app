@@ -1,7 +1,7 @@
 import React from "react";
 import MUIDataTable from "mui-datatables";
 import { options } from "../resources/Table/defaultOptions";
-import servieProfileData from "./serviceProfileData"
+import {acquisitionMethodsValueMap, channelTypesValueMap, paramsValueMap, dataTypesValueMap} from "./serviceProfileData"
 
 export default function ServiceProfileTable({serviceProfiles}){
     const columns = [
@@ -14,20 +14,14 @@ export default function ServiceProfileTable({serviceProfiles}){
       ];
 
     
-    console.log([...servieProfileData.acquisitionMethodsValueMap.entries()])
-    console.log([...servieProfileData.channelTypesValueMap.entries()])
-    console.log([...servieProfileData.paramsValueMap.entries()])
-    console.log([...servieProfileData.dataTypesValueMap.entries()])
-    console.log(serviceProfiles)
-
     const _serviceProfiles = serviceProfiles.map((serviceProfile) => {
       return{
         serviceProfileId: serviceProfile.serviceProfileId,
         name: serviceProfile.name,
-        acquisition: servieProfileData.acquisitionMethodsValueMap.get(serviceProfile.acquisition),
-        dataType: servieProfileData.dataTypesValueMap.get(serviceProfile.dataType),
-        channelType: servieProfileData.channelTypesValueMap.get(serviceProfile.channelType),
-        channelParam: servieProfileData.paramsValueMap.get(serviceProfile.channelParam),        
+        acquisition: acquisitionMethodsValueMap.get(serviceProfile.acquisition),
+        dataType: dataTypesValueMap.get(serviceProfile.dataType),
+        channelType: channelTypesValueMap.get(serviceProfile.channelType),
+        channelParam: paramsValueMap.get(serviceProfile.channelParam),        
       }
     })
 

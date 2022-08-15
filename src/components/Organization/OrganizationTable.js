@@ -1,34 +1,33 @@
 import React from "react";
-import { CacheProvider } from "@emotion/react";
 import MUIDataTable from "mui-datatables";
-import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { options } from "../resources/Table/defaultOptions";
-import createCache from "@emotion/cache";
-
-const muiCache = createCache({
-  key: "mui-datatables",
-  prepend: true
-});
-
+import {MapperMemberRole, MapperMemeberStatus} from "../resources/enums"
 
 export default function OrganizationTable({members}){
     const columns = [
-        {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
-        {name: "email", label: "Email"},
+        {name: "userName", label:"Nome", options: { filterOptions: { fullWidth: true } } },
+        {name: "userEmail", label: "Email"},
         {name: "role", label: "Função"},
         {name: "status", label: "Estado"},
       ];
     
+    console.log('Rendering members table')
+    const membersMapped = []
+    members.map((member) => {
+      membersMapped.push({
+        role: MapperMemberRole[member.role],
+        status: MapperMemeberStatus[member.status],
+        userName: member.userName,
+        userEmail: member.userEmail
+      })
+    })  
+
     return (
-        <CacheProvider value={muiCache}>
-          <ThemeProvider theme={createTheme()}>
-            <MUIDataTable
-              title={"Participantes"}
-              data={members}
-              columns={columns}
-              options={options}
-            />
-           </ThemeProvider>
-        </CacheProvider>
+        <MUIDataTable
+          title={"Participantes"}
+          data={membersMapped}
+          columns={columns}
+          options={options}
+        />
       );  
 }

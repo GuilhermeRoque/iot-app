@@ -12,6 +12,8 @@ import { Badge } from '@mui/material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
+import useAPI from '../../services/useAPI';
+import { useAuth } from '../../context/auth-context';
 
 export const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
@@ -37,6 +39,9 @@ export const AppBar = styled(MuiAppBar, {
 export function DrawerAppBar({open,drawerwidth,toggleDrawer}){
     const [anchorEl, setAnchorEl] = React.useState(null);
     const navigate = useNavigate()
+    let auth = useAuth();
+    const api = useAPI()
+
     const handleMenu = (event) => {
       setAnchorEl(event.currentTarget);
     };
@@ -46,7 +51,10 @@ export function DrawerAppBar({open,drawerwidth,toggleDrawer}){
     };
 
     const logout = () => {
-        localStorage.setItem("token","")
+        api.post('/auth/logout')
+          .then(()=>console.log("Success logout"))
+          .catch(()=>console.log("Fail logout"))
+        auth.signout()
         setAnchorEl(null);
         navigate("/login")
     }

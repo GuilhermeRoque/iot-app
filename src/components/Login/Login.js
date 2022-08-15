@@ -43,7 +43,10 @@ export default function SignIn() {
     api.post('/auth/login', userData)
     .then((response) => {
       dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
-      auth.signin(response.data)
+      const accessToken = response.data.accessToken
+      const user = response.data.user
+      user.token = accessToken
+      auth.signin(user)
       navigate(from, {replace: true})
     })
     .catch(error => {
@@ -67,7 +70,7 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
           LoRaWAN Device Manager
           </Typography>
-          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required

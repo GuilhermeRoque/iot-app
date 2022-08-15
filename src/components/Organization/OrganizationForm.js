@@ -19,16 +19,16 @@ export default function OrganizationForm({setOrganization}){
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const payload = {
-          organizationId: data.get("organizationId"),
           name: data.get("organizationName"),
-          // apiKey: data.get("organizationApiKey")
+          description: data.get("organizationDescription"),
+
         }
         api.post("/organizations", payload)
           .then((response) => {
             dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Organização cadastrada"}))
-            const organizations = [response.data._id]
-            setOrganization([response.data])
-            auth.updateOrganizations(organizations)    
+            setOrganization([response.data.organization])
+            // const organizations = [response.data._id]
+            // auth.updateOrganizations(organizations)    
           })
           .catch((err)=>{
             console.log(err)
@@ -43,28 +43,20 @@ export default function OrganizationForm({setOrganization}){
             margin="normal"
             required
             fullWidth
-            id="organizationId"
-            label="Identificador"
-            name="organizationId"
+            id="organizationName"
+            label="Nome"
+            name="organizationName"
             autoFocus
             />
           <TextField
             margin="normal"
             required
             fullWidth
-            id="organizationName"
-            label="Nome"
-            name="organizationName"
+            id="organizationDescription"
+            label="Descrição"
+            name="organizationDescription"
             autoFocus
             />
-          {/* <TextField
-            margin="normal"
-            fullWidth
-            id="organizationApiKey"
-            label="Chave de API"
-            name="organizationApiKey"
-            autoFocus
-            /> */}
           <Button
               type="submit"
               fullWidth

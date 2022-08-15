@@ -1,4 +1,4 @@
-const dataTypes = [
+export const dataTypes = [
     {name: 'Inteiro', value:0},
     {name: 'Texto', value:1},
     {name: 'Lógico', value:2},
@@ -46,13 +46,13 @@ const allParams = [
     ...GDIParams
 ]
 
-const paramsValueMap = new Map()
+export const paramsValueMap = new Map()
 for (const param of allParams) {paramsValueMap.set(param.value, param.name)}
 
 const deviceParamType = {name: 'Dispositivo', value: 0}
 const configParamType = {name: 'Configuração', value: 1}
 
-const channelTypes = [
+export const channelTypes = [
     {name: 'Digital', value:"0", params: [], paramsType: null},
     {name: 'Analógico', value:"1", params: [], paramsType: null},
     {name: 'Interrupção', value:"2", params: [], paramsType: null},
@@ -82,28 +82,17 @@ const channelTypes = [
     },
 ]
 
-const channelTypesValueMap = new Map()
+export const channelTypesValueMap = new Map()
 for(const channelType of channelTypes) {channelTypesValueMap.set(channelType.value, channelType.name)}
 
-const acquisitionMethods = [
+export const acquisitionMethods = [
     {name: "Leitura única", value:0},
     {name: "Média", value:1},
     {name: "RMS", value:2},
 
 ]
-const acquisitionMethodsValueMap = new Map()
+export const acquisitionMethodsValueMap = new Map()
 for(const acquisitionMethod of acquisitionMethods) {acquisitionMethodsValueMap.set(acquisitionMethod.value, acquisitionMethod.name)}
 
-const dataTypesValueMap = new Map()
+export const dataTypesValueMap = new Map()
 for(const dataType of dataTypes) {dataTypesValueMap.set(dataType.value, dataType.name)}
-
-
-module.exports = {
-    dataTypes,
-    channelTypes,
-    acquisitionMethods,
-    acquisitionMethodsValueMap,
-    channelTypesValueMap,
-    paramsValueMap,
-    dataTypesValueMap
-}

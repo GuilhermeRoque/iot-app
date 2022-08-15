@@ -15,9 +15,10 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setSnackbar } from "../../redux/snackbarSlice";
 import useAPI from "../../services/useAPI";
+import {MapperMemberRole} from "../resources/enums"
 
 
-export default function InviteDialog({open, handleClose, organizationId, setOrganization}){
+export default function InviteDialog({open, handleClose, organizationId, addMember}){
     const api = useAPI()
     const dispatch = useDispatch()
     const [role, setRole] = useState('')
@@ -33,12 +34,12 @@ export default function InviteDialog({open, handleClose, organizationId, setOrga
           email: data.get("email-invite"),
           role: data.get("role-invite")
         }
-        const path = "/organizations/"+organizationId+"/users"
+        const path = "/organizations/"+organizationId+"/members"
         api.post(path, post_data)
         .then((response) => {
           console.log("Usuario convidado", response)
           dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Convite enviado"}))
-          setOrganization([response.data])
+          addMember(organizationId, response.data)
         })
         .catch((err)=>{
           console.log("err", err)
@@ -48,6 +49,8 @@ export default function InviteDialog({open, handleClose, organizationId, setOrga
         handleClose();
       }
     
+    
+    const menuItems = Object.entries(MapperMemberRole).map((memberRole)=>{return <MenuItem value={memberRole[0]}>{memberRole[1]}</MenuItem>})
 
     return(
         <Dialog open={open} onClose={handleClose}>
@@ -76,9 +79,7 @@ export default function InviteDialog({open, handleClose, organizationId, setOrga
                         fullWidth
                         onChange={handleChange}
                     >
-                        <MenuItem value={"Dono"}>Dono</MenuItem>
-                        <MenuItem value={"Administrador"}>Administrador</MenuItem>
-                        <MenuItem value={"Visualizador"}>Visualizador</MenuItem>
+                        {menuItems}
                     </Select>
                     <Button type="submit">Enviar</Button>
                     <Button onClick={handleClose}>Cancelar</Button>

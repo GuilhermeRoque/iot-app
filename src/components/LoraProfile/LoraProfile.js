@@ -2,20 +2,19 @@ import React, { useState } from "react"
 import useAPI from "../../services/useAPI"
 import { useAuth } from "../../context/auth-context"
 import LoraProfileForm from "./LoraProfileForm"
-import { useDispatch } from "react-redux"
-import { setSnackbar } from "../../redux/snackbarSlice"
 import { useNavigate } from "react-router-dom"
 import LoraProfileTable from "./LoraProfileTable"
 import LoraProfileDialog from "./LoraProfileDialog"
 import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
+import { useSnackbar } from "../../context/snackbar-context";
 
 export default function LoraProfile(){
     const api = useAPI()
     const [organization, setOrganization] = React.useState(null)
     const auth = useAuth()
-    const dispatch = useDispatch()
     const navigate = useNavigate()
+    const toast = useSnackbar()
 
     const [open, setOpen] = useState(false)
     const handleClose = () => {setOpen(false)}
@@ -34,7 +33,7 @@ export default function LoraProfile(){
 
     React.useEffect( () => {
         if(!auth.user.organizations.length){
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre uma organização primeiro"}));
+            toast.start("Cadastre uma organização primeiro", "warning")
             navigate('/organizations', {replace: true})
         }else{
             getOrganizations()

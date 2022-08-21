@@ -6,7 +6,9 @@ const useRefreshToken = () => {
 
     async function refresh () {
         const response = await api.get('/auth/refresh')
-        const token = response.data.token
+        const token = response.data.accessToken
+        console.log("access token received:")
+        console.log(token)
         const user = {...auth.user}
         user.token = token
         auth.signin(user)

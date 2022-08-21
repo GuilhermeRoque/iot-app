@@ -10,14 +10,13 @@ import {
 } from "@mui/material"
 import React from "react"
 import useAPI from "../../services/useAPI"
-import { useDispatch } from "react-redux"
-import { setSnackbar } from "../../redux/snackbarSlice"
 import { loraWanVersions, loraPhyVersions } from "./loraModelOptions"
 import ttn_freq_plans from "./ttn_freq_plans"
+import { useSnackbar } from "../../context/snackbar-context"
 
 export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
     const api = useAPI()
-    const dispatch = useDispatch()
+    const toast = useSnackbar()
 
     const [loraWanVersion, setLoraWanVersion] = React.useState(loraWanVersions[0].value)
     const [loraFreqPlan, setLoraFreqPlan] = React.useState("EU_863_870")
@@ -33,12 +32,12 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
     const registerLoraProfile = (loraProfile) => {
         api.post("/organizations/"+organizationId+"/lora-profiles", loraProfile)
         .then((response)=>{
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Perfil LoRaWAN cadastrado"}))
+            toast.start("Perfil LoRaWAN cadastrado", "success")
             handleNewLoraProfile(response.data)
         })
         .catch((error)=>{
             console.log(error)
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Erro ao cadastrar perfil LoRaWAN"}))
+            toast.start("Erro ao cadastrar perfil LoRaWAN", "error")
         })
     }
 

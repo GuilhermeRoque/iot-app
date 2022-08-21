@@ -110,7 +110,6 @@ export default function Organization() {
       }
     }else{
       console.log("There is no organizations, rendering register form..")
-      // dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Nenhuma organização encontrada"}));
       return(
         <OrganizationForm setOrganization={setOrganization}/>
       )

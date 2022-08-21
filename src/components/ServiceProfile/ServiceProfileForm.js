@@ -7,14 +7,13 @@ import {
     MenuItem,
 } from "@mui/material"
 import React from "react"
+import { useSnackbar } from "../../context/snackbar-context"
 import useAPI from "../../services/useAPI"
-import { useDispatch } from "react-redux"
-import { setSnackbar } from "../../redux/snackbarSlice"
 import { acquisitionMethods, channelTypes, dataTypes } from "./serviceProfileData"
 
 export default function ServiceProfileForm({organizationId, handleNewServiceProfile}){
     const api = useAPI()
-    const dispatch = useDispatch()
+    const toast = useSnackbar()
 
     const [dataType, setDataType] = React.useState(dataTypes[0])
     const [dataChannel, setDataChannel] = React.useState(channelTypes[0])
@@ -41,12 +40,12 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
     const registerServiceProfile = (serviceProfile) => {
         api.post("/organizations/"+organizationId+"/service-profiles", serviceProfile)
         .then((response)=>{
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Perfil de serviço cadastrado"}))
+            toast.start("Perfil de serviço cadastrado", "success")
             handleNewServiceProfile(response.data)
         })
         .catch((error)=>{
             console.log(error)
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Erro ao cadastrar perfil de serviço"}))
+            toast.start("Erro ao cadastrar perfil de serviço", "error")
         })
     }
 

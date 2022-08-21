@@ -85,7 +85,7 @@ export function DrawerAppBar({open,drawerwidth,toggleDrawer}){
             noWrap
             sx={{ flexGrow: 1 }}
           >
-            LoRaWAN Device Manager
+            LoRaWAN Application Platform
           </Typography>
           <IconButton color="inherit">
             <Badge badgeContent={0} color="secondary">

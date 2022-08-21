@@ -15,6 +15,7 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import ApiIcon from '@mui/icons-material/Api';
 import GroupsIcon from '@mui/icons-material/Groups';
 import DrawerItem from './DrawerItem';
+import HomeIcon from '@mui/icons-material/Home';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerAppBar } from '../AppBar';
 import CellTowerIcon from '@mui/icons-material/CellTower';
@@ -84,6 +85,10 @@ export default function MiniDrawer() {
             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
           </IconButton>
         </DrawerHeader>
+        <Divider />
+        <List>
+          <DrawerItem open={open} text={"Apresentação"} Icon={HomeIcon} link={'home'}/>
+        </List>
         <Divider />
         <List>
           <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon} link={'organizations'}/>

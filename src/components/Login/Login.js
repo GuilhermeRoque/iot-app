@@ -11,11 +11,10 @@ import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LorawanMgntLogo from '../resources/LorawanMgntLogo';
-import { useDispatch } from "react-redux";
-import { setSnackbar } from "../../redux/snackbarSlice";
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/auth-context';
 import useAPI from '../../services/useAPI';
+import { useSnackbar } from '../../context/snackbar-context';
 
 const theme = createTheme({
   palette: {
@@ -25,13 +24,13 @@ const theme = createTheme({
 });
 
 export default function SignIn() {
-  const dispatch = useDispatch()
   let navigate = useNavigate();
   let location = useLocation();
   let from = location.state?.from?.pathname || "/";
   let auth = useAuth();
   const api = useAPI()
-  
+  const toast = useSnackbar()
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -42,15 +41,19 @@ export default function SignIn() {
     
     api.post('/auth/login', userData)
     .then((response) => {
-      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário autenticado"}));
+      toast.start("Usuário autenticado", "success")
       const accessToken = response.data.accessToken
       const user = response.data.user
       user.token = accessToken
       auth.signin(user)
-      navigate(from, {replace: true})
+      if(from == '/'){
+        navigate('/home', {replace: true})
+      }else{
+        navigate(from, {replace: true})
+      }
     })
     .catch(error => {
-      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha na autenticação"}));
+      toast.start("Falha na autenticação", "error")
     })
   };
 
@@ -68,7 +71,7 @@ export default function SignIn() {
         >
           <LorawanMgntLogo/>
           <Typography component="h1" variant="h5">
-          LoRaWAN Device Manager
+          LoRaWAN Application Platform
           </Typography>
           <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField

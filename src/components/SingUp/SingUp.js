@@ -11,15 +11,14 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import LorawanMgntLogo from '../resources/LorawanMgntLogo';
 import useAPI from "../../services/useAPI";
 import {useNavigate} from 'react-router-dom'
-import { useDispatch } from "react-redux";
-import { setSnackbar } from "../../redux/snackbarSlice";
+import { useSnackbar } from '../../context/snackbar-context';
 
 const theme = createTheme();
 
 export default function SignUp() {
   let navigate = useNavigate();
-  const dispatch = useDispatch()
   const api = useAPI()
+  const toast = useSnackbar()
 
 
   const handleSubmit = (event) => {
@@ -33,11 +32,11 @@ export default function SignUp() {
     }
     api.post('/users/', user)
     .then(response => {
-      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Usuário registrado"}));
+      toast.start("Usuário registrado", "success")
       navigate('/login')
     })
     .catch(error => {
-      dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha ao registrar"}));
+      toast.start("Falha ao registrar", "error")
     })
   };
 
@@ -55,7 +54,7 @@ export default function SignUp() {
         >
           <LorawanMgntLogo />
           <Typography component="h1" variant="h5">
-          LoRaWAN Device Manager
+          LoRaWAN Application Platform
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>

@@ -2,22 +2,20 @@ import React, { useEffect, useState } from "react"
 import useAPI from "../../services/useAPI"
 import { useAuth } from "../../context/auth-context"
 import DeviceForm from "./DeviceForm"
-import { useDispatch } from "react-redux"
-import { setSnackbar } from "../../redux/snackbarSlice"
 import { useNavigate } from "react-router-dom"
 import DeviceTable from "./DeviceTable"
 import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
 import DialogForm from "../resources/DialogForm"
+import { useSnackbar } from "../../context/snackbar-context";
 
 export default function Device(){
     const api = useAPI()
     const [organization, setOrganization] = useState(null)
     const auth = useAuth()
-    const dispatch = useDispatch()
     const navigate = useNavigate()
     const [device, setDevice] = useState(null)
-
+    const toast = useSnackbar()
     const [open, setOpen] = useState(false)
     const handleClose = () => {setOpen(false)}
     const handleClickOpen = () => {setOpen(true)}
@@ -35,11 +33,11 @@ export default function Device(){
                 setOrganization(_organization)
             } 
             else if(! _organization.applications.length){
-                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre uma aplicação primeiro"}));
+                toast.start("Cadastre uma aplicação primeiro", "warning")
                 navigate('/applications', {replace: true})    
             }
             else if(! _organization.loraProfiles.length){
-                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre um perfil LoRaWAN primeiro"}));
+                toast.start("Cadastre um perfil LoRaWAN primeiro", "warning")
                 navigate('/lorawan-profiles', {replace: true})
             }
             console.log("RESP", _organization)
@@ -51,7 +49,7 @@ export default function Device(){
 
     useEffect( () => {
         if(!auth.user.organizations.length){
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Cadastre uma organização primeiro"}));
+            toast.start("Cadastre uma organização primeiro", 'warning')
             navigate('/organizations', {replace: true})
         }else{
             console.log("GETTING ORGs...")

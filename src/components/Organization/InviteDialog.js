@@ -12,16 +12,15 @@ import {
     TextField
 } from "@mui/material";
 import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { setSnackbar } from "../../redux/snackbarSlice";
 import useAPI from "../../services/useAPI";
 import {MapperMemberRole} from "../resources/enums"
+import { useSnackbar } from "../../context/snackbar-context";
 
 
 export default function InviteDialog({open, handleClose, organizationId, addMember}){
     const api = useAPI()
-    const dispatch = useDispatch()
     const [role, setRole] = useState('')
+    const toast = useSnackbar()
 
     const handleChange = (event) => {
         setRole(event.target.value);
@@ -38,19 +37,18 @@ export default function InviteDialog({open, handleClose, organizationId, addMemb
         api.post(path, post_data)
         .then((response) => {
           console.log("Usuario convidado", response)
-          dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Convite enviado"}))
+          toast.start("Convite enviado", 'success')
           addMember(organizationId, response.data)
         })
         .catch((err)=>{
           console.log("err", err)
-          dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha enviar convite"}))
-
+          toast.start("Falha enviar convite", 'error')
         })
         handleClose();
       }
     
     
-    const menuItems = Object.entries(MapperMemberRole).map((memberRole)=>{return <MenuItem value={memberRole[0]}>{memberRole[1]}</MenuItem>})
+    const menuItems = Object.entries(MapperMemberRole).map((memberRole, index)=>{return <MenuItem key={index} value={memberRole[0]}>{memberRole[1]}</MenuItem>})
 
     return(
         <Dialog open={open} onClose={handleClose}>

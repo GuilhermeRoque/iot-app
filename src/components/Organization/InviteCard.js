@@ -5,25 +5,24 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import useAPI from '../../services/useAPI';
-import { useDispatch } from "react-redux";
-import { setSnackbar } from "../../redux/snackbarSlice"; 
 import { MapperMemberRole } from "../resources/enums"
+import { useSnackbar } from "../../context/snackbar-context";
 
 export default function InviteCard({organizationName, member, oragnizationId, updateMemberStatus}) {
     const api = useAPI()
-    const dispatch = useDispatch()
     const memberUpdated = {...member}
+    const toast = useSnackbar()
     // active
     memberUpdated.status = 0
     const handleAccept = () => {
         api.put("/organizations/"+oragnizationId+"/members/"+member._id, {status: 0})
         .then((response) => {
-          dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Convite aceito"}))
+          toast.start("Convite aceito", 'success')
           updateMemberStatus(oragnizationId, member._id)
         })
         .catch((err)=>{
           console.log(err)
-          dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Erro inesperado"}))
+          toast.start("Erro inesperado", 'error')
         })  
     }
 

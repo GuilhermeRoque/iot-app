@@ -7,9 +7,8 @@ import {
     MenuItem
 } from "@mui/material"
 import React, { useState } from "react"
+import { useSnackbar } from "../../context/snackbar-context"
 import useAPI from "../../services/useAPI"
-import { useDispatch } from "react-redux"
-import { setSnackbar } from "../../redux/snackbarSlice"
 
 export default function DeviceForm({
     organizationId, 
@@ -19,9 +18,8 @@ export default function DeviceForm({
     handleNewDevice, 
     device
 }){
-
+    const toast = useSnackbar()
     const api = useAPI()
-    const dispatch = useDispatch()
 
     const [loraProfile, setLoraProfile] = useState(device?device.loraProfileId:loraProfiles[0].loraProfileId)
     const handleChangeLoraProfile = (event) =>{setLoraProfile(event.target.value)}
@@ -39,15 +37,15 @@ export default function DeviceForm({
         request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices'+deviceId, deviceData)
         .then((response)=>{
             if(response.status === 201){
-                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Dispositivo cadastrado"}))
+                toast.start("Dispositivo cadastrado", 'success')
             }else if(response.status === 202){
-                dispatch(setSnackbar({snackbarOpen: true, snackbarType: "warning", snackbarMessage: "Falha durante configuração LoRaWAN"}))
+                toast.start("Falha durante configuração LoRaWAN", 'warning')
             }
             handleNewDevice(response.data)
         })
         .catch((error)=>{
             console.log(error)
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Erro ao cadastrar dispositvo"}))
+            toast.start("Erro inesperado", 'error')
         })
     }
 

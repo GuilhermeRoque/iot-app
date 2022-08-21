@@ -5,15 +5,14 @@ import {
     Typography,
     Button 
 } from "@mui/material"
-import { useDispatch } from "react-redux";
-import { setSnackbar } from "../../redux/snackbarSlice";
 import useAPI from "../../services/useAPI";
 import { useAuth } from "../../context/auth-context";
+import { useSnackbar } from "../../context/snackbar-context";
 
 export default function OrganizationForm({setOrganization}){
     const api = useAPI()
-    const dispatch = useDispatch()
     const auth = useAuth()
+    const toast = useSnackbar()
 
     const handleSubmit = (event) =>{
         event.preventDefault();
@@ -25,14 +24,14 @@ export default function OrganizationForm({setOrganization}){
         }
         api.post("/organizations", payload)
           .then((response) => {
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "success", snackbarMessage: "Organização cadastrada"}))
+            toast("Organização cadastrada", "success")
             setOrganization([response.data.organization])
             // const organizations = [response.data._id]
             // auth.updateOrganizations(organizations)    
           })
           .catch((err)=>{
             console.log(err)
-            dispatch(setSnackbar({snackbarOpen: true, snackbarType: "error", snackbarMessage: "Falha ao registrar"}))
+            toast("Falha ao registrar", "error")
           })
       }
     
@@ -59,7 +58,6 @@ export default function OrganizationForm({setOrganization}){
             />
           <Button
               type="submit"
-              fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >

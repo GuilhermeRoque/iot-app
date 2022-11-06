@@ -87,15 +87,15 @@ export default function MiniDrawer() {
         </DrawerHeader>
         <Divider />
         <List>
-          <DrawerItem open={open} text={"Apresentação"} Icon={HomeIcon} link={'home'}/>
+          <DrawerItem open={open} text={"Apresentação"} Icon={HomeIcon} link={'/'}/>
         </List>
         <Divider />
         <List>
           <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon} link={'organizations'}/>
-          <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon} link={'applications'}/>
-          <DrawerItem open={open} text={"Perfis LoRaWAN"} Icon={CellTowerIcon} link={'lorawan-profiles'}/>
-          <DrawerItem open={open} text={"Perfis de Serviço"} Icon={SettingsApplicationsIcon} link={'service-profiles'}/>
-          <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon} link={'devices'}/>
+          <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon} link={'organizations/applications'}/>
+          <DrawerItem open={open} text={"Perfis LoRaWAN"} Icon={CellTowerIcon} link={'organizations/lorawan-profiles'}/>
+          <DrawerItem open={open} text={"Perfis de Serviço"} Icon={SettingsApplicationsIcon} link={'organizations/service-profiles'}/>
+          <DrawerItem open={open} text={"Dispositivos"} Icon={EdgesensorLowIcon} link={'organizations/devices'}/>
         </List>
         <Divider />
         <List>

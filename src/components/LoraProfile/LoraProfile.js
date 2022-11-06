@@ -8,53 +8,59 @@ import LoraProfileDialog from "./LoraProfileDialog"
 import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
 import { useSnackbar } from "../../context/snackbar-context";
+import APIClient from "../../services/apiClient"
+import { useOrganization } from '../../context/organization-context';
 
 export default function LoraProfile(){
     const api = useAPI()
-    const [organization, setOrganization] = React.useState(null)
+    const [loraWANProfiles, setLoraWANProfiles] = React.useState(null)
     const auth = useAuth()
     const navigate = useNavigate()
-    const toast = useSnackbar()
+    const OrganizationContext = useOrganization()  
+    const currentOrganization = OrganizationContext.organization
+    console.log("Current organization: ", currentOrganization)
 
     const [open, setOpen] = useState(false)
     const handleClose = () => {setOpen(false)}
     const handleClickOpen = () => {setOpen(true)}
 
-    const getOrganizations = () => {
-        console.log("GETTING ORG...")
-        api.get('/organizations/'+ auth.user.organizations[0])
-        .then((response)=>{
-            console.log("ORG GOT...")
-            const _organization = response.data
-            setOrganization(_organization)
-        })
-        .catch((err)=>{console.log(err)})
-    }
+    const toast = useSnackbar()
+    const userOrganizations = auth?.user?.userOrganizations
 
     React.useEffect( () => {
-        if(!auth.user.organizations.length){
-            toast.start("Cadastre uma organização primeiro", "warning")
+        const apiClient = new APIClient(api)
+        if(!userOrganizations){
+            toast.start("Cadastre uma organização primeiro", 'warning')
             navigate('/organizations', {replace: true})
         }else{
-            getOrganizations()
+            if (currentOrganization){
+                apiClient.getLoraProfiles(currentOrganization)
+                .then((data) => {
+                    setLoraWANProfiles(data)
+                })
+                .catch((error)=>{
+                    console.log(error)
+                    toast.start("Não foi possível carregador os dados", "error")
+                })
+            }
         }  
-    }, [])
+    }, [api, toast, navigate, currentOrganization])
 
  
     const handleNewLoraProfile = (loraProfile) => {
-        const _organization = {...organization}
-        _organization.loraProfiles.push(loraProfile)
-        setOrganization(_organization)
+        const newloraWANProfiles = [...loraWANProfiles]
+        newloraWANProfiles.push(loraProfile)
+        setLoraWANProfiles(newloraWANProfiles)
         handleClose()
     }
 
     // Not loaded yet
-    if(organization == null){
+    if(loraWANProfiles == null){
         return (<></>)
-    }else if(organization.loraProfiles.length){
+    }else if(loraWANProfiles.length){
             return (
                 <div>
-                    <LoraProfileTable organizationName={organization.name} loraProfiles={organization.loraProfiles}/>
+                    <LoraProfileTable loraProfiles={loraWANProfiles}/>
                     <Button 
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}                
@@ -62,7 +68,7 @@ export default function LoraProfile(){
                         Novo Perfil LoRaWAN
                     </Button>
                     <LoraProfileDialog 
-                        organizationId={auth.user.organizations[0]} 
+                        organizationId={currentOrganization} 
                         handleNewLoraProfile={handleNewLoraProfile}
                         open={open}
                         handleClose={handleClose}
@@ -74,7 +80,7 @@ export default function LoraProfile(){
     }else{
         return(
             <FormPaper title={"Cadastre um perfil LoRaWAN"}>
-                <LoraProfileForm organizationId={auth.user.organizations[0]} handleNewLoraProfile={handleNewLoraProfile}/>
+                <LoraProfileForm organizationId={currentOrganization} handleNewLoraProfile={handleNewLoraProfile}/>
             </FormPaper>
         )
     }

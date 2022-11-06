@@ -28,14 +28,13 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
     const handleChangeDataType = (event) =>{setDataType(event.target.value)}
     const handleChangeDataChannel = (event) =>{
         const channel = event.target.value
-        // console.log("channel, ", channel)
         setDataChannel(channel)
         setChannelParam(channel.params.length?channel.params[0].value:null)
     }
     const handleChangeAcquisitionMethod = (event) =>{setAcquisitionMethod(event.target.value)}
-    const dataTypesMenuItems = dataTypes.map((dataType) => <MenuItem value={dataType}>{dataType.name}</MenuItem>)
-    const channelTypesMenuItems = channelTypes.map((channelType) => <MenuItem value={channelType}>{channelType.name}</MenuItem>)
-    const acquisitionMethodsMenuItems = acquisitionMethods.map((acquisitionMethod) => <MenuItem value={acquisitionMethod}>{acquisitionMethod.name}</MenuItem>)
+    const dataTypesMenuItems = dataTypes.map((dataType, index) => <MenuItem value={dataType} key={index}>{dataType.name}</MenuItem>)
+    const channelTypesMenuItems = channelTypes.map((channelType, index) => <MenuItem value={channelType} key={index}>{channelType.name}</MenuItem>)
+    const acquisitionMethodsMenuItems = acquisitionMethods.map((acquisitionMethod, index) => <MenuItem value={acquisitionMethod} key={index}>{acquisitionMethod.name}</MenuItem>)
 
     const registerServiceProfile = (serviceProfile) => {
         api.post("/organizations/"+organizationId+"/service-profiles", serviceProfile)
@@ -54,15 +53,14 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
         const data = new FormData(event.currentTarget);
 
         const payload = {
-            serviceProfileId: data.get("serviceProfileId"),
             name: data.get("name"),
+            description: data.get("description"),
             dataType: dataType?.value,
             channelType: dataChannel?.value,
             channelParam: channelParam,
             acquisition: acquisitionMethod?.value,
             period: data.get('period')
         }
-        console.log('payload', payload)
         registerServiceProfile(payload)    
     }
 
@@ -72,19 +70,17 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
             <TextField
                 margin="normal"
                 required
-                fullWidth
-                id="serviceProfileId"
-                label="Identificador"
-                name="serviceProfileId"
-                autoFocus
-            />
-            <TextField
-                margin="normal"
-                required
                 name="name"
                 label="Nome"
                 fullWidth
                 id="name"
+            />
+            <TextField
+                margin="normal"
+                name="description"
+                label="Descrição"
+                fullWidth
+                id="description"
             />
             <TextField
                 margin="normal"

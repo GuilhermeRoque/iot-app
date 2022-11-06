@@ -53,42 +53,22 @@ const deviceParamType = {name: 'Dispositivo', value: 0}
 const configParamType = {name: 'Configuração', value: 1}
 
 export const channelTypes = [
-    {name: 'Digital', value:"0", params: [], paramsType: null},
-    {name: 'Analógico', value:"1", params: [], paramsType: null},
-    {name: 'Interrupção', value:"2", params: [], paramsType: null},
-    {
-        name: 'UART', 
-        value:3,
-        params: UARTParams, 
-        paramsType: configParamType
-    },
-    {
-        name: 'SPI', 
-        value:4,
-        params: SPIParams, 
-        paramsType: deviceParamType
-    },
-    {
-        name: 'I2C', 
-        value:5,
-        params: I2CParams, 
-        paramsType: deviceParamType
-    },
-    {
-        name: 'GDI', 
-        value:6,
-        params: GDIParams, 
-        paramsType: deviceParamType
-    },
+    {name: 'Digital', value:0, params: [], paramsType: null},
+    {name: 'Analógico', value:1, params: [], paramsType: null},
+    {name: 'Interrupção', value:2, params: [], paramsType: null},
+    {name: 'UART', value:3, params: UARTParams, paramsType: configParamType},
+    {name: 'SPI', value:4, params: SPIParams, paramsType: deviceParamType},
+    {name: 'I2C', value:5, params: I2CParams, paramsType: deviceParamType},
+    {name: 'GDI', value:6, params: GDIParams,  paramsType: deviceParamType},
 ]
 
 export const channelTypesValueMap = new Map()
 for(const channelType of channelTypes) {channelTypesValueMap.set(channelType.value, channelType.name)}
 
 export const acquisitionMethods = [
-    {name: "Leitura única", value:0},
-    {name: "Média", value:1},
-    {name: "RMS", value:2},
+    {name: "Leitura única", value: 0},
+    {name: "Média", value: 1},
+    {name: "RMS", value: 2},
 
 ]
 export const acquisitionMethodsValueMap = new Map()

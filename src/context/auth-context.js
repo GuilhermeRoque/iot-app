@@ -19,14 +19,12 @@ const AuthProvider = ({children}) => {
         setUser(user)
     }
     const signout = () => {
-        setUser(null)
-    }
-    const updateOrganizations = (organizations) => {        
-        user.organizations = organizations
-        setUser(user)
+        const newUser = {...user}
+        newUser.token = null
+        setUser(newUser)
     }
 
-    const value = { user, signin, signout, updateOrganizations}
+    const value = { user, signin, signout}
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 } 
 export {AuthContext, useAuth, AuthProvider}

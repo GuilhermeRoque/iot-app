@@ -11,7 +11,7 @@ const useAPI = () => {
         const token = auth?.user?.token
         const requestIntercept = api.interceptors.request.use(
             config => {
-                if (!config.headers['Authorization']) {
+                if (!config.headers['Authorization'] && token) {
                     config.headers['Authorization'] = `Bearer ${token}`;
                 }
                 return config;
@@ -22,7 +22,7 @@ const useAPI = () => {
             response => response,
             async (error) => {
                 const prevRequest = error?.config;
-                if (error?.response?.status === 401 && !prevRequest?.sent) {
+                if (error?.response?.status === 401 && !prevRequest?.sent && token) {
                     prevRequest.sent = true;
                     const newAccessToken = await refresh();
                     prevRequest.headers['Authorization'] = `Bearer ${newAccessToken}`;

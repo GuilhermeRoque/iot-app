@@ -12,14 +12,15 @@ export default function OrganizationTable({members}){
       ];
     
     console.log('Rendering members table')
-    const membersMapped = []
-    members.map((member) => {
-      membersMapped.push({
+    
+    const membersMapped = members.map((member) => {
+      return({
         role: MapperMemberRole[member.role],
         status: MapperMemeberStatus[member.status],
         userName: member.userName,
         userEmail: member.userEmail
       })
+      
     })  
 
     return (

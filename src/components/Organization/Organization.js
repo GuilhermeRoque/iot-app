@@ -8,13 +8,14 @@ import InviteDialog from "./InviteDialog";
 import useAPI from "../../services/useAPI";
 import OrganizationForm from "./OrganizationForm";
 import OrganizationTable from "./OrganizationTable";
+import APIClient from "../../services/apiClient";
+import { Container } from "@mui/material";
 
 export default function Organization() {
-  const [organization, setOrganization] = useState(null)
+  const [organizations, setOrganizations] = useState(null)
   const api = useAPI()
   const [open, setOpen] = React.useState(false);
   const auth = useAuth();
-
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -23,41 +24,49 @@ export default function Organization() {
   const handleClose = (e) => {
     setOpen(false);
   };
+ 
 
-  const getOrganizations = () => {
-    api.get('/organizations')
-      .then((response)=>{
-        console.log('Organizations got')
-        const organizations = response.data
-        console.log(organizations)
-        setOrganization(organizations)  
-        })
-      .catch((err)=>{
-          console.log('Error getting organizations', err)
-        })
-  } 
+  const handleNewOrganization = (newOrganization, newAccessToken) => {
+    const newUser = {...auth.user}
+    newUser.token = newAccessToken
+    
+    newUser.userOrganizations.push({
+      organizationId: newOrganization._id,
+      organizationName: newOrganization.name,
+      role: newOrganization.members[0].role,
+      status: newOrganization.members[0].status
+    })
+
+    auth.signin(newUser)
+    const newOrganizations = [...organizations]
+    newOrganizations.push(newOrganization)
+    setOrganizations(newOrganizations)
+  }
 
   const updateMemberStatus = (organizationId, memberId) => {
-    const newOrganizations = [...organization]
+    const newOrganizations = [...organizations]
     const orgIndex = newOrganizations.findIndex(org => {return org._id === organizationId;});
     const newOrg = newOrganizations[orgIndex]
     const memberIndex = newOrg.members.findIndex(memb => {return memb._id === memberId})
     newOrg.members[memberIndex].status = 0
-    setOrganization(newOrganizations)
+    setOrganizations(newOrganizations)
   }
   const addMember = (organizationId, member) => {
-    const newOrganizations = [...organization]
+    const newOrganizations = [...organizations]
     const orgIndex = newOrganizations.findIndex(org => {return org._id === organizationId;});
     const newOrg = newOrganizations[orgIndex]
     newOrg.members.push(member)
-    setOrganization(newOrganizations)
+    setOrganizations(newOrganizations)
   }
 
   useEffect(() => {
-    getOrganizations()
-  }, [])
+    const apiClient = new APIClient(api)
+    apiClient.getOrganizations()
+      .then((newOrganizations)=>setOrganizations(newOrganizations))
+      .catch((error)=>{console.log("Erro ao carregar dados", error)})    
+  }, [api])
 
-  if (organization == null){
+  if (organizations == null){
     console.log("None organization, rendering circular progress..")
     return(
       <Box sx={{ display: 'flex' }}>
@@ -65,8 +74,8 @@ export default function Organization() {
       </Box>    
     )
   }else{
-    const first_organization = organization.length?organization[0]:{name: '', members: []}
-    if(organization.length){
+    const first_organization = organizations.length?organizations[0]:{name: '', members: []}
+    if(organizations.length){
       console.log("There is organizations, rendering first one..")
       const index = first_organization.members.findIndex(member => {
         return member.userId === auth.user._id;
@@ -79,18 +88,20 @@ export default function Organization() {
       if (member.status === 1){
         console.log("The user still is just invited, rendering invite card..")
         return (
-          <InviteCard 
-            organizationName={first_organization.name} 
-            member={member} 
-            oragnizationId={first_organization._id}
-            updateMemberStatus={updateMemberStatus}
-            >            
-          </InviteCard>
+            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+              <InviteCard 
+                organizationName={first_organization.name} 
+                member={member} 
+                oragnizationId={first_organization._id}
+                updateMemberStatus={updateMemberStatus}
+                >            
+              </InviteCard>
+            </Container>
         )
       }else{
         console.log("The user is active in organization, rendering table with members..")
         return(
-          <div>
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <OrganizationTable members={first_organization.members}/>
             <Button 
               variant="contained"
@@ -102,16 +113,18 @@ export default function Organization() {
               open={open} 
               handleClose={handleClose} 
               addMember={addMember}
-              organizationId={organization[0]._id}
+              organizationId={organizations[0]._id}
               >
             </InviteDialog>                  
-          </div>  
+        </Container>
         )
       }
     }else{
       console.log("There is no organizations, rendering register form..")
       return(
-        <OrganizationForm setOrganization={setOrganization}/>
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+          <OrganizationForm handleNewOrganization={handleNewOrganization}/>
+        </Container>
       )
     }
   }

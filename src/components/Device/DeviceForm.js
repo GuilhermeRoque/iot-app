@@ -21,18 +21,21 @@ export default function DeviceForm({
     const toast = useSnackbar()
     const api = useAPI()
 
-    const [loraProfile, setLoraProfile] = useState(device?device.loraProfileId:loraProfiles[0].loraProfileId)
+    const [loraProfile, setLoraProfile] = useState(device?device.loraProfileId:loraProfiles[0]._id)
     const handleChangeLoraProfile = (event) =>{setLoraProfile(event.target.value)}
-    const loraProfilesItems = loraProfiles.map((loraProfile) => <MenuItem value={loraProfile.loraProfileId}>{loraProfile.loraProfileId}</MenuItem>)
+    const loraProfilesItems = loraProfiles.map((loraProfile) => <MenuItem value={loraProfile._id}>{loraProfile.name}</MenuItem>)
 
-    const [serviceProfile, setServiceProfile] = useState(device?device.serviceProfileId:serviceProfiles[0].serviceProfileId)
+    const [serviceProfile, setServiceProfile] = useState(device?device.serviceProfileId:serviceProfiles[0]._id)
     const handleChangeServiceProfile = (event) =>{setServiceProfile(event.target.value)}
-    const serviceProfilesItems = serviceProfiles.map((serviceProfile) => <MenuItem value={serviceProfile.serviceProfileId}>{serviceProfile.serviceProfileId}</MenuItem>)
+    const serviceProfilesItems = serviceProfiles.map((serviceProfile) => <MenuItem value={serviceProfile._id}>{serviceProfile.name}</MenuItem>)
 
     const registerDevice = (deviceData) => {
         console.log("device",device, device?'1':'2')
+        console.log("payload", deviceData)
         const request = device?api.put:api.post
+        console.log("111")
         const deviceId = device?("/"+device._id):""
+        console.log("222")
 
         request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices'+deviceId, deviceData)
         .then((response)=>{
@@ -54,10 +57,10 @@ export default function DeviceForm({
         const data = new FormData(event.currentTarget);
 
         const loraProfileId = data.get("loraProfile")
-        const loraProfile = loraProfiles.find(loraProfile => loraProfile.loraProfileId === loraProfileId)
+        // const loraProfile = loraProfiles.find(loraProfile => loraProfile.loraProfileId === loraProfileId)
 
         const serviceProfileId = data.get("serviceProfile")
-        const serviceProfile = serviceProfiles.find(serviceProfile => serviceProfile.serviceProfileId === serviceProfileId)
+        // const serviceProfile = serviceProfiles.find(serviceProfile => serviceProfile.serviceProfileId === serviceProfileId)
 
         const payload = {
           name: data.get("devName"),
@@ -65,8 +68,8 @@ export default function DeviceForm({
           devEUI: data.get("devEUI"),
           joinEUI: data.get('joinEUI'),
           appKey: data.get('appKey'),
-          loraProfile: loraProfile,
-          serviceProfile: serviceProfile
+          loraProfileId: loraProfile,
+          serviceProfileId: serviceProfile
         }
         registerDevice(payload)    
     }

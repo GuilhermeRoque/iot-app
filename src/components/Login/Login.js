@@ -46,11 +46,7 @@ export default function SignIn() {
       const user = response.data.user
       user.token = accessToken
       auth.signin(user)
-      if(from == '/'){
-        navigate('/home', {replace: true})
-      }else{
-        navigate(from, {replace: true})
-      }
+      navigate(from, {replace: true})
     })
     .catch(error => {
       toast.start("Falha na autenticação", "error")

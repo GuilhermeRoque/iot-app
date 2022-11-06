@@ -12,7 +12,7 @@ const SnackbarContext = React.createContext({
 
 const useSnackbar = () => {
     return React.useContext(SnackbarContext);
-  };  
+};  
 
 const SnackbarProvider = ({children}) => {
     const [toast, setToast] = React.useState({open:false, message:'', type:'success',   });    

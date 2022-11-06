@@ -8,88 +8,91 @@ import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
 import DialogForm from "../resources/DialogForm"
 import { useSnackbar } from "../../context/snackbar-context";
+import APIClient from "../../services/apiClient"
+import { useOrganization } from '../../context/organization-context';
 
 export default function Device(){
+    console.log("DEVICE")
     const api = useAPI()
-    const [organization, setOrganization] = useState(null)
     const auth = useAuth()
     const navigate = useNavigate()
-    const [device, setDevice] = useState(null)
     const toast = useSnackbar()
     const [open, setOpen] = useState(false)
     const handleClose = () => {setOpen(false)}
     const handleClickOpen = () => {setOpen(true)}
+    const OrganizationContext = useOrganization()  
+    const currentOrganization = OrganizationContext.organization
+    console.log("Current organization: ", currentOrganization)
+  
+    const [applications, setApplications] = React.useState(null)
+    const [loraProfiles, setLoraProfiles] = React.useState(null)
+    const [serviceProfiles, setServiceProfiles] = React.useState(null)
+    const [devices, setDevices] = useState(null)
+    const [device, setDevice] = useState(null)
+    const userOrganizations = auth?.user?.userOrganizations
 
     const handlerEdit = (device) => {
         setOpen(true)
         setDevice(device)
     }
-    const getOrganizations = () => {
-        api.get('/organizations/'+ auth.user.organizations[0])
-        .then((response)=>{
-            const _organization = response.data
-            if(_organization.applications.length > 0 & _organization.loraProfiles.length > 0){
-                console.log("TUDO_OK", _organization)
-                setOrganization(_organization)
-            } 
-            else if(! _organization.applications.length){
-                toast.start("Cadastre uma aplicação primeiro", "warning")
-                navigate('/applications', {replace: true})    
-            }
-            else if(! _organization.loraProfiles.length){
-                toast.start("Cadastre um perfil LoRaWAN primeiro", "warning")
-                navigate('/lorawan-profiles', {replace: true})
-            }
-            console.log("RESP", _organization)
-        })
-        .catch((err)=>{
-            console.log("ERROR", err)
-        })
-    }
 
-    useEffect( () => {
-        if(!auth.user.organizations.length){
+    useEffect(() => {
+        if(!userOrganizations){
             toast.start("Cadastre uma organização primeiro", 'warning')
             navigate('/organizations', {replace: true})
-        }else{
-            console.log("GETTING ORGs...")
-            getOrganizations()
-        }  
-    }, [])
-
-    useEffect(()=>{
-        console.log("device", device)
-    })
-
+            return
+        }   
+        if (!currentOrganization){
+            return
+        }
+        console.log("There is organization")
+        const apiClient = new APIClient(api)
+        apiClient.getOrganizationDeviceProfiles(currentOrganization)
+            .then((data)=>{
+                setApplications(data.applications)      
+                setLoraProfiles(data.loraProfiles)
+                setServiceProfiles(data.serviceProfiles)
+                apiClient.getDevices(currentOrganization, data.applications[0]._id)
+                    .then((dataDevices)=>{
+                        setDevices(dataDevices)
+                    })
+                    .catch((error)=>{
+                        console.log(error)                
+                        toast.start("Não foi possível carregar os dispositivos cadastrados", "error")        
+                    })
+            })
+            .catch((error)=>{
+                console.log(error)                
+                toast.start("Não foi possível carregar os perfis de dispositivos", "error")
+            })
+    }, [currentOrganization, userOrganizations])
  
     const handleNewDevice = (device) => {
-        let _organization = {...organization}
-        let applicationDevices = _organization.applications[0].devices
-        let deviceIndex = applicationDevices.findIndex((dev) => {return dev._id===device._id})  
+        const newDevices = [...devices]
+        let deviceIndex = newDevices.findIndex((dev) => {return dev._id===device._id})  
         if (deviceIndex > -1){
-            applicationDevices.splice(deviceIndex, 1)
+            newDevices.splice(deviceIndex, 1)
         }
-        applicationDevices.push(device)
-        setOrganization(_organization)
+        newDevices.push(newDevices)
+        setDevices(newDevices)
         handleClose()
     }
 
     const deviceFormProps = {
-        organizationId : auth.user.organizations[0], 
-        applicationId : organization?.applications[0]._id,
+        organizationId : currentOrganization, 
+        applicationId : applications?applications[0]._id:null,
         handleNewDevice : handleNewDevice,
-        loraProfiles : organization?.loraProfiles,
-        serviceProfiles :organization?.serviceProfiles,
+        loraProfiles : loraProfiles,
+        serviceProfiles :serviceProfiles,
     }
 
     // Not loaded yet
-    if(organization == null){
+    if(devices == null){
         return (<></>)
-    }else if(organization.applications[0].devices.length){
-            console.log('devices', organization.applications[0].devices)
+    }else if(devices.length){
             return (
                 <div>
-                    <DeviceTable devices={organization.applications[0].devices} handlerEdit={handlerEdit}/>
+                    <DeviceTable devices={devices} handlerEdit={handlerEdit}/>
                     <Button 
                         variant="contained"
                         sx={{ mt: 3, mb: 2 }}                
@@ -108,6 +111,7 @@ export default function Device(){
   
             )
     }else{
+        console.log("Returning first form", deviceFormProps)
         return(
             <FormPaper title={"Cadastro de dispositivo"}>
                 <DeviceForm {...deviceFormProps}></DeviceForm>

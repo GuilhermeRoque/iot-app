@@ -18,10 +18,8 @@ export default function Dashboard() {
                 height: '100vh',
                 overflow: 'auto',
                 }}>
-                <DrawerHeader/>
-                <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
+                {/* <DrawerHeader/> */}
                 <Outlet/>
-                </Container>
             </Box>
         </Box>
     )

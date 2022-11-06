@@ -6,12 +6,10 @@ import {
     Button 
 } from "@mui/material"
 import useAPI from "../../services/useAPI";
-import { useAuth } from "../../context/auth-context";
 import { useSnackbar } from "../../context/snackbar-context";
 
-export default function OrganizationForm({setOrganization}){
+export default function OrganizationForm({handleNewOrganization}){
     const api = useAPI()
-    const auth = useAuth()
     const toast = useSnackbar()
 
     const handleSubmit = (event) =>{
@@ -24,14 +22,14 @@ export default function OrganizationForm({setOrganization}){
         }
         api.post("/organizations", payload)
           .then((response) => {
-            toast("Organização cadastrada", "success")
-            setOrganization([response.data.organization])
-            // const organizations = [response.data._id]
-            // auth.updateOrganizations(organizations)    
+            toast.start("Organização cadastrada", "success")
+            const newOrganization = response.data.organization
+            const newAccessToken = response.data.accessToken
+            handleNewOrganization(newOrganization, newAccessToken)
           })
           .catch((err)=>{
             console.log(err)
-            toast("Falha ao registrar", "error")
+            toast.start("Falha ao registrar", "error")
           })
       }
     

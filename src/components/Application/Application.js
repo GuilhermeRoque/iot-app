@@ -1,48 +1,53 @@
 import * as React from 'react';
-import { useAuth } from '../../context/auth-context';
 import ApplicationTable from './ApplicationTable';
-import { useNavigate } from 'react-router-dom';
 import ApplicationForm from './ApplicationForm';
 import useAPI from '../../services/useAPI';
+
 import { useSnackbar } from '../../context/snackbar-context';
+import FormPaper from '../resources/FormPaper';
+import APIClient from '../../services/apiClient';
+import { useOrganization } from '../../context/organization-context';
 
 export default function Application() {
   const api = useAPI()
-  const auth = useAuth();
-  let navigate = useNavigate();
   const [applications, setApplications] = React.useState(null)
   const toast = useSnackbar()
+  const OrganizationContext = useOrganization()  
+  const currentOrganization = OrganizationContext.organization
+  console.log("Current organization: ", currentOrganization)
 
-  const getApplications = () => {
-    const firstOrganizationId = auth.user.userOrganizations[0].organizationId
-    api.get('/organizations/'+ firstOrganizationId +'/applications')
-      .then((response)=>{
-          setApplications(response.data)
-        })
-      .catch((err)=>{
-          console.log(err)
-        })
-  }
   const handleNewApplication = (newApplication) => {
     const oldApplications = [...applications]
     oldApplications.push(newApplication)
     setApplications(oldApplications)
   }
 
-  React.useEffect( () => {
-    if(!auth.user.userOrganizations.length){
-      toast.start("Cadastre uma organização primeiro", 'warning')
-      navigate('/organizations', {replace: true})
-    }else{
-      getApplications()
-    }  
-  }, [])
+
+  React.useEffect(() => {
+    if (currentOrganization){
+      const apiClient = new APIClient(api)
+      apiClient.getApplications(currentOrganization)
+        .then((newApplications)=>{setApplications(newApplications)})
+        .catch((error)=>{
+          console.log('error', error)
+          toast.start("Não possível carregar as aplicações cadastradas")
+        })  
+    }
+  }, [currentOrganization])
 
   if(applications == null){
-    return <></>
+    return (
+      <></>
+    )
   }else if (applications.length){
-    return <ApplicationTable applications={applications}/>
+    return (
+        <ApplicationTable applications={applications}/>
+    )
   }else{  
-    return <ApplicationForm handleNewApplication={handleNewApplication}/>
+    return (
+        <FormPaper title={"Cadastre uma aplicação"}> 
+          <ApplicationForm handleNewApplication={handleNewApplication}/>
+        </FormPaper>
+    )
   }
 }

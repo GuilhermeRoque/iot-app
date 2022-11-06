@@ -5,7 +5,6 @@ import {acquisitionMethodsValueMap, channelTypesValueMap, paramsValueMap, dataTy
 
 export default function ServiceProfileTable({serviceProfiles}){
     const columns = [
-        {name: "serviceProfileId", label: "Identificador"},
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "dataType", label: "Tipo de dado"},
         {name: "channelType", label: "Canal"},
@@ -16,7 +15,6 @@ export default function ServiceProfileTable({serviceProfiles}){
     
     const _serviceProfiles = serviceProfiles.map((serviceProfile) => {
       return{
-        serviceProfileId: serviceProfile.serviceProfileId,
         name: serviceProfile.name,
         acquisition: acquisitionMethodsValueMap.get(serviceProfile.acquisition),
         dataType: dataTypesValueMap.get(serviceProfile.dataType),
@@ -24,6 +22,9 @@ export default function ServiceProfileTable({serviceProfiles}){
         channelParam: paramsValueMap.get(serviceProfile.channelParam),        
       }
     })
+
+    console.log('service_profiles')
+    console.log(serviceProfiles)
 
     return (
             <MUIDataTable

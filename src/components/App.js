@@ -14,6 +14,7 @@ import ServiceProfile from './ServiceProfile/ServiceProfile';
 import Home from './Home/Home'
 import { SnackbarProvider } from '../context/snackbar-context';
 import { AuthProvider } from '../context/auth-context';
+import OrganizationResource from "./resources/OrganizationResource"
 
 export default function App(){
   return (
@@ -24,15 +25,17 @@ export default function App(){
             <Route path="/login" element={<Login/>}></Route>
             <Route path="/singup" element={<SignUp/>}></Route>
             <Route element={<ProtectedRoute/>}>
-                <Route path="/" element={<Dashboard/>}>
-                  <Route path="organizations" element={<Organization/>}></Route>
-                  <Route path="applications" element={<Application/>}></Route>
-                  <Route path="devices" element={<Device/>}></Route>
-                  <Route path="integrations" element={<Integrations/>}></Route>
-                  <Route path="device-apis" element={<DeviceAPIs/>}></Route>
-                  <Route path="lorawan-profiles" element={<LoraProfile/>}></Route>
-                  <Route path="service-profiles" element={<ServiceProfile/>}></Route>
-                  <Route path="home" element={<Home/>}></Route>      
+                <Route element={<Dashboard/>}>
+                  <Route path="/" element={<Home/>}></Route>      
+                  <Route path="/organizations" element={<Organization/>}/>
+                  <Route path="/organizations/*" element={<OrganizationResource/>}>
+                    <Route path="applications" element={<Application/>}></Route>
+                    <Route path="lorawan-profiles" element={<LoraProfile/>}></Route>
+                    <Route path="service-profiles" element={<ServiceProfile/>}></Route>
+                    <Route path="devices" element={<Device/>}></Route>
+                  </Route>                  
+                  <Route path="/integrations" element={<Integrations/>}></Route>
+                  <Route path="/device-apis" element={<DeviceAPIs/>}></Route>
                 </Route>
             </Route>
             <Route path="*" element={<h1>Página não encontrada</h1>} />

@@ -5,7 +5,6 @@ import { loraWanVersionsValueMap, loraPhyVersionsValueMap } from "./loraModelOpt
 
 export default function LoraProfileTable({loraProfiles}){
     const columns = [
-        {name: "loraProfileId", label: "Identificador"},
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "freqPlanId", label: "Plano de frequência"},
         {name: "macVersion", label: "MAC LoRaWAN"},
@@ -19,7 +18,6 @@ export default function LoraProfileTable({loraProfiles}){
     const _loraProfiles = []
     for (const loraProfile of loraProfiles){
       _loraProfiles.push({
-        loraProfileId: loraProfile.loraProfileId,
         name: loraProfile.name,
         macVersion: loraWanVersionsValueMap.get(loraProfile.macVersion),
         phyVersion: loraPhyVersionsValueMap.get(loraProfile.phyVersion),

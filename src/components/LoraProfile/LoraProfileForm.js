@@ -24,9 +24,9 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
     const handleChangeLoraWanVersion = (event) =>{setLoraWanVersion(event.target.value)}
     const handleChangeLoraFreqPlan = (event) =>{setLoraFreqPlan(event.target.value)}
     const handleChangeLoraPhyVersion = (event) =>{setLoraPhyVersion(event.target.value)}
-    const loraWanVersionsMenuItems = loraWanVersions.map((loraWanVersion) => <MenuItem value={loraWanVersion.value}>{loraWanVersion.name}</MenuItem>)
-    const frequencyPlansMenuItems = ttn_freq_plans.map((freqPlan) => <MenuItem value={freqPlan['id']}>{freqPlan['name']}</MenuItem>)
-    const loraPhyVersionsMenuItems = loraPhyVersions.map((loraPhyVersion) => <MenuItem value={loraPhyVersion.value}>{loraPhyVersion.name}</MenuItem>)
+    const loraWanVersionsMenuItems = loraWanVersions.map((loraWanVersion, index) => <MenuItem value={loraWanVersion.value} key={index}>{loraWanVersion.name}</MenuItem>)
+    const frequencyPlansMenuItems = ttn_freq_plans.map((freqPlan, index) => <MenuItem value={freqPlan['id']}  key={index}>{freqPlan['name']}</MenuItem>)
+    const loraPhyVersionsMenuItems = loraPhyVersions.map((loraPhyVersion, index) => <MenuItem value={loraPhyVersion.value} key={index}>{loraPhyVersion.name}</MenuItem>)
 
 
     const registerLoraProfile = (loraProfile) => {
@@ -45,8 +45,8 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
         event.preventDefault();
         const data = new FormData(event.currentTarget);
         const payload = {
-            loraProfileId: data.get("loraProfileId"),
             name: data.get("name"),
+            description: data.get("description"),
             macVersion: data.get("loraWanVersion"),
             phyVersion: data.get("loraPhyVersion"),
             freqPlanId: data.get("loraFreqPlan"),
@@ -65,19 +65,17 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
             <TextField
                 margin="normal"
                 required
-                fullWidth
-                id="loraProfileId"
-                label="Identificador"
-                name="loraProfileId"
-                autoFocus
-            />
-            <TextField
-                margin="normal"
-                required
                 name="name"
                 label="Nome"
                 fullWidth
                 id="name"
+            />
+            <TextField
+                margin="normal"
+                name="description"
+                label="Descrição"
+                fullWidth
+                id="description"
             />
             <Box sx={{display: 'flex'}}>
                 <FormControlLabel control={<Checkbox name="isClassB"/>} label="Classe B" />
@@ -128,7 +126,6 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
             </Select>
             <Button
                 type="submit"
-                fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >

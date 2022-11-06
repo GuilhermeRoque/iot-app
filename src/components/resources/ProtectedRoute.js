@@ -12,17 +12,18 @@ const ProtectedRoute = ({ redirectPath='/login', children }) => {
     const refresh = useRefreshToken()
     const [isAuth, setIsAuth] = useState(null)
 
-    useEffect(async ()=>{
+    useEffect(()=>{
       console.log("Checking auth in ProtectedRoute")
-      try {
-        if (!auth?.user?.token) {
-          await refresh()
-          setIsAuth(true)  
-        }else{
-          setIsAuth(true)  
-        }
-      } catch (error) {
-        setIsAuth(false)
+      if (!auth?.user?.token) {
+        refresh()
+          .then(()=>{
+            setIsAuth(true)
+          })
+          .catch(()=>{
+            setIsAuth(false)
+          })            
+      }else{
+        setIsAuth(true)  
       }
     }, [])
 

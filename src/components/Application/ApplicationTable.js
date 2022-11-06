@@ -4,7 +4,7 @@ import { options } from "../resources/Table/defaultOptions";
 
 export default function ApplicationTable({applications}){
     const columns = [
-        {name: "appId", label:"Identificador"},
+        {name: "applicationId", label:"Identificador"},
         {name: "name", label:"Nome"},
         {name: "integration", label: "Integração"},
         {name: "deviceApi", label: "API dos dispositivos"},
@@ -14,7 +14,7 @@ export default function ApplicationTable({applications}){
     for (const application of applications){
       data.push({
         name: application.name,
-        // appId: application.appId,
+        applicationId: application.applicationId,
         integration: "TTN",
         deviceApi: "LoRaWAN-Jean"
       })

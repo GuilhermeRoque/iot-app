@@ -2,7 +2,6 @@ import React from "react";
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { InputLabel } from '@mui/material';
@@ -40,9 +39,6 @@ export default function ApplicationForm({handleNewApplication}){
     
     return (
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <Typography component="h1" variant="h5">
-        Cadastre uma aplicação
-        </Typography>
         <TextField
             margin="normal"
             required

@@ -9,6 +9,7 @@ import FormPaper from "../resources/FormPaper"
 import { useSnackbar } from "../../context/snackbar-context"
 import { useOrganization } from '../../context/organization-context';
 import APIClient from '../../services/apiClient';
+import { Box, Container } from '@mui/material';
 
 export default function ServiceProfile(){
     const api = useAPI()
@@ -54,23 +55,25 @@ export default function ServiceProfile(){
     }
     else if(serviceProfiles.length){
             return (
-                <div>
-                    <ServiceProfileTable serviceProfiles={serviceProfiles}/>
-                    <Button 
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}                
-                        onClick={handleClickOpen}>
-                        Novo Perfil de Serviço
-                    </Button>
-                    <ServiceProfileDialog 
-                        organizationId={currentOrganization} 
-                        handleNewServiceProfile={handleNewServiceProfile}
-                        open={open}
-                        handleClose={handleClose}
-                        >
-                    </ServiceProfileDialog>
-                </div>
-  
+                <>
+                    <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+                    <Box sx={{width: "fit-content", margin: "auto"}}>
+                        <ServiceProfileTable serviceProfiles={serviceProfiles}/>
+                        <Button 
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}                
+                            onClick={handleClickOpen}>
+                            Novo Perfil de Serviço
+                        </Button>
+                        <ServiceProfileDialog 
+                            organizationId={currentOrganization} 
+                            handleNewServiceProfile={handleNewServiceProfile}
+                            open={open}
+                            handleClose={handleClose}
+                            >
+                        </ServiceProfileDialog>                    
+                    </Box>
+                </>
             )
     }
     else{

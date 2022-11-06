@@ -7,6 +7,7 @@ import { useSnackbar } from '../../context/snackbar-context';
 import FormPaper from '../resources/FormPaper';
 import APIClient from '../../services/apiClient';
 import { useOrganization } from '../../context/organization-context';
+import { Box, Container } from '@mui/material';
 
 export default function Application() {
   const api = useAPI()
@@ -41,7 +42,12 @@ export default function Application() {
     )
   }else if (applications.length){
     return (
-        <ApplicationTable applications={applications}/>
+      <>
+          <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+          <Box sx={{width: "fit-content", margin: "auto"}}>
+            <ApplicationTable applications={applications}/>
+          </Box>
+      </>
     )
   }else{  
     return (

@@ -1,26 +1,15 @@
 import MUIDataTable from "mui-datatables";
 import actionsColumns from "../resources/Table/defaultColumns";
 import { options } from "../resources/Table/defaultOptions";
-export default function DeviceTable({devices, handlerEdit}){
-  const _devices = []
-  console.log('devicesTable', devices)
-  for (const device of devices){
-      _devices.push({
-        name: device.name,
-        devId: device.devId,
-        devEUI: device.devEUI,
-        joinEUI: device.joinEUI,
-        serviceProfileId: device.serviceProfile,
-        loraProfileId: device.loraProfile,
-        appKey: device.appKey,
-        _id: device._id
-      })
-    }
+export default function DeviceTable({devices, handlerEdit, handlerDelete}){
 
-    function handler(dataIndex){
-      handlerEdit(_devices[dataIndex])
+    function handlerEditIndex(dataIndex){
+      handlerEdit(devices[dataIndex])
     } 
 
+    function handlerDeleteIndex(dataIndex){
+      handlerDelete(dataIndex)
+    } 
 
     
     const columns = [
@@ -30,16 +19,18 @@ export default function DeviceTable({devices, handlerEdit}){
         {name: "joinEUI", label:"Join EUI"},
         {name: "_id", label:"ID", options: {display: false}},
         {name: "appKey", label:"Chave de aplicação", options: {display: false}},
-        {name: "serviceProfileId", label: "Perfil de Serviço"},
-        {name: "loraProfileId", label: "Perfil LoRaWAN"},
+        {name: "serviceProfileName", label: "Perfil de Serviço"},
+        {name: "loraProfileName", label: "Perfil LoRaWAN"},
+        {name: "serviceProfileId", label: "ID Perfil de Serviço", options: {display: false}},
+        {name: "loraProfileId", label: "ID Perfil LoRaWAN", options: {display: false}},
         // ...defaultActions
-        ...actionsColumns(handler, handler)
+        ...actionsColumns(handlerEditIndex, handlerDeleteIndex)
     ];
     
     return (
             <MUIDataTable
               title={"Dispositivos"}
-              data={_devices}
+              data={devices}
               columns={columns}
               options={options}
             />

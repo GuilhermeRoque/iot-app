@@ -28,6 +28,11 @@ class APIClient{
         return response.data 
     }  
 
+    deleteDeivce = async (oragnizationId, applicationId, deviceId) => {
+        const response = await this.api.delete('/organizations/'+oragnizationId+'/applications/' + applicationId + '/devices/' + deviceId)
+        return response.data 
+    }  
+
     getOrganizationDeviceProfiles = async (oragnizationId) => {
         const response = await this.api.get('/organizations/'+oragnizationId+'/device-profiles  ')
         return response.data 

@@ -10,6 +10,12 @@ import DialogForm from "../resources/DialogForm"
 import { useSnackbar } from "../../context/snackbar-context";
 import APIClient from "../../services/apiClient"
 import { useOrganization } from '../../context/organization-context';
+import { Box, Container } from '@mui/material';
+import { Select } from '@mui/material';
+import { MenuItem } from '@mui/material';
+import { InputLabel } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 export default function Device(){
     console.log("DEVICE")
@@ -24,18 +30,40 @@ export default function Device(){
     const currentOrganization = OrganizationContext.organization
     console.log("Current organization: ", currentOrganization)
   
-    const [applications, setApplications] = React.useState(null)
+    const [applications, setApplications] = React.useState([])
+    const [currentApplication, setCurrentApplication] = React.useState(null)
     const [loraProfiles, setLoraProfiles] = React.useState(null)
     const [serviceProfiles, setServiceProfiles] = React.useState(null)
     const [devices, setDevices] = useState(null)
     const [device, setDevice] = useState(null)
     const userOrganizations = auth?.user?.userOrganizations
 
+    const handleChangeCurrentApplication = (event) =>{setCurrentApplication(event.target.value)}
+    const applicationItems = applications.map(
+        (application, index) => {
+          return <MenuItem value={application._id} key={index}>{application.name}</MenuItem>
+        }
+    )
+
     const handlerEdit = (device) => {
         setOpen(true)
         setDevice(device)
     }
-
+    
+    const handlerDelete = (deviceIndex) => {
+        const deviceToDelete = devices[deviceIndex]
+        const apiClient = new APIClient(api)
+        apiClient.deleteDeivce(currentOrganization, currentApplication, deviceToDelete._id)
+        .then(()=>{
+            const newDevices = [...devices]
+            newDevices.splice(deviceIndex, 1)
+            setDevices(newDevices)
+        })
+        .catch(()=>{
+            toast.start("Não foi possível remover o dispositivo", 'error')
+        })
+    }
+    
     useEffect(() => {
         if(!userOrganizations){
             toast.start("Cadastre uma organização primeiro", 'warning')
@@ -46,26 +74,39 @@ export default function Device(){
             return
         }
         console.log("There is organization")
+        console.log(currentOrganization)
+
         const apiClient = new APIClient(api)
         apiClient.getOrganizationDeviceProfiles(currentOrganization)
             .then((data)=>{
                 setApplications(data.applications)      
                 setLoraProfiles(data.loraProfiles)
                 setServiceProfiles(data.serviceProfiles)
-                apiClient.getDevices(currentOrganization, data.applications[0]._id)
-                    .then((dataDevices)=>{
-                        setDevices(dataDevices)
-                    })
-                    .catch((error)=>{
-                        console.log(error)                
-                        toast.start("Não foi possível carregar os dispositivos cadastrados", "error")        
-                    })
             })
             .catch((error)=>{
                 console.log(error)                
                 toast.start("Não foi possível carregar os perfis de dispositivos", "error")
             })
     }, [currentOrganization, userOrganizations])
+
+    useEffect(() => {
+        if (!currentOrganization | !currentApplication){
+            return
+        }
+        console.log("There is application")
+        console.log(currentApplication)
+        const apiClient = new APIClient(api)
+        apiClient.getDevices(currentOrganization, currentApplication)
+
+        .then((dataDevices)=>{
+            setDevices(dataDevices)
+        })
+        .catch((error)=>{
+            console.log(error)                
+            toast.start("Não foi possível carregar os dispositivos cadastrados", "error")        
+        })
+
+    }, [currentApplication, currentOrganization])
  
     const handleNewDevice = (device) => {
         const newDevices = [...devices]
@@ -80,25 +121,59 @@ export default function Device(){
 
     const deviceFormProps = {
         organizationId : currentOrganization, 
-        applicationId : applications?applications[0]._id:null,
+        applicationId : currentApplication,
         handleNewDevice : handleNewDevice,
         loraProfiles : loraProfiles,
         serviceProfiles :serviceProfiles,
     }
 
+    const currentAppSelect = (
+        <Box>
+            <InputLabel id="application-select-label">Aplicação</InputLabel>
+            <Select
+                id="currentApplication"
+                name="currentApplication"
+                value={currentApplication}
+                labelId='currentApplication-select-label'
+                onChange={handleChangeCurrentApplication}
+            >
+                {applicationItems}
+            </Select>
+        </Box>
+    )
+    const selectApplicationWarning = (
+        <Box sx={{width: "100%", height: "500px"}}> 
+            <Box sx={{width: "100%", display:"flex"}}>    
+                <Box sx={{width: "fit-content", margin: "auto"}}>
+                    <Alert severity="info"><AlertTitle>Aplicação não definida</AlertTitle>Selecione uma aplicação no seletor do canto superior esquerdo</Alert>
+                </Box>                        
+            </Box>
+        </Box>
+    )
     // Not loaded yet
     if(devices == null){
-        return (<></>)
+        return (
+            <>
+                 {currentAppSelect}
+                 <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+                 {selectApplicationWarning}        
+            </>
+        )
     }else if(devices.length){
+            console.log("devices:::: ", devices)
             return (
-                <div>
-                    <DeviceTable devices={devices} handlerEdit={handlerEdit}/>
-                    <Button 
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}                
-                        onClick={handleClickOpen}>
-                        Novo dispositivo
-                    </Button>
+                <>
+                    {currentAppSelect}
+                    <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+                    <Box sx={{width: "fit-content", margin: "auto"}}>
+                        <DeviceTable devices={devices} handlerEdit={handlerEdit} handlerDelete={handlerDelete}/>
+                        <Button 
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}                
+                            onClick={handleClickOpen}>
+                            Novo dispositivo
+                        </Button>
+                    </Box>
                     <DialogForm
                         title={"Cadastro de dispositivo"}
                         helpText={"Especifique os perfis de configuração e identificadores do dispositivo"}
@@ -107,15 +182,21 @@ export default function Device(){
                     >   
                         <DeviceForm {...deviceFormProps} device={device} ></DeviceForm>
                     </DialogForm>
-                </div>
+                </>
   
             )
     }else{
         console.log("Returning first form", deviceFormProps)
         return(
-            <FormPaper title={"Cadastro de dispositivo"}>
-                <DeviceForm {...deviceFormProps}></DeviceForm>
-            </FormPaper>
+            <>
+                {currentAppSelect}
+                <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+                <Box sx={{width: "fit-content", margin: "auto"}}>
+                    <FormPaper title={"Cadastro de dispositivo"}>
+                        <DeviceForm {...deviceFormProps}></DeviceForm>
+                    </FormPaper>
+                </Box>
+            </>
         )
     }
 }

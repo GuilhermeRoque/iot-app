@@ -39,6 +39,15 @@ const OrganizationProvider = ({children}) => {
         }
     },[userOrganizations])
 
+    const selectOrganizationWarning = (
+        <Box sx={{width: "100%", height: "500px"}}> 
+            <Box sx={{width: "100%", display:"flex"}}>    
+                <Box sx={{width: "fit-content", margin: "auto"}}>
+                    <Alert severity="info"><AlertTitle>Organização não definida</AlertTitle>Selecione uma organização no seletor do canto superior esquerdo</Alert>
+                </Box>                        
+            </Box>
+        </Box>
+    )
     return (
         <OrganizationContext.Provider value={value}>
             <Box>
@@ -56,14 +65,8 @@ const OrganizationProvider = ({children}) => {
                                 {organizationsItems}
                             </Select>
                         </Box>
-                        <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
-                        <Box sx={{width: "100%", height: "500px"}}> 
-                            <Box sx={{width: "100%", display:"flex"}}>    
-                                <Box sx={{width: "fit-content", margin: "auto"}}>
-                                    {organization?children:<Alert severity="info"><AlertTitle>Organização não definida</AlertTitle>Selecione uma organização no seletor do canto superior esquerdo</Alert>}
-                                </Box>                        
-                            </Box>
-                        </Box>
+                        {organization?<></>:<Box sx={{flexBasis:"100%", height: "30px"}}></Box>}
+                        {organization?children:selectOrganizationWarning}
                     </Box>
                 </Box>
             </Box>

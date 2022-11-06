@@ -10,6 +10,7 @@ import FormPaper from "../resources/FormPaper"
 import { useSnackbar } from "../../context/snackbar-context";
 import APIClient from "../../services/apiClient"
 import { useOrganization } from '../../context/organization-context';
+import { Box, Container } from '@mui/material';
 
 export default function LoraProfile(){
     const api = useAPI()
@@ -59,22 +60,25 @@ export default function LoraProfile(){
         return (<></>)
     }else if(loraWANProfiles.length){
             return (
-                <div>
-                    <LoraProfileTable loraProfiles={loraWANProfiles}/>
-                    <Button 
-                        variant="contained"
-                        sx={{ mt: 3, mb: 2 }}                
-                        onClick={handleClickOpen}>
-                        Novo Perfil LoRaWAN
-                    </Button>
-                    <LoraProfileDialog 
-                        organizationId={currentOrganization} 
-                        handleNewLoraProfile={handleNewLoraProfile}
-                        open={open}
-                        handleClose={handleClose}
-                        >
-                    </LoraProfileDialog>
-                </div>
+                <>
+                    <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+                    <Box sx={{width: "fit-content", margin: "auto"}}>
+                        <LoraProfileTable loraProfiles={loraWANProfiles}/>
+                        <Button 
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}                
+                            onClick={handleClickOpen}>
+                            Novo Perfil LoRaWAN
+                        </Button>
+                        <LoraProfileDialog 
+                            organizationId={currentOrganization} 
+                            handleNewLoraProfile={handleNewLoraProfile}
+                            open={open}
+                            handleClose={handleClose}
+                            >
+                        </LoraProfileDialog>
+                    </Box>
+                </>
   
             )
     }else{

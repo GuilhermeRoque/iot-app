@@ -1,22 +1,16 @@
-import DeviceForm from "./DeviceForm";
+import DeviceLineChart from "./DeviceLineChart";
 import DialogForm from "../resources/DialogForm";
 
-export default function DeviceDialog({open, handleClose, organizationId, applicationId, handleNewDevice, loraProfiles, serviceProfiles}){
+export default function DeviceDialogChart({open, handleClose}){
     return(
         <DialogForm
-            title={"Cadastro de dispositivo"}
-            helpText={"Especifique os perfis de configuração e identificadores do dispositivo"}
+            title={"Dados colhidos pelo dispositivo"}
             open={open}
             handleClose={handleClose}
         >
-            <DeviceForm 
-                organizationId={organizationId} 
-                applicationId={applicationId} 
-                handleNewDevice={handleNewDevice}
-                loraProfiles={loraProfiles}
-                serviceProfiles={serviceProfiles}
+            <DeviceLineChart 
             > 
-            </DeviceForm>
+            </DeviceLineChart>
         </DialogForm>
     )
 }

@@ -30,12 +30,8 @@ export default function DeviceForm({
     const serviceProfilesItems = serviceProfiles.map((serviceProfile) => <MenuItem value={serviceProfile._id}>{serviceProfile.name}</MenuItem>)
 
     const registerDevice = (deviceData) => {
-        console.log("device",device, device?'1':'2')
-        console.log("payload", deviceData)
         const request = device?api.put:api.post
-        console.log("111")
         const deviceId = device?("/"+device._id):""
-        console.log("222")
 
         request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices'+deviceId, deviceData)
         .then((response)=>{

@@ -1,16 +1,7 @@
 import MUIDataTable from "mui-datatables";
 import actionsColumns from "../resources/Table/defaultColumns";
 import { options } from "../resources/Table/defaultOptions";
-export default function DeviceTable({devices, handlerEdit, handlerDelete}){
-
-    function handlerEditIndex(dataIndex){
-      handlerEdit(devices[dataIndex])
-    } 
-
-    function handlerDeleteIndex(dataIndex){
-      handlerDelete(dataIndex)
-    } 
-
+export default function DeviceTable({devices, handlerEdit, handlerDelete, handlerMonitor}){
     
     const columns = [
         {name: "devId", label: "Identificador"},
@@ -24,7 +15,7 @@ export default function DeviceTable({devices, handlerEdit, handlerDelete}){
         {name: "serviceProfileId", label: "ID Perfil de Serviço", options: {display: false}},
         {name: "loraProfileId", label: "ID Perfil LoRaWAN", options: {display: false}},
         // ...defaultActions
-        ...actionsColumns(handlerEditIndex, handlerDeleteIndex)
+        ...actionsColumns(handlerEdit, handlerDelete, handlerMonitor)
     ];
     
     return (

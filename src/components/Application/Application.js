@@ -51,9 +51,14 @@ export default function Application() {
     )
   }else{  
     return (
-        <FormPaper title={"Cadastre uma aplicação"}> 
-          <ApplicationForm handleNewApplication={handleNewApplication}/>
-        </FormPaper>
+      <>
+          <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+          <Box sx={{width: "fit-content", margin: "auto"}}>
+            <FormPaper title={"Cadastre uma aplicação"}> 
+              <ApplicationForm handleNewApplication={handleNewApplication}/>
+            </FormPaper>
+          </Box>
+      </>
     )
   }
 }

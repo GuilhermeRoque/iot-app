@@ -83,9 +83,14 @@ export default function LoraProfile(){
             )
     }else{
         return(
-            <FormPaper title={"Cadastre um perfil LoRaWAN"}>
-                <LoraProfileForm organizationId={currentOrganization} handleNewLoraProfile={handleNewLoraProfile}/>
-            </FormPaper>
+            <>
+                <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
+                <Box sx={{width: "fit-content", margin: "auto"}}>
+                <FormPaper title={"Cadastre um perfil LoRaWAN"}>
+                    <LoraProfileForm organizationId={currentOrganization} handleNewLoraProfile={handleNewLoraProfile}/>
+                </FormPaper>
+                </Box>
+            </>
         )
     }
 }

@@ -10,12 +10,13 @@ import DialogForm from "../resources/DialogForm"
 import { useSnackbar } from "../../context/snackbar-context";
 import APIClient from "../../services/apiClient"
 import { useOrganization } from '../../context/organization-context';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { InputLabel } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
+import DeviceDialogChart from "./DeviceDialogChart"
 
 export default function Device(){
     console.log("DEVICE")
@@ -23,9 +24,15 @@ export default function Device(){
     const auth = useAuth()
     const navigate = useNavigate()
     const toast = useSnackbar()
+
+    const [openChart, setOpenChart] = useState(false)
+    const handleCloseChart = () => {setOpenChart(false)}
+    const handleOpenChart = () => {setOpenChart(true)}
+
     const [open, setOpen] = useState(false)
     const handleClose = () => {setOpen(false)}
     const handleClickOpen = () => {setOpen(true)}
+
     const OrganizationContext = useOrganization()  
     const currentOrganization = OrganizationContext.organization
     console.log("Current organization: ", currentOrganization)
@@ -45,11 +52,15 @@ export default function Device(){
         }
     )
 
-    const handlerEdit = (device) => {
+    const handlerEdit = (deviceIndex) => {
         setOpen(true)
-        setDevice(device)
+        setDevice(devices[deviceIndex])
     }
     
+    const handlerMonitor = (deviceIndex) => {
+        handleOpenChart()        
+    }
+
     const handlerDelete = (deviceIndex) => {
         const deviceToDelete = devices[deviceIndex]
         const apiClient = new APIClient(api)
@@ -66,7 +77,7 @@ export default function Device(){
     
     useEffect(() => {
         if(!userOrganizations){
-            toast.start("Cadastre uma organização primeiro", 'warning')
+            toast.start("Cadastre uma organização primeiro", 'info')
             navigate('/organizations', {replace: true})
             return
         }   
@@ -79,6 +90,21 @@ export default function Device(){
         const apiClient = new APIClient(api)
         apiClient.getOrganizationDeviceProfiles(currentOrganization)
             .then((data)=>{
+                if (!data.applications.length){
+                    toast.start("Cadastre uma aplicação primeiro", 'info')
+                    navigate('/organizations/applications', {replace: true})
+                    return
+                }
+                if (!data.serviceProfiles.length){
+                    toast.start("Cadastre um perfil de serviço primeiro", 'info')
+                    navigate('/organizations/service-profiles', {replace: true})
+                    return
+                }
+                if (!data.loraProfiles.length){
+                    toast.start("Cadastre um perfil lorawan primeiro", 'info')
+                    navigate('/organizations/lorawan-profiles', {replace: true})
+                    return
+                }
                 setApplications(data.applications)      
                 setLoraProfiles(data.loraProfiles)
                 setServiceProfiles(data.serviceProfiles)
@@ -93,8 +119,6 @@ export default function Device(){
         if (!currentOrganization | !currentApplication){
             return
         }
-        console.log("There is application")
-        console.log(currentApplication)
         const apiClient = new APIClient(api)
         apiClient.getDevices(currentOrganization, currentApplication)
 
@@ -114,7 +138,7 @@ export default function Device(){
         if (deviceIndex > -1){
             newDevices.splice(deviceIndex, 1)
         }
-        newDevices.push(newDevices)
+        newDevices.push(device)
         setDevices(newDevices)
         handleClose()
     }
@@ -166,7 +190,7 @@ export default function Device(){
                     {currentAppSelect}
                     <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
                     <Box sx={{width: "fit-content", margin: "auto"}}>
-                        <DeviceTable devices={devices} handlerEdit={handlerEdit} handlerDelete={handlerDelete}/>
+                        <DeviceTable devices={devices} handlerEdit={handlerEdit} handlerDelete={handlerDelete} handlerMonitor={handlerMonitor}/>
                         <Button 
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}                
@@ -182,6 +206,12 @@ export default function Device(){
                     >   
                         <DeviceForm {...deviceFormProps} device={device} ></DeviceForm>
                     </DialogForm>
+                    <DeviceDialogChart
+                        open={openChart}
+                        handleClose={handleCloseChart}
+                    >   
+                    </DeviceDialogChart>
+
                 </>
   
             )

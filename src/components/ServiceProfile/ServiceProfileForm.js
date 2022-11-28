@@ -66,7 +66,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
 
 
     return(
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , minWidth: "800px"}}>
             <TextField
                 margin="normal"
                 required
@@ -153,10 +153,8 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                     </Select>
                 </Box>:null}
             </Box>
-
             <Button
                 type="submit"
-                fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >

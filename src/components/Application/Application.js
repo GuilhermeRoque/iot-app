@@ -44,7 +44,7 @@ export default function Application() {
     return (
       <>
           <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
-          <Box sx={{width: "fit-content", margin: "auto"}}>
+          <Box sx={{width: "fit-content", margin: "auto", minWidth:"1000px"}}>
             <ApplicationTable applications={applications}/>
           </Box>
       </>

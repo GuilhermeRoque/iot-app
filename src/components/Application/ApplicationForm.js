@@ -38,8 +38,8 @@ export default function ApplicationForm({handleNewApplication}){
       const handleChange = () => {}
     
     return (
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-        <TextField
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , minWidth: "800px"}}>
+      <TextField
             margin="normal"
             required
             fullWidth

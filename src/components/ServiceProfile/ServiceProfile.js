@@ -57,13 +57,13 @@ export default function ServiceProfile(){
             return (
                 <>
                     <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
-                    <Box sx={{width: "fit-content", margin: "auto"}}>
+                    <Box sx={{width: "fit-content", margin: "auto", minWidth:"1000px"}}>
                         <ServiceProfileTable serviceProfiles={serviceProfiles}/>
                         <Button 
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}                
                             onClick={handleClickOpen}>
-                            Novo Perfil de Serviço
+                            Cadastrar
                         </Button>
                         <ServiceProfileDialog 
                             organizationId={currentOrganization} 

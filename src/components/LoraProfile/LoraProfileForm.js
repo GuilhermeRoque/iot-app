@@ -61,7 +61,7 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
 
 
     return(
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , minWidth: "800px"}}>
             <TextField
                 margin="normal"
                 required

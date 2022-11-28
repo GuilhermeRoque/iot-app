@@ -1,16 +1,23 @@
+import React from "react";
 import DeviceLineChart from "./DeviceLineChart";
-import DialogForm from "../resources/DialogForm";
+import {
+    Dialog,
+    DialogContent, 
+    DialogTitle, 
+} from "@mui/material";
 
-export default function DeviceDialogChart({open, handleClose}){
+export default function DeviceDialogChart({open, handleClose, device}){
     return(
-        <DialogForm
-            title={"Dados colhidos pelo dispositivo"}
+        <Dialog 
             open={open}
-            handleClose={handleClose}
+            onClose={handleClose}
+            fullWidth={false}
+            maxWidth="fit-content"
         >
-            <DeviceLineChart 
-            > 
-            </DeviceLineChart>
-        </DialogForm>
+        <DialogTitle>{device?`${device.devId}`:""}</DialogTitle>
+        <DialogContent>
+            <DeviceLineChart></DeviceLineChart>
+        </DialogContent> 
+    </Dialog>
     )
 }

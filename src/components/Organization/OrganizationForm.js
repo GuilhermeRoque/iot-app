@@ -34,8 +34,8 @@ export default function OrganizationForm({handleNewOrganization}){
       }
     
     return(
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <Typography component="h1" variant="h5">Cadastre uma organização</Typography>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , minWidth: "800px"}}>
+      {/* <Typography component="h1" variant="h5">Cadastre uma organização</Typography> */}
           <TextField
             margin="normal"
             required
@@ -54,13 +54,13 @@ export default function OrganizationForm({handleNewOrganization}){
             name="organizationDescription"
             autoFocus
             />
-          <Button
-              type="submit"
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}
+            <Button
+                type="submit"
+                variant="contained"
+                sx={{ mt: 3, mb: 2 }}
             >
-              Registrar
-          </Button>
+            Cadastrar
+            </Button>
         </Box>
       )
 }

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useAuth } from './auth-context';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from './snackbar-context';
-import { Box, Container } from '@mui/material';
+import { Box } from '@mui/material';
 import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { InputLabel } from '@mui/material';
@@ -22,7 +22,7 @@ const OrganizationProvider = ({children}) => {
     const auth = useAuth();
     let navigate = useNavigate();
     const toast = useSnackbar()
-    const userOrganizations = auth.user.userOrganizations
+    const userOrganizations = auth.user.userOrganizations   
     const organizationsItems = userOrganizations.map(
         (userOrganization, index) => {
           return <MenuItem value={userOrganization.organizationId} key={index}>{userOrganization.organizationName}</MenuItem>

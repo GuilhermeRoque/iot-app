@@ -15,7 +15,7 @@ import Home from './Home/Home'
 import { SnackbarProvider } from '../context/snackbar-context';
 import { AuthProvider } from '../context/auth-context';
 import OrganizationResource from "./resources/OrganizationResource"
-
+import Members from "./Members/Members"
 export default function App(){
   return (
     <Router>
@@ -29,6 +29,7 @@ export default function App(){
                   <Route path="/" element={<Home/>}></Route>      
                   <Route path="/organizations" element={<Organization/>}/>
                   <Route path="/organizations/*" element={<OrganizationResource/>}>
+                    <Route path="members" element={<Members/>}/>
                     <Route path="applications" element={<Application/>}></Route>
                     <Route path="lorawan-profiles" element={<LoraProfile/>}></Route>
                     <Route path="service-profiles" element={<ServiceProfile/>}></Route>

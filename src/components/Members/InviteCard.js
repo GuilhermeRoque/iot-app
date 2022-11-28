@@ -7,18 +7,33 @@ import Typography from '@mui/material/Typography';
 import useAPI from '../../services/useAPI';
 import { MapperMemberRole } from "../resources/enums"
 import { useSnackbar } from "../../context/snackbar-context";
+import APIClient from "../../services/apiClient";
 
-export default function InviteCard({organizationName, member, oragnizationId, updateMemberStatus}) {
+export default function InviteCard({organizationName, member, oragnizationId, handleInviteUpdate, handleInviteDelete}) {
     const api = useAPI()
-    const memberUpdated = {...member}
     const toast = useSnackbar()
-    // active
-    memberUpdated.status = 0
+
     const handleAccept = () => {
-        api.put("/organizations/"+oragnizationId+"/members/"+member._id, {status: 0})
-        .then((response) => {
+      const apiClient = new APIClient(api)  
+      apiClient.acceptMemberInvitation(oragnizationId, member._id)
+        .then((data) => {
+          console.log(data)
           toast.start("Convite aceito", 'success')
-          updateMemberStatus(oragnizationId, member._id)
+          handleInviteUpdate(data.member, data.accessToken)
+        })
+        .catch((err)=>{
+          console.log(err)
+          toast.start("Erro inesperado", 'error')
+        })  
+    }
+
+    const handleDeny = () => {
+      const apiClient = new APIClient(api)  
+      apiClient.denyMemberInvitation(oragnizationId, member._id)
+        .then((data) => {
+          console.log(data)
+          toast.start("Convite recusado", 'success')
+          handleInviteDelete(member._id, data.accessToken)
         })
         .catch((err)=>{
           console.log(err)
@@ -44,7 +59,7 @@ export default function InviteCard({organizationName, member, oragnizationId, up
       </CardContent>
       <CardActions>
         <Button size="small" onClick={handleAccept}>Aceitar</Button>
-        <Button size="small">Recusar</Button>
+        <Button size="small" onClick={handleDeny}>Recusar</Button>
       </CardActions>
     </Card>
   );

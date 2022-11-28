@@ -4,8 +4,8 @@ import { options } from "../resources/Table/defaultOptions";
 
 export default function ApplicationTable({applications}){
     const columns = [
+        {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "applicationId", label:"Identificador"},
-        {name: "name", label:"Nome"},
         {name: "integration", label: "Integração"},
         {name: "deviceApi", label: "API dos dispositivos"},
     ];

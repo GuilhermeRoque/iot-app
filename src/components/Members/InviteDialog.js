@@ -15,7 +15,7 @@ import { useState } from "react";
 import useAPI from "../../services/useAPI";
 import {MapperMemberRole} from "../resources/enums"
 import { useSnackbar } from "../../context/snackbar-context";
-
+import APIClient from "../../services/apiClient";
 
 export default function InviteDialog({open, handleClose, organizationId, addMember}){
     const api = useAPI()
@@ -33,12 +33,12 @@ export default function InviteDialog({open, handleClose, organizationId, addMemb
           email: data.get("email-invite"),
           role: data.get("role-invite")
         }
-        const path = "/organizations/"+organizationId+"/members"
-        api.post(path, post_data)
-        .then((response) => {
-          console.log("Usuario convidado", response)
+        const apiClient = new APIClient(api)
+        apiClient.addMemberInvitation(organizationId, post_data)
+        .then((data) => {
+          console.log("Usuario convidado", data)
           toast.start("Convite enviado", 'success')
-          addMember(organizationId, response.data)
+          addMember(data)
         })
         .catch((err)=>{
           console.log("err", err)

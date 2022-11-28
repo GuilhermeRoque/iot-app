@@ -16,6 +16,7 @@ import ApiIcon from '@mui/icons-material/Api';
 import GroupsIcon from '@mui/icons-material/Groups';
 import DrawerItem from './DrawerItem';
 import HomeIcon from '@mui/icons-material/Home';
+import BusinessIcon from '@mui/icons-material/Business';
 import { DrawerHeader } from './DrawerHeader';
 import { DrawerAppBar } from '../AppBar';
 import CellTowerIcon from '@mui/icons-material/CellTower';
@@ -88,10 +89,11 @@ export default function MiniDrawer() {
         <Divider />
         <List>
           <DrawerItem open={open} text={"Apresentação"} Icon={HomeIcon} link={'/'}/>
+          <DrawerItem open={open} text={"Organizações"} Icon={BusinessIcon} link={'/organizations'}/>
         </List>
         <Divider />
         <List>
-          <DrawerItem open={open} text={"Organizações"} Icon={GroupsIcon} link={'organizations'}/>
+          <DrawerItem open={open} text={"Participantes"} Icon={GroupsIcon} link={'organizations/members'}/>
           <DrawerItem open={open} text={"Aplicações"} Icon={AppsIcon} link={'organizations/applications'}/>
           <DrawerItem open={open} text={"Perfis LoRaWAN"} Icon={CellTowerIcon} link={'organizations/lorawan-profiles'}/>
           <DrawerItem open={open} text={"Perfis de Serviço"} Icon={SettingsApplicationsIcon} link={'organizations/service-profiles'}/>

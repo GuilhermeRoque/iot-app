@@ -14,7 +14,7 @@ export default function DialogForm({open, handleClose, title, helpText, children
                 <DialogContentText>
                     {helpText}
                 </DialogContentText>
-                <div>{children}</div>
+                {children}
             </DialogContent> 
         </Dialog>
     )

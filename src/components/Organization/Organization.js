@@ -3,16 +3,17 @@ import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import { useAuth } from "../../context/auth-context";
 import { CircularProgress } from "@mui/material";
-import InviteCard from "./InviteCard";
-import InviteDialog from "./InviteDialog";
 import useAPI from "../../services/useAPI";
 import OrganizationForm from "./OrganizationForm";
 import OrganizationTable from "./OrganizationTable";
 import APIClient from "../../services/apiClient";
 import { Container } from "@mui/material";
+import OrganizationDialog from "./OrganizationDialog"
+import FormPaper from "../resources/FormPaper"
 
 export default function Organization() {
   const [organizations, setOrganizations] = useState(null)
+
   const api = useAPI()
   const [open, setOpen] = React.useState(false);
   const auth = useAuth();
@@ -43,22 +44,6 @@ export default function Organization() {
     setOrganizations(newOrganizations)
   }
 
-  const updateMemberStatus = (organizationId, memberId) => {
-    const newOrganizations = [...organizations]
-    const orgIndex = newOrganizations.findIndex(org => {return org._id === organizationId;});
-    const newOrg = newOrganizations[orgIndex]
-    const memberIndex = newOrg.members.findIndex(memb => {return memb._id === memberId})
-    newOrg.members[memberIndex].status = 0
-    setOrganizations(newOrganizations)
-  }
-  const addMember = (organizationId, member) => {
-    const newOrganizations = [...organizations]
-    const orgIndex = newOrganizations.findIndex(org => {return org._id === organizationId;});
-    const newOrg = newOrganizations[orgIndex]
-    newOrg.members.push(member)
-    setOrganizations(newOrganizations)
-  }
-
   useEffect(() => {
     const apiClient = new APIClient(api)
     apiClient.getOrganizations()
@@ -74,58 +59,35 @@ export default function Organization() {
       </Box>    
     )
   }else{
-    const first_organization = organizations.length?organizations[0]:{name: '', members: []}
     if(organizations.length){
-      console.log("There is organizations, rendering first one..")
-      const index = first_organization.members.findIndex(member => {
-        return member.userId === auth.user._id;
-      });
-      if (index === -1){
-        console.log("User is not in organization!")
-        return <></>
-      }
-      const member = first_organization.members[index]
-      if (member.status === 1){
-        console.log("The user still is just invited, rendering invite card..")
-        return (
-            <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-              <InviteCard 
-                organizationName={first_organization.name} 
-                member={member} 
-                oragnizationId={first_organization._id}
-                updateMemberStatus={updateMemberStatus}
-                >            
-              </InviteCard>
-            </Container>
-        )
-      }else{
-        console.log("The user is active in organization, rendering table with members..")
-        return(
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <OrganizationTable members={first_organization.members}/>
-            <Button 
-              variant="contained"
-              sx={{ mt: 3, mb: 2 }}                
-              onClick={handleClickOpen}>
-              Convidar
-            </Button>
-            <InviteDialog 
-              open={open} 
-              handleClose={handleClose} 
-              addMember={addMember}
-              organizationId={organizations[0]._id}
-              >
-            </InviteDialog>                  
-        </Container>
-        )
-      }
-    }else{
-      console.log("There is no organizations, rendering register form..")
-      return(
-        <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-          <OrganizationForm handleNewOrganization={handleNewOrganization}/>
+      return (
+        <Container maxWidth="lg" sx={{ mt: 4, mb: 4, marginTop: "80px" }}>
+          <OrganizationTable organizations={organizations} user={auth.user}/>
+          <Button 
+            variant="contained"
+            sx={{ mt: 3, mb: 2 }}                
+            onClick={handleClickOpen}>
+            Cadastrar
+          </Button>
+          <OrganizationDialog 
+            open={open} 
+            handleClose={handleClose} 
+            handleNewOrganization={handleNewOrganization}
+            >
+          </OrganizationDialog>                  
         </Container>
       )
+      }else{
+        return(
+          <>
+            <Box sx={{flexBasis:"100%", height: "60px"}}></Box>
+            <Box sx={{width: "fit-content", margin: "auto"}}>
+            <FormPaper title={"Cadastre uma Organização"}>
+              <OrganizationForm handleNewOrganization={handleNewOrganization}/>
+            </FormPaper>
+            </Box>
+         </>
+        )
     }
   }
 }

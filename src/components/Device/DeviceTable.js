@@ -18,10 +18,18 @@ export default function DeviceTable({devices, handlerEdit, handlerDelete, handle
         ...actionsColumns(handlerEdit, handlerDelete, handlerMonitor)
     ];
     
+    const devicesAdapted = devices.map(device => {return {
+      ...device, 
+      loraProfileName: device.loraProfile.name, 
+      loraProfileId: device.loraProfile._id,
+      serviceProfileName: device.serviceProfile.name,
+      serviceProfileId: device.serviceProfile._id
+    }})
+
     return (
             <MUIDataTable
               title={"Dispositivos"}
-              data={devices}
+              data={devicesAdapted}
               columns={columns}
               options={options}
             />

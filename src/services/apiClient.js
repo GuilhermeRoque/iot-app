@@ -14,7 +14,7 @@ class APIClient{
     static organizationsPath = '/organizations'
     static applicationsPath = '/applications'
     static loraProfilesPath = '/lora-profiles'
-    static serviceProfilesPath = '/applications'
+    static serviceProfilesPath = '/service-profiles'
     static deviceProfilesPath = '/device-profiles'
     static devicesPath = '/devices'
     static membersPath = '/members'

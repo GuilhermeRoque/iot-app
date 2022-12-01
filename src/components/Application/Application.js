@@ -22,7 +22,8 @@ export default function Application() {
     oldApplications.push(newApplication)
     setApplications(oldApplications)
   }
-
+  const handleEdit=()=>{}
+  const handleDelete=()=>{}
 
   React.useEffect(() => {
     if (currentOrganization){
@@ -45,7 +46,7 @@ export default function Application() {
       <>
           <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
           <Box sx={{width: "fit-content", margin: "auto", minWidth:"1000px"}}>
-            <ApplicationTable applications={applications}/>
+            <ApplicationTable applications={applications} handlerDelete={handleDelete} handlerEdit={handleEdit}/>
           </Box>
       </>
     )

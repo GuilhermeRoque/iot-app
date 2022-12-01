@@ -71,7 +71,7 @@ export default function DeviceForm({
     }
 
     return(
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , minWidth: "800px"}}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
             <TextField
                 margin="normal"
                 required

@@ -54,6 +54,8 @@ export default function LoraProfile(){
         setLoraWANProfiles(newloraWANProfiles)
         handleClose()
     }
+    const handleEdit = () =>{}
+    const handleDelete = () =>{}
 
     // Not loaded yet
     if(loraWANProfiles == null){
@@ -63,7 +65,7 @@ export default function LoraProfile(){
                 <>
                     <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
                     <Box sx={{width: "fit-content", margin: "auto", minWidth:"1000px"}}>
-                        <LoraProfileTable loraProfiles={loraWANProfiles}/>
+                        <LoraProfileTable loraProfiles={loraWANProfiles} handlerDelete={handleDelete} handlerEdit={handleEdit}/>
                         <Button 
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}                

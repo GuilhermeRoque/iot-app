@@ -1,9 +1,8 @@
 import React, { useState } from "react"
 import useAPI from "../../services/useAPI"
-import ServiceProfileForm from "./ServiceProfileForm"
 import { useNavigate } from "react-router-dom"
-import ServiceProfileTable from "./ServiceProfileTable"
-import ServiceProfileDialog from "./ServiceProfileDialog"
+import OrganizationChildTable from "./OrganizationChildTable"
+import OrganizationChildDialog from "./OrganizationChildDialog"
 import { Button } from "@mui/material"
 import FormPaper from "../resources/FormPaper"
 import { useSnackbar } from "../../context/snackbar-context"
@@ -11,10 +10,9 @@ import { useOrganization } from '../../context/organization-context';
 import APIClient from '../../services/apiClient';
 import { Box, Container } from '@mui/material';
 
-export default function ServiceProfile(){
+export default function OrganizationChild({apiPath, tableMapper, Form}){
     const api = useAPI()
-    const [serviceProfiles, setServiceProfiles] = React.useState(null)
-    const navigate = useNavigate()
+    const [data, setData] = React.useState(null)
     const toast = useSnackbar()
     const [open, setOpen] = useState(false)
     const handleClose = () => {setOpen(false)}
@@ -27,25 +25,22 @@ export default function ServiceProfile(){
     React.useEffect( () => {
         if(currentOrganization){
             const apiClient = new APIClient(api)
-            apiClient.getServiceProfiles(currentOrganization)
-                .then((newServiceProfiles)=>{
-                    setServiceProfiles(newServiceProfiles)
+            apiClient.getOrganizationChildData(currentOrganization, path)
+                .then((newData)=>{
+                    setData(newData)
                 })
                 .catch((error)=>{
                     console.log('error', error)
-                    toast.start("Não possível carregar os perfis de serviço cadastrados")          
+                    toast.start("Não possível carregar os dados")          
                 })
-            // toast.start("Cadastre uma organização primeiro", 'warning')
-            // navigate('/organizations', {replace: true})
-        }else{
-        }  
+        }
     }, [currentOrganization])
 
  
-    const handleNewServiceProfile = (serviceProfile) => {
-        const newServiceProfiles = [...serviceProfiles]
-        newServiceProfiles.push(serviceProfile)
-        setServiceProfiles(newServiceProfiles)
+    const handleNewData = (singleData) => {
+        const newData = [...data]
+        newData.push(singleData)
+        setNewData(newData)
         handleClose()
     }
 
@@ -53,28 +48,29 @@ export default function ServiceProfile(){
     const handleDelete=()=>{}
 
     // Not loaded yet
-    if(serviceProfiles == null){
+    if(data == null){
         return (<></>)
     }
-    else if(serviceProfiles.length){
+    else if(data.length){
             return (
                 <>
                     <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
                     <Box sx={{width: "fit-content", margin: "auto", minWidth:"1000px"}}>
-                        <ServiceProfileTable serviceProfiles={serviceProfiles} handlerEdit={handleEdit} handlerDelete={handleDelete}/>
+                        <OrganizationChildTable data={data} handlerEdit={handleEdit} handlerDelete={handleDelete} mapper={tableMapper}/>
                         <Button 
                             variant="contained"
                             sx={{ mt: 3, mb: 2 }}                
                             onClick={handleClickOpen}>
                             Cadastrar
                         </Button>
-                        <ServiceProfileDialog 
+                        <OrganizationChildDialog 
                             organizationId={currentOrganization} 
-                            handleNewServiceProfile={handleNewServiceProfile}
+                            handleNewData={handleNewData}
+                            Form={Form}
                             open={open}
                             handleClose={handleClose}
                             >
-                        </ServiceProfileDialog>                    
+                        </OrganizationChildDialog>                    
                     </Box>
                 </>
             )
@@ -85,7 +81,7 @@ export default function ServiceProfile(){
             <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
             <Box sx={{width: "fit-content", margin: "auto"}}>
             <FormPaper title={"Cadastre um perfil de serviço"}>
-                    <ServiceProfileForm organizationId={currentOrganization} handleNewServiceProfile={handleNewServiceProfile}/>
+                    <Form organizationId={currentOrganization} handleNewData={handleNewData}/>
             </FormPaper>
             </Box>
             </>

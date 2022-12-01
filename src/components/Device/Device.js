@@ -190,7 +190,7 @@ export default function Device(){
                 <>
                     {currentAppSelect}
                     <Box sx={{flexBasis:"100%", height: "30px"}}></Box>
-                    <Box sx={{width: "fit-content", margin: "auto", minWidth:"1000px"}}>
+                    <Box sx={{width: "fit-content", margin: "auto"}}>
                         <DeviceTable devices={devices} handlerEdit={handlerEdit} handlerDelete={handlerDelete} handlerMonitor={handlerMonitor}/>
                         <Button 
                             variant="contained"

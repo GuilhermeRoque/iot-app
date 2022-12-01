@@ -34,7 +34,7 @@ export default function OrganizationForm({handleNewOrganization}){
       }
     
     return(
-      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 , minWidth: "800px"}}>
+      <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
       {/* <Typography component="h1" variant="h5">Cadastre uma organização</Typography> */}
           <TextField
             margin="normal"

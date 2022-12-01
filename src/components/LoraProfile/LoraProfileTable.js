@@ -2,8 +2,10 @@ import React from "react";
 import MUIDataTable from "mui-datatables";
 import { options } from "../resources/Table/defaultOptions";
 import { loraWanVersionsValueMap, loraPhyVersionsValueMap } from "./loraModelOptions"
+import actionsColumns from "../resources/Table/defaultColumns";
 
-export default function LoraProfileTable({loraProfiles}){
+
+export default function LoraProfileTable({loraProfiles, handlerEdit, handlerDelete}){
     const columns = [
         {name: "name", label:"Nome", options: { filterOptions: { fullWidth: true } } },
         {name: "freqPlanId", label: "Plano de frequência"},
@@ -12,7 +14,7 @@ export default function LoraProfileTable({loraProfiles}){
         {name: "isClassB", label: "Classe B"},
         {name: "isClassC", label: "Classe C"},
         {name: "isOTAA", label: "OTAA"},
-
+        ...actionsColumns(handlerEdit, handlerDelete)
       ];
     
     const _loraProfiles = []

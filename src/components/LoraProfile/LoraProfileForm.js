@@ -9,18 +9,17 @@ import {
     Checkbox
 } from "@mui/material"
 import React from "react"
-import useAPI from "../../services/useAPI"
 import { loraWanVersions, loraPhyVersions } from "./loraModelOptions"
 import ttn_freq_plans from "./ttn_freq_plans"
-import { useSnackbar } from "../../context/snackbar-context"
 
-export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
-    const api = useAPI()
-    const toast = useSnackbar()
+export default function LoraProfileForm({handleNewData, currentData}){
 
-    const [loraWanVersion, setLoraWanVersion] = React.useState(loraWanVersions[0].value)
-    const [loraFreqPlan, setLoraFreqPlan] = React.useState("EU_863_870")
-    const [loraPhyVersion, setLoraPhyVersion] = React.useState(loraPhyVersions[0].value)
+    console.log("currentData", currentData)
+    console.log("loraWanVersions[0].value", loraWanVersions[0].value)
+
+    const [loraWanVersion, setLoraWanVersion] = React.useState(currentData?currentData.macVersion:loraWanVersions[0].value)
+    const [loraFreqPlan, setLoraFreqPlan] = React.useState(currentData?currentData.freqPlanId:"EU_863_870")
+    const [loraPhyVersion, setLoraPhyVersion] = React.useState(currentData?currentData.phyVersion:loraPhyVersions[0].value)
     const handleChangeLoraWanVersion = (event) =>{setLoraWanVersion(event.target.value)}
     const handleChangeLoraFreqPlan = (event) =>{setLoraFreqPlan(event.target.value)}
     const handleChangeLoraPhyVersion = (event) =>{setLoraPhyVersion(event.target.value)}
@@ -28,18 +27,6 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
     const frequencyPlansMenuItems = ttn_freq_plans.map((freqPlan, index) => <MenuItem value={freqPlan['id']}  key={index}>{freqPlan['name']}</MenuItem>)
     const loraPhyVersionsMenuItems = loraPhyVersions.map((loraPhyVersion, index) => <MenuItem value={loraPhyVersion.value} key={index}>{loraPhyVersion.name}</MenuItem>)
 
-
-    const registerLoraProfile = (loraProfile) => {
-        api.post("/organizations/"+organizationId+"/lora-profiles", loraProfile)
-        .then((response)=>{
-            toast.start("Perfil LoRaWAN cadastrado", "success")
-            handleNewLoraProfile(response.data)
-        })
-        .catch((error)=>{
-            console.log(error)
-            toast.start("Erro ao cadastrar perfil LoRaWAN", "error")
-        })
-    }
 
     const handleSubmit = (event) =>{
         event.preventDefault();
@@ -55,8 +42,7 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
             isOTAA: true,
 
         }
-        console.log('payload', payload)
-        registerLoraProfile(payload)    
+        handleNewData(currentData?{...currentData, ...payload}:payload)    
     }
 
 
@@ -69,6 +55,7 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
                 label="Nome"
                 fullWidth
                 id="name"
+                defaultValue={currentData?currentData.name:""}
             />
             <TextField
                 margin="normal"
@@ -76,10 +63,11 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
                 label="Descrição"
                 fullWidth
                 id="description"
+                defaultValue={currentData?currentData.description:""}
             />
             <Box sx={{display: 'flex'}}>
-                <FormControlLabel control={<Checkbox name="isClassB"/>} label="Classe B" />
-                <FormControlLabel control={<Checkbox name="isClassC"/>} label="Classe C" />            
+                <FormControlLabel control={<Checkbox name="isClassB" defaultChecked={currentData?currentData.isClassB:false}/>} label="Classe B" />
+                <FormControlLabel control={<Checkbox name="isClassC" defaultChecked={currentData?currentData.isClassC:false}/>} label="Classe C" />            
             </Box>
             <FormControlLabel disabled checked control={<Checkbox name="isOTAA"/>} label="OTAA" />
             <Box sx={{display: 'flex'}}>
@@ -129,7 +117,7 @@ export default function LoraProfileForm({organizationId, handleNewLoraProfile}){
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-            Cadastrar
+            {currentData?"Atualizar":"Cadastrar"}
             </Button>
         </Box>
     )

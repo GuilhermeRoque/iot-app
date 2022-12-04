@@ -1,15 +1,23 @@
 import React from "react";
 import DialogForm from "../resources/DialogForm";
 
-export default function OrganizationChildDialog({open, handleClose, organizationId, handleNewData, Form}){
-    return(
+export default function OrganizationChildDialog({open, 
+                                                handleClose,
+                                                handleNewData,
+                                                Form, 
+                                                currentData}){
+
+        return(
         <DialogForm 
-            title={"Formulário de cadastro/edição"} 
-            helpText={"Insira as informações necessárias e confirme o cadastro/edição"}
+            title={"Formulário de cadastro"} 
+            helpText={"Insira as informações necessárias e confirme o cadastro"}
             open={open}
             handleClose={handleClose}
         >
-            <Form organizationId={organizationId} handleNewData={handleNewData}> </Form>
+            <Form 
+                handleNewData={handleNewData} 
+                currentData={currentData}
+            />
         </DialogForm>
     )
 }

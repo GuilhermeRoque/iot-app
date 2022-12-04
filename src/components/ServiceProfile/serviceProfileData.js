@@ -65,6 +65,9 @@ export const channelTypes = [
 export const channelTypesValueMap = new Map()
 for(const channelType of channelTypes) {channelTypesValueMap.set(channelType.value, channelType.name)}
 
+export const channelTypesValueMapObject = new Map()
+for(const channelType of channelTypes) {channelTypesValueMapObject.set(channelType.value, channelType)}
+
 export const acquisitionMethods = [
     {name: "Leitura única", value: 0},
     {name: "Média", value: 1},

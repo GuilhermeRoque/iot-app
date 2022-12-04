@@ -91,6 +91,31 @@ class APIClient{
         return response.data 
     }  
 
+    getOrganizationChildData = async (organizationId, childPath, childId=null) => {
+        const path = this._getChildOrganizationPath(organizationId, childPath, childId)
+        const response = await this.api.get(path)
+        return response.data 
+    }  
+
+    deleteOrganizationChildData = async (organizationId, childPath, childId=null) => {
+        const path = this._getChildOrganizationPath(organizationId, childPath, childId)
+        const response = await this.api.delete(path)
+        return response.data 
+    }  
+
+    createOrganizationChildData = async (organizationId, childPath, childData) => {
+        const path = this._getChildOrganizationPath(organizationId, childPath)
+        const response = await this.api.post(path, childData)
+        return response.data 
+    }  
+    updateOrganizationChildData = async (organizationId, childPath, childData, childId) => {
+        console.log("updateOrganizationChildData",organizationId,childPath,childData,childId)
+        const path = this._getChildOrganizationPath(organizationId, childPath, childId)
+        const response = await this.api.put(path, childData)
+        return response.data 
+    }  
+
+
     getApplications = async (organizationId) => {
         const path = this._getApplicationsPath(organizationId)
         const response = await this.api.get(path)
@@ -145,6 +170,15 @@ class APIClient{
         return response.data
     }
 
+
+    _getChildOrganizationPath(organizationId, childPath, childId) {
+        return PathUtils.join(
+            APIClient.organizationsPath,
+            organizationId,
+            childPath,
+            childId
+        )
+    }
 }
 
 export default APIClient

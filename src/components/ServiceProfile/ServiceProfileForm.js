@@ -7,64 +7,45 @@ import {
     MenuItem,
 } from "@mui/material"
 import React from "react"
-import { useSnackbar } from "../../context/snackbar-context"
-import useAPI from "../../services/useAPI"
-import { acquisitionMethods, channelTypes, dataTypes } from "./serviceProfileData"
+import { acquisitionMethods, channelTypes, dataTypes, channelTypesValueMapObject } from "./serviceProfileData"
 
-export default function ServiceProfileForm({organizationId, handleNewServiceProfile}){
-    const api = useAPI()
-    const toast = useSnackbar()
+export default function ServiceProfileForm({handleNewData, currentData}){
 
-    const [dataType, setDataType] = React.useState(dataTypes[0])
-    const [dataChannel, setDataChannel] = React.useState(channelTypes[0])
-    const [acquisitionMethod, setAcquisitionMethod] = React.useState(acquisitionMethods[0])
-    const [channelParam, setChannelParam] = React.useState(null)
+    const [dataType, setDataType] = React.useState(currentData?currentData.dataType:dataTypes[0].value)
+    const [dataChannel, setDataChannel] = React.useState(currentData?currentData.channelType:channelTypes[0].value)
+    const [acquisitionMethod, setAcquisitionMethod] = React.useState(currentData?currentData.acquisition:acquisitionMethods[0].value)
+    const [channelParam, setChannelParam] = React.useState(currentData?currentData.channelParam:'')
     
-
-    // const [channelParam, setChannelParam] = React.useState(null)
-    // const channelParamsMenuItems = channelParams.map((channelParam)=><MenuItem value={channelParam.value}>{channelParam.name}</MenuItem>)
-
     const handleChangeChannelParam = (event) =>{setChannelParam(event.target.value)}
     const handleChangeDataType = (event) =>{setDataType(event.target.value)}
     const handleChangeDataChannel = (event) =>{
         const channel = event.target.value
         setDataChannel(channel)
-        setChannelParam(channel.params.length?channel.params[0].value:null)
+        setChannelParam(channel.params.length?channel.params[0].value:'')
     }
     const handleChangeAcquisitionMethod = (event) =>{setAcquisitionMethod(event.target.value)}
-    const dataTypesMenuItems = dataTypes.map((dataType, index) => <MenuItem value={dataType} key={index}>{dataType.name}</MenuItem>)
-    const channelTypesMenuItems = channelTypes.map((channelType, index) => <MenuItem value={channelType} key={index}>{channelType.name}</MenuItem>)
-    const acquisitionMethodsMenuItems = acquisitionMethods.map((acquisitionMethod, index) => <MenuItem value={acquisitionMethod} key={index}>{acquisitionMethod.name}</MenuItem>)
+    const dataTypesMenuItems = dataTypes.map((dataType, index) => <MenuItem value={dataType.value} key={index}>{dataType.name}</MenuItem>)
+    const channelTypesMenuItems = channelTypes.map((channelType, index) => <MenuItem value={channelType.value} key={index}>{channelType.name}</MenuItem>)
+    const acquisitionMethodsMenuItems = acquisitionMethods.map((acquisitionMethod, index) => <MenuItem value={acquisitionMethod.value} key={index}>{acquisitionMethod.name}</MenuItem>)
 
-    const registerServiceProfile = (serviceProfile) => {
-        api.post("/organizations/"+organizationId+"/service-profiles", serviceProfile)
-        .then((response)=>{
-            toast.start("Perfil de serviço cadastrado", "success")
-            handleNewServiceProfile(response.data)
-        })
-        .catch((error)=>{
-            console.log(error)
-            toast.start("Erro ao cadastrar perfil de serviço", "error")
-        })
-    }
 
     const handleSubmit = (event) =>{
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-
+        
         const payload = {
             name: data.get("name"),
             description: data.get("description"),
-            dataType: dataType?.value,
-            channelType: dataChannel?.value,
+            dataType: dataType,
+            channelType: dataChannel,
             channelParam: channelParam,
-            acquisition: acquisitionMethod?.value,
+            acquisition: acquisitionMethod,
             period: data.get('period')
         }
-        registerServiceProfile(payload)    
+        handleNewData(currentData?{...currentData, ...payload} : payload)    
     }
 
-
+    const channelParams = channelTypesValueMapObject.get(dataChannel)
     return(
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
             <TextField
@@ -74,6 +55,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                 label="Nome"
                 fullWidth
                 id="name"
+                defaultValue={currentData?currentData.name:''}
             />
             <TextField
                 margin="normal"
@@ -81,6 +63,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                 label="Descrição"
                 fullWidth
                 id="description"
+                defaultValue={currentData?currentData.description:''}
             />
             <TextField
                 margin="normal"
@@ -89,6 +72,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                 type="number"
                 label="Período (s)"
                 fullWidth
+                defaultValue={currentData?currentData.period:''}
                 id="period"
             />
             <Box sx={{display: 'flex'}}>
@@ -138,8 +122,8 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                     </Select>
                 </Box>
 
-                {dataChannel.params.length?<Box sx={{marginRight: 5}}>
-                    <InputLabel id="channelParam-select-label">{dataChannel.paramsType.name}</InputLabel>
+                {channelParams?.params.length?<Box sx={{marginRight: 5}}>
+                    <InputLabel id="channelParam-select-label">{channelParams.paramsType.name}</InputLabel>
                     <Select
                         required
                         fullWidth
@@ -149,7 +133,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                         labelId='channelParam-select-label'
                         onChange={handleChangeChannelParam}
                     >
-                        {dataChannel.params.map((channelParam) => {return (<MenuItem value={channelParam.value}>{channelParam.name}</MenuItem>)})}
+                        {channelParams.params.map((channelParam) => {return (<MenuItem value={channelParam.value}>{channelParam.name}</MenuItem>)})}
                     </Select>
                 </Box>:null}
             </Box>
@@ -158,7 +142,7 @@ export default function ServiceProfileForm({organizationId, handleNewServiceProf
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-            Cadastrar
+            {currentData?"Atualizar":"Cadastrar"}
             </Button>
         </Box>
     )

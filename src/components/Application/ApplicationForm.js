@@ -5,34 +5,17 @@ import Box from '@mui/material/Box';
 import { Select } from '@mui/material';
 import { MenuItem } from '@mui/material';
 import { InputLabel } from '@mui/material';
-import useAPI from '../../services/useAPI';
-import { useAuth } from '../../context/auth-context';
-import { useSnackbar } from "../../context/snackbar-context";
 
-export default function ApplicationForm({handleNewApplication}){
-    const api = useAPI()
-    const auth = useAuth();
-    const toast = useSnackbar()
-
+export default function ApplicationForm({handleNewData, currentData}){
     const handleSubmit = (event) => {
         event.preventDefault();
-        const firstOrganizationId = auth.user.userOrganizations[0].organizationId
         const data = new FormData(event.currentTarget);
         const applicationData = {
           applicationId: data.get("applicationId"),
           apiKey: data.get("apiKey"),
           name: data.get("name")
         }
-        
-        api.post('/organizations/'+firstOrganizationId+"/applications", applicationData)
-        .then((response) => {
-          toast.start("Applicação cadastrada", "success")
-          const newApplication = response.data
-          handleNewApplication(newApplication)
-        })
-        .catch(error => {
-          toast.start("Falha durante cadastro", "error")
-        })
+        handleNewData(currentData?{...currentData, ...applicationData}:applicationData)    
       };
     
       const handleChange = () => {}
@@ -46,6 +29,7 @@ export default function ApplicationForm({handleNewApplication}){
             id="applicationId"
             label="Identificador"
             name="applicationId"
+            defaultValue={currentData?currentData.applicationId:""}
             autoFocus
           />
         <TextField
@@ -55,7 +39,7 @@ export default function ApplicationForm({handleNewApplication}){
             label="Nome"
             fullWidth
             id="name"
-            autoComplete="current-password"
+            defaultValue={currentData?currentData.name:""}
           />
           <TextField
             margin="normal"
@@ -64,6 +48,7 @@ export default function ApplicationForm({handleNewApplication}){
             label="Chave de API"
             name="apiKey"
             autoFocus
+            defaultValue={currentData?currentData.apiKey:""}
           />
           <InputLabel id="integration-select-label">Integração</InputLabel>
           <Select
@@ -96,7 +81,7 @@ export default function ApplicationForm({handleNewApplication}){
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Cadastrar
+            {currentData?"Atualizar":"Cadastrar"}
           </Button>
         </Box>
     );

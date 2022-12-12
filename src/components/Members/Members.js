@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Box } from "@mui/system";
 import { Button } from "@mui/material";
 import { useAuth } from "../../context/auth-context";
-import { CircularProgress } from "@mui/material";
+// import { CircularProgress } from "@mui/material";
 import InviteCard from "./InviteCard";
 import InviteDialog from "./InviteDialog";
 import useAPI from "../../services/useAPI";
@@ -17,7 +17,7 @@ export default function Members() {
   const [organization, setOrganization] = useState(null)
   const [member, setMember] = useState(null)
   const api = useAPI()
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const auth = useAuth();
 
   const handleClickOpen = () => {
@@ -28,7 +28,7 @@ export default function Members() {
     setOpen(false);
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     const apiClient = new APIClient(api)
     console.log("currentOrganization", currentOrganization)
     apiClient.getOrganizations(currentOrganization)
@@ -54,7 +54,7 @@ export default function Members() {
 
     const newUser = {...auth.user}
     newUser.token = newAccessToken
-    const orgIndex = newUser.userOrganizations.findIndex(org => {return org.organizationId==newOrganization._id})
+    const orgIndex = newUser.userOrganizations.findIndex(org => {return org.organizationId===newOrganization._id})
     newUser.userOrganizations.splice(orgIndex, 1)
     newUser.userOrganizations.push({
       organizationId: newOrganization._id,
@@ -74,7 +74,7 @@ export default function Members() {
 
     const newUser = {...auth.user}
     newUser.token = newAccessToken
-    const orgIndex = newUser.userOrganizations.findIndex(org => {return org.organizationId==newOrganization._id})
+    const orgIndex = newUser.userOrganizations.findIndex(org => {return org.organizationId===newOrganization._id})
     newUser.userOrganizations.splice(orgIndex, 1)
     auth.signin(newUser)
   }

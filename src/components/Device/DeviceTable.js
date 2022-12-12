@@ -14,16 +14,19 @@ export default function DeviceTable({devices, handlerEdit, handlerDelete, handle
         {name: "loraProfileName", label: "Perfil LoRaWAN"},
         {name: "serviceProfileId", label: "ID Perfil de Serviço", options: {display: false}},
         {name: "loraProfileId", label: "ID Perfil LoRaWAN", options: {display: false}},
+        {name: 'configured', label:"Status provedor"},
         // ...defaultActions
         ...actionsColumns(handlerEdit, handlerDelete, handlerMonitor)
     ];
     
+    const statusMapper = new Map([[true, 'OK'], [false, 'NOK']])
     const devicesAdapted = devices.map(device => {return {
       ...device, 
-      loraProfileName: device.loraProfile.name, 
-      loraProfileId: device.loraProfile._id,
-      serviceProfileName: device.serviceProfile.name,
-      serviceProfileId: device.serviceProfile._id
+      loraProfileName: device.loraProfile?.name, 
+      loraProfileId: device.loraProfile?._id,
+      serviceProfileName: device.serviceProfile?.name,
+      serviceProfileId: device.serviceProfile?._id,
+      configured: statusMapper.get(device.configured)
     }})
 
     return (

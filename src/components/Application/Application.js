@@ -16,11 +16,13 @@ export default function LoraProfile(){
                 {name: "applicationId", label:"Identificador"},
                 {name: "integration", label: "Integração"},
                 {name: "deviceApi", label: "API dos dispositivos"},
+                {name: 'configured', label:"Status provedor"},
                 {name: '_id', label:"_id", options:{display: false}}
             ]}
             valueMapper={{
                 integration: new Map([[undefined, "TTN"]]),
-                deviceApi: new Map([[undefined, "LoRaWAN-Jean"]])
+                deviceApi: new Map([[undefined, "LoRaWAN-Jean"]]),
+                configured: new Map([[true, 'OK'],[false, 'NOK']])
             }}
         >
 

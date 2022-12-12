@@ -2,7 +2,6 @@ import React from "react"
 import { 
     Box,
     TextField,
-    Typography,
     Button 
 } from "@mui/material"
 import useAPI from "../../services/useAPI";
@@ -35,7 +34,6 @@ export default function OrganizationForm({handleNewOrganization}){
     
     return(
       <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
-      {/* <Typography component="h1" variant="h5">Cadastre uma organização</Typography> */}
           <TextField
             margin="normal"
             required

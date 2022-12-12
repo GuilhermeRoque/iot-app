@@ -9,7 +9,7 @@ import { useOrganization } from '../../context/organization-context';
 import APIClient from '../../services/apiClient';
 import { Box } from '@mui/material';
 
-export default function OrganizationChild({apiPath, valueMapper, labelMapper, Form, titleTable, titleRegisterForm}){
+export default function OrganizationChild({apiPath, valueMapper, labelMapper, Form, titleTable, titleRegisterForm, respParser}){
     const api = useAPI()
     const [data, setData] = React.useState(null)
     const [currentData, setCurrentData] = React.useState(null)
@@ -22,6 +22,7 @@ export default function OrganizationChild({apiPath, valueMapper, labelMapper, Fo
     const handleClickOpen = () => {setOpen(true)}
     const OrganizationContext = useOrganization()  
     const currentOrganization = OrganizationContext.organization
+
     console.log("Current organization: ", currentOrganization)
   
 
@@ -59,10 +60,11 @@ export default function OrganizationChild({apiPath, valueMapper, labelMapper, Fo
         const apiClient = new APIClient(api)
         apiClient.updateOrganizationChildData(currentOrganization, apiPath, singleData, singleData._id)
             .then((respData)=>{
+                const respParsed = respParser?respParser(respData):{singleDataUpdated: respData, accessToken:null}
                 const newData = [...data]
                 const index = newData.findIndex(d => {return d._id===singleData._id})
                 newData.splice(index, 1)
-                newData.push(respData)
+                newData.push(respParsed.singleDataUpdated)
                 setData(newData)
                 handleClose()        
             })

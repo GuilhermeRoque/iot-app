@@ -19,7 +19,6 @@ import AlertTitle from '@mui/material/AlertTitle';
 import DeviceDialogChart from "./DeviceDialogChart"
 
 export default function Device(){
-    console.log("DEVICE")
     const api = useAPI()
     const auth = useAuth()
     const navigate = useNavigate()
@@ -30,7 +29,10 @@ export default function Device(){
     const handleOpenChart = () => {setOpenChart(true)}
 
     const [open, setOpen] = useState(false)
-    const handleClose = () => {setOpen(false)}
+    const handleClose = () => {
+        setOpen(false)
+        setDevice(null)    
+    }
     const handleClickOpen = () => {setOpen(true)}
 
     const OrganizationContext = useOrganization()  
@@ -38,7 +40,7 @@ export default function Device(){
     console.log("Current organization: ", currentOrganization)
   
     const [applications, setApplications] = React.useState([])
-    const [currentApplication, setCurrentApplication] = React.useState(null)
+    const [currentApplication, setCurrentApplication] = React.useState('')
     const [loraProfiles, setLoraProfiles] = React.useState(null)
     const [serviceProfiles, setServiceProfiles] = React.useState(null)
     const [devices, setDevices] = useState(null)
@@ -96,16 +98,6 @@ export default function Device(){
                     navigate('/organizations/applications', {replace: true})
                     return
                 }
-                if (!data.serviceProfiles.length){
-                    toast.start("Cadastre um perfil de serviço primeiro", 'info')
-                    navigate('/organizations/service-profiles', {replace: true})
-                    return
-                }
-                if (!data.loraProfiles.length){
-                    toast.start("Cadastre um perfil lorawan primeiro", 'info')
-                    navigate('/organizations/lorawan-profiles', {replace: true})
-                    return
-                }
                 setApplications(data.applications)      
                 setLoraProfiles(data.loraProfiles)
                 setServiceProfiles(data.serviceProfiles)
@@ -139,6 +131,7 @@ export default function Device(){
         if (deviceIndex > -1){
             newDevices.splice(deviceIndex, 1)
         }
+        console.log("Adding device to list", device)
         newDevices.push(device)
         setDevices(newDevices)
         handleClose()

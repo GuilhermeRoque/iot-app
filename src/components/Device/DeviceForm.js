@@ -4,11 +4,15 @@ import {
     Select, 
     InputLabel, 
     Button,
-    MenuItem
+    Checkbox,
+    MenuItem,
+    FormControl,
+    FormControlLabel,
 } from "@mui/material"
 import React, { useState } from "react"
 import { useSnackbar } from "../../context/snackbar-context"
 import useAPI from "../../services/useAPI"
+import APIClient from "../../services/apiClient"
 
 export default function DeviceForm({
     organizationId, 
@@ -21,30 +25,30 @@ export default function DeviceForm({
     const toast = useSnackbar()
     const api = useAPI()
 
-    const [loraProfile, setLoraProfile] = useState(device?device.loraProfileId:loraProfiles[0]._id)
+    const [loraProfile, setLoraProfile] = useState(device?.loraProfile?._id?device.loraProfile._id:"")
     const handleChangeLoraProfile = (event) =>{setLoraProfile(event.target.value)}
-    const loraProfilesItems = loraProfiles.map((loraProfile) => <MenuItem value={loraProfile._id}>{loraProfile.name}</MenuItem>)
-
-    const [serviceProfile, setServiceProfile] = useState(device?device.serviceProfileId:serviceProfiles[0]._id)
+    const loraProfilesItems = loraProfiles.map((loraProfile, index) => <MenuItem value={loraProfile._id} key={index}>{loraProfile.name}</MenuItem>)
+    const [checked, setChecked] = React.useState(device?device.configured:loraProfiles?.length?false:true)
+    const [serviceProfile, setServiceProfile] = useState(device?.serviceProfile?._id?device.serviceProfile._id:"")
     const handleChangeServiceProfile = (event) =>{setServiceProfile(event.target.value)}
-    const serviceProfilesItems = serviceProfiles.map((serviceProfile) => <MenuItem value={serviceProfile._id}>{serviceProfile.name}</MenuItem>)
+    const serviceProfilesItems = serviceProfiles.map((serviceProfile, index) => <MenuItem value={serviceProfile._id} key={index}>{serviceProfile.name}</MenuItem>)
+
+    const handleIsConfigured = (e) =>{
+        setChecked(e.target.checked)
+    }
 
     const registerDevice = (deviceData) => {
-        const request = device?api.put:api.post
-        const deviceId = device?("/"+device._id):""
-
-        request("/organizations/"+organizationId+"/applications/"+applicationId+'/devices'+deviceId, deviceData)
-        .then((response)=>{
-            if(response.status === 201){
-                toast.start("Dispositivo cadastrado", 'success')
-            }else if(response.status === 202){
-                toast.start("Falha durante configuração LoRaWAN", 'warning')
-            }
-            handleNewDevice(response.data)
+        const apiClient = new APIClient(api)
+        const request = device?apiClient.updateDevice:apiClient.createDevice
+        const deviceId = device?device._id:null
+        console.log("device", device)
+        request(organizationId, applicationId, deviceData, deviceId)
+        .then((data)=>{
+            toast.start("Dispositivo cadastrado", 'success')
+            handleNewDevice(data)
         })
         .catch((error)=>{
-            console.log(error)
-            toast.start("Erro inesperado", 'error')
+            toast.start(error.message, 'error')
         })
     }
 
@@ -52,18 +56,13 @@ export default function DeviceForm({
         event.preventDefault();
         const data = new FormData(event.currentTarget);
 
-        const loraProfileId = data.get("loraProfile")
-        // const loraProfile = loraProfiles.find(loraProfile => loraProfile.loraProfileId === loraProfileId)
-
-        const serviceProfileId = data.get("serviceProfile")
-        // const serviceProfile = serviceProfiles.find(serviceProfile => serviceProfile.serviceProfileId === serviceProfileId)
-
         const payload = {
           name: data.get("devName"),
           devId: data.get("devId"),
           devEUI: data.get("devEUI"),
           joinEUI: data.get('joinEUI'),
           appKey: data.get('appKey'),
+          configured: checked,
           loraProfileId: loraProfile,
           serviceProfileId: serviceProfile
         }
@@ -71,7 +70,7 @@ export default function DeviceForm({
     }
 
     return(
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1}}>
+        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, maxWidth:1000}}>
             <TextField
                 margin="normal"
                 required
@@ -79,8 +78,8 @@ export default function DeviceForm({
                 id="devId"
                 label="Identificador do dispositivo"
                 name="devId"
-                value={device?device.devId:null}
-                autoFocus
+                defaultValue={device?device.devId:''}
+                // autoFocus
             />
             <TextField
                 margin="normal"
@@ -88,7 +87,7 @@ export default function DeviceForm({
                 name="devName"
                 label="Nome"
                 fullWidth
-                value={device?device.name:null}
+                defaultValue={device?device.name:''}
                 id="devName"
             />
             <TextField
@@ -96,7 +95,7 @@ export default function DeviceForm({
                 name="devEUI"
                 label="Device EUI"
                 fullWidth
-                value={device?device.devEUI:null}
+                defaultValue={device?device.devEUI:''}
                 id="devEUI"
             />
             <TextField
@@ -104,9 +103,9 @@ export default function DeviceForm({
                 name="joinEUI"
                 label="Join EUI"
                 fullWidth
-                value={device?device.joinEUI:null}
+                defaultValue={device?device.joinEUI:''}
                 id="joinEUI"
-                hidden
+                // hidden
             />
             <TextField
                 margin="normal"
@@ -114,45 +113,51 @@ export default function DeviceForm({
                 label="Chave de aplicação"
                 fullWidth
                 id="appKey"
-                value={device?device.appKey:null}
-                hidden
+                defaultValue={device?device.appKey:''}
+                // hidden
             />
-            <Box sx={{display: 'flex'}}>
-                <Box sx={{marginRight: 5}}>
-                    <InputLabel id="loraProfile-select-label">Perfil LoRaWAN</InputLabel>
-                    <Select
-                        required
-                        fullWidth
-                        id="loraProfile"
-                        name="loraProfile"
-                        value={loraProfile}
-                        labelId='loraProfile-select-label'
-                        onChange={handleChangeLoraProfile}
-                    >
-                        {loraProfilesItems}
-                    </Select>
-                </Box>
-                <Box sx={{marginRight: 5}}>
-                    <InputLabel id="serviceProfile-select-label">Perfil de serviço</InputLabel>
-                    <Select
-                        required
-                        fullWidth
-                        id="serviceProfile"
-                        name="serviceProfile"
-                        value={serviceProfile}
-                        labelId='serviceProfile-select-label'
-                        onChange={handleChangeServiceProfile}
-                    >
-                        {serviceProfilesItems}
-                    </Select>
-                </Box>                
-            </Box>
+            <br/>
+            <FormControl sx={{marginTop:1, marginRight:1, minWidth:160 }} disabled={loraProfiles?.length?false:true}>
+                <InputLabel id="loraProfile-select-label">Perfil LoRaWAN</InputLabel>
+                <Select
+                    // fullWidth
+                    id="loraProfile"
+                    name="loraProfile"
+                    defaultValue={loraProfile}
+                    labelId='loraProfile-select-label'
+                    onChange={handleChangeLoraProfile}
+                >
+                    {loraProfilesItems}
+                </Select>
+            </FormControl>
+            <FormControl sx={{marginTop:1, marginRight:1, minWidth:160 }} disabled={serviceProfiles?.length?false:true}>
+                <InputLabel id="serviceProfile-select-label">Perfil de serviço</InputLabel>
+                <Select
+                    fullWidth
+                    id="serviceProfile"
+                    name="serviceProfile"                        
+                    defaultValue={serviceProfile}
+                    labelId='serviceProfile-select-label'
+                    onChange={handleChangeServiceProfile}
+                >
+                    {serviceProfilesItems}
+                </Select>
+            </FormControl>
+            <br/>
+            <FormControl disabled={loraProfiles?.length?false:true}>
+                <FormControlLabel 
+                    sx={{display: 'flex', marginTop:"5px"}} 
+                    control={<Checkbox onChange={handleIsConfigured} id="configured" defaultChecked={checked}/>} 
+                    label={"Configurado no provedor"}>
+                </FormControlLabel>
+            </FormControl>
+            <br/>
             <Button
                 type="submit"
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
             >
-            Cadastrar
+            {device?"Atualizar":"Cadastrar"}
             </Button>
         </Box>
     )

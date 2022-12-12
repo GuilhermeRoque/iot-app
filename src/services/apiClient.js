@@ -10,6 +10,27 @@ class PathUtils {
         return pathsParsed.join('/')
     }
 }
+
+class APIError extends Error{
+    constructor(error){
+        const respMessage = error.response.data.message
+        const status = error.response.status
+        const message = respMessage?respMessage:APIError._getStatusMessageError(status)
+        super(message)
+    }
+
+    static _getStatusMessageError(status){
+        switch (status) {
+            case 400:
+                return "Request Error"        
+            case 500:
+                return "Internal Error"
+            default:
+                return "Unexpect Error"
+        }
+    }
+}
+
 class APIClient{
     static organizationsPath = '/organizations'
     static applicationsPath = '/applications'
@@ -87,87 +108,164 @@ class APIClient{
 
     getOrganizations = async (organizationId=null) => {
         const path = this._getOrganizationsPath(organizationId)
-        const response = await this.api.get(path)
-        return response.data 
+        try {
+            const response = await this.api.get(path)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                                                                                                                           
+        }
     }  
 
     getOrganizationChildData = async (organizationId, childPath, childId=null) => {
         const path = this._getChildOrganizationPath(organizationId, childPath, childId)
-        const response = await this.api.get(path)
-        return response.data 
+        try {
+            const response = await this.api.get(path)
+            return response.data 
+        } catch (error) {
+            throw new APIError(error)                                                                                                                                               
+        }
     }  
 
     deleteOrganizationChildData = async (organizationId, childPath, childId=null) => {
         const path = this._getChildOrganizationPath(organizationId, childPath, childId)
-        const response = await this.api.delete(path)
-        return response.data 
+        try {
+            const response = await this.api.delete(path)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                                                                                                   
+        }
     }  
 
     createOrganizationChildData = async (organizationId, childPath, childData) => {
         const path = this._getChildOrganizationPath(organizationId, childPath)
-        const response = await this.api.post(path, childData)
-        return response.data 
+        try {
+            const response = await this.api.post(path, childData)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                                                                                       
+        }
     }  
     updateOrganizationChildData = async (organizationId, childPath, childData, childId) => {
-        console.log("updateOrganizationChildData",organizationId,childPath,childData,childId)
         const path = this._getChildOrganizationPath(organizationId, childPath, childId)
-        const response = await this.api.put(path, childData)
-        return response.data 
+        try {
+            const response = await this.api.put(path, childData)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                                                                           
+        }
     }  
 
 
     getApplications = async (organizationId) => {
         const path = this._getApplicationsPath(organizationId)
-        const response = await this.api.get(path)
-        return response.data 
+        try {            
+            const response = await this.api.get(path)
+            return response.data 
+        } catch (error) {
+            throw new APIError(error)                                                                                               
+        }
     }  
 
     getLoraProfiles = async (organizationId) => {
         const path = this._getLoraProfilesPath(organizationId)
-        const response = await this.api.get(path)
-        return response.data 
+        try {
+            const response = await this.api.get(path)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                                                    
+        }
     }  
 
     getServiceProfiles = async (organizationId) => {
         const path = this._getServiceProfilesPath(organizationId)
-        const response = await this.api.get(path)
-        return response.data 
+        try {
+            const response = await this.api.get(path)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                                        
+        }
+    }  
+
+
+    createDevice = async (organizationId, applicationId, device) => {
+        const path = this._getDevicesPath(organizationId, applicationId)
+        try {
+            const response = await this.api.post(path, device)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                            
+        }
+    }  
+
+    updateDevice = async (organizationId, applicationId, device, deviceId) => {
+        const path = this._getDevicesPath(organizationId, applicationId, deviceId)
+        try {
+            const response = await this.api.put(path, device)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                            
+        }
     }  
 
     getDevices = async (organizationId, applicationId) => {
         const path = this._getDevicesPath(organizationId, applicationId)
-        const response = await this.api.get(path)
-        return response.data 
+        try {
+            const response = await this.api.get(path)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                                            
+        }
     }  
 
     deleteDeivce = async (organizationId, applicationId, deviceId) => {
         const path = this._getDevicesPath(organizationId, applicationId, deviceId)
-        const response = await this.api.delete(path)
-        return response.data 
+        try {
+            const response = await this.api.delete(path)
+            return response.data 
+        } catch (error) {
+            throw new APIError(error)                                                
+        }
     }  
 
     getOrganizationDeviceProfiles = async (organizationId) => {
         const path = this._getDeviceProfilesPath(organizationId)
-        const response = await this.api.get(path)
-        return response.data 
+        try {
+            const response = await this.api.get(path)
+            return response.data                 
+        } catch (error) {
+            throw new APIError(error)                                    
+        }
     }
 
     acceptMemberInvitation = async (organizationId, memberId) => {
         const path = this._getMembersPath(organizationId, memberId)
-        const response = await this.api.put(path, {status: 0})
-        return response.data
+        try {
+            const response = await this.api.put(path, {status: 0})
+            return response.data                
+        } catch (error) {
+            throw new APIError(error)                        
+        }
     }
     
     denyMemberInvitation = async (organizationId, memberId) => {
         const path = this._getMembersPath(organizationId, memberId)
-        const response = await this.api.delete(path)
-        return response.data
+        try {
+            const response = await this.api.delete(path)
+            return response.data                
+        } catch (error) {
+            throw new APIError(error)            
+        }
+
     }
 
     addMemberInvitation = async (organizationId, member) => {
         const path = this._getMembersPath(organizationId)
-        const response = await this.api.post(path, member)
-        return response.data
+        try {
+            const response = await this.api.post(path, member)
+            return response.data                
+        } catch (error) {
+            throw new APIError(error)
+        }
     }
 
 

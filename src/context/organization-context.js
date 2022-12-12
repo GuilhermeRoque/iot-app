@@ -37,7 +37,7 @@ const OrganizationProvider = ({children}) => {
             toast.start("Cadastre uma organização primeiro", "info")
             navigate("/organizations")
         }
-    },[userOrganizations])
+    },[userOrganizations, navigate, toast])
 
     const selectOrganizationWarning = (
         <Box sx={{width: "100%", height: "500px"}}> 

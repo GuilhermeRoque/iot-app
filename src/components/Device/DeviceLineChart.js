@@ -1,4 +1,4 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Label} from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
 
 const data = [
     {

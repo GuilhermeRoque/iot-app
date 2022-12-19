@@ -44,7 +44,11 @@ export default function DeviceForm({
         console.log("device", device)
         request(organizationId, applicationId, deviceData, deviceId)
         .then((data)=>{
-            toast.start("Dispositivo cadastrado", 'success')
+            if(data.configured){
+                toast.start("Dispositivo cadastrado", 'success')
+            }else{
+                toast.start("Erro durante integração na TTN", 'warning')
+            }
             handleNewDevice(data)
         })
         .catch((error)=>{

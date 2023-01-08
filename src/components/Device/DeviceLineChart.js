@@ -1,62 +1,16 @@
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip} from 'recharts';
-
-const data = [
-    {
-      time: '01:00:00',
-      value: 4000,
-    },
-    {
-      time: '02:00:00',
-      value: 5000,
-    },
-    {
-      time: '03:00:00',
-      value: 6000,
-    },
-    {
-      time: '04:00:00',
-      value: 4000,
-    },
-    {
-      time: '05:00:00',
-      value: 3000,
-    },
-    {
-      time: '06:00:00',
-      value: 3000,
-    },
-    {
-      time: '07:00:00',
-      value: 5000,
-    },
-    {
-      time: '08:00:00',
-      value: 4000,
-    },
-    {
-      time: '09:00:00',
-      value: 5000,
-    },
-    {
-      time: '10:00:00',
-      value: 6000,
-    },
-    {
-      time: '11:00:00',
-      value: 4000,
-    },
-  ];
   
-export default function DeviceLineChart(){
-    return(
+export default function DeviceLineChart({data}){
+  console.log("DeviceLineChart", data)
+  return(
         <LineChart
-          width={600}
-          height={400}
+          width={1000}
+          height={500}
           data={data}
           // margin={{ top: 5, right: 20, left: 20, bottom: 5 }}
           // padding={{ top: 5, right: 20, left: 20, bottom: 5 }}
     >
-        <XAxis dataKey="time">
+        <XAxis dataKey="datetime">
           {/* <Label value="Horário" offset={5} position="outsideCenter" /> */}
         </XAxis>
         <YAxis>

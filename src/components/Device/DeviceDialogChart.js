@@ -5,19 +5,27 @@ import {
     DialogContent, 
     DialogTitle, 
 } from "@mui/material";
+import { ResponsiveContainer } from "recharts";
 
-export default function DeviceDialogChart({open, handleClose, device}){
+export default function DeviceDialogChart({open, handleClose, device, deviceData}){
     return(
         <Dialog 
             open={open}
             onClose={handleClose}
             fullWidth={false}
-            maxWidth="fit-content"
+            maxWidth={"fill-content"}
         >
         <DialogTitle>{device?`${device.devId}`:""}</DialogTitle>
-        <DialogContent>
-            <DeviceLineChart></DeviceLineChart>
-        </DialogContent> 
+        <DialogContent
+            // sx={{
+            //     width:1200,
+            //     height:600
+            // }}
+        >
+            {/* <ResponsiveContainer width="95%" height={600}> */}
+                <DeviceLineChart data={deviceData?.data}></DeviceLineChart>
+            {/* </ResponsiveContainer>  */}
+        </DialogContent>
     </Dialog>
     )
 }

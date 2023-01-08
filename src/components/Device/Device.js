@@ -45,6 +45,7 @@ export default function Device(){
     const [serviceProfiles, setServiceProfiles] = React.useState(null)
     const [devices, setDevices] = useState(null)
     const [device, setDevice] = useState(null)
+    const [deviceData, setDeviceData] = useState(null)
     const userOrganizations = auth?.user?.userOrganizations
 
     const handleChangeCurrentApplication = (event) =>{setCurrentApplication(event.target.value)}
@@ -60,8 +61,19 @@ export default function Device(){
     }
     
     const handlerMonitor = (deviceIndex) => {
-        setDevice(devices[deviceIndex])
-        handleOpenChart()        
+        const newDevice = devices[deviceIndex]
+        const apiClient = new APIClient(api)
+        apiClient.getDeviceData(currentOrganization, newDevice.devId)
+            .then((data)=>{
+                console.log("Received device data")
+                console.log(data)
+                setDeviceData(data)
+                setDevice(newDevice)
+                handleOpenChart()        
+            })
+            .catch((error)=>{
+                toast.start("Não foi possível carregar os dados do dispositivo", 'error')
+            })
     }
 
     const handlerDelete = (deviceIndex) => {
@@ -204,6 +216,7 @@ export default function Device(){
                         open={openChart}
                         handleClose={handleCloseChart}
                         device={device}
+                        deviceData={deviceData}
                     >   
                     </DeviceDialogChart>
 

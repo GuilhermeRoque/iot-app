@@ -268,6 +268,22 @@ class APIClient{
         }
     }
 
+    getDeviceData = async (organizationId, deviceId) => {
+        const path = PathUtils.join(
+            APIClient.organizationsPath,
+            organizationId,
+            "export-sensor-data",
+            "devices",
+            deviceId
+        )
+        try {
+            const response = await this.api.post(path, {})
+            return response.data                
+        } catch (error) {
+            throw new APIError(error)
+        }
+
+    }
 
     _getChildOrganizationPath(organizationId, childPath, childId) {
         return PathUtils.join(

@@ -52,7 +52,7 @@ export default function OrganizationChild({apiPath, valueMapper, labelMapper, Fo
             })
             .catch((error)=>{
                 console.log('error', error)
-                toast.start("Não possível adicionar o dado", "error")          
+                toast.start("Erro inesperado", "error")          
             })
     }
 
